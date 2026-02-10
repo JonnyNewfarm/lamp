@@ -54,14 +54,14 @@ const Imagesection = () => {
 
   return (
     <section id="details" className="relative bg-[#ecebeb] text-[#161310]">
-      <div className="h-[250vh]">
+      <div className="h-[160vh]">
         <div className="sticky top-0 h-screen flex items-center">
           <div className="w-full max-w-6xl mx-auto px-8 grid grid-cols-12 gap-6 sm:gap-8">
             {/* IMAGE */}
             <div className="col-span-7 relative overflow-hidden">
               <div className="image-mask">
                 <img
-                  src="/table-lamp.jpg"
+                  src="/lamp.jpeg"
                   alt=""
                   className="w-full h-[70vh] object-cover"
                 />

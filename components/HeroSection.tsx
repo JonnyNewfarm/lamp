@@ -278,8 +278,8 @@ export default function HeroLamp() {
               <br />
               doesn’t shout.
             </h1>
-            <p ref={textRef} className="mt-4 sm:text-lg  text-[#3a3734]">
-              A desk lamp designed for calm,<br></br> focused work.
+            <p ref={textRef} className="mt-4 sm:text-xl  text-[#3a3734]">
+              A desk lamp designed for <br></br> calm, focused work.
             </p>
 
             <button
