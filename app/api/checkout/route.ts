@@ -22,7 +22,6 @@ export async function POST() {
       },
     ],
 
-    // Samle inn adresse (du må liste land; her er en “bred” liste som starter)
     shipping_address_collection: {
       allowed_countries: [
         "US","CA","GB","IE","AU","NZ",
@@ -32,13 +31,12 @@ export async function POST() {
       ],
     },
 
-    // Enkel flat-rate frakt
     shipping_options: [
       {
         shipping_rate_data: {
           display_name: "Standard shipping",
           type: "fixed_amount",
-          fixed_amount: { amount: 1200, currency: PRODUCT.currency }, // €12
+          fixed_amount: { amount: 1200, currency: PRODUCT.currency },
           delivery_estimate: {
             minimum: { unit: "business_day", value: 7 },
             maximum: { unit: "business_day", value: 18 },
@@ -50,11 +48,16 @@ export async function POST() {
     success_url: `${siteUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${siteUrl}/cancel`,
 
-    // nyttig for mapping
-    metadata: {
-      productId: PRODUCT.id,
+    metadata: { productId: PRODUCT.id },
+
+    payment_intent_data: {
+      metadata: { productId: PRODUCT.id },
     },
   });
 
-  return NextResponse.json({ id: session.id });
+  if (!session.url) {
+    return NextResponse.json({ error: "Missing session url" }, { status: 500 });
+  }
+
+  return NextResponse.json({ url: session.url });
 }
