@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum OrderStatus {
+  PAID
+  ORDERED
+  SHIPPED
+  REFUNDED
+  CANCELED
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  status OrderStatus @default(PAID)
+
+  productId   String
+  productName String
+  unitAmount  Int
+  currency    String
+
+  stripeSessionId String  @unique
+  stripePaymentId String?
+  customerEmail   String?
+  customerName    String?
+
+  shipLine1      String?
+  shipLine2      String?
+  shipCity       String?
+  shipState      String?
+  shipPostalCode String?
+  shipCountry    String?
+
+  supplierUrl    String? // AliExpress URL 
+  trackingNumber String?
+}

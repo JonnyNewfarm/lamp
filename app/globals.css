@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+
+html, body {
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+  background: #181c14; 
+  
+  
+}
+
+
+.image-mask {
+  clip-path: inset(0 100% 0 0);
+}
+
+
