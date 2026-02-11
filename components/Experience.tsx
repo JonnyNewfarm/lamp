@@ -8,37 +8,24 @@ import { Book } from "./Book";
 import { ScrollSync } from "./ScrollControls";
 import { pages } from "./UI";
 import { ResetOnMount } from "./ResetOnMount";
+import { ScrollDriver } from "./ScrollDriver";
 
 export const Experience = () => {
   const totalStops = pages.length + 1;
 
   return (
     <>
-      <ScrollControls
-        pages={totalStops}
-        damping={0.15}
-        style={{
-          position: "fixed",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          touchAction: "pan-y",
-        }}
+      <ScrollDriver totalStops={totalStops} />
+      <Float
+        rotation-x={-Math.PI / 4}
+        floatIntensity={0.4}
+        speed={2}
+        rotationIntensity={1}
       >
-        <ResetOnMount />
-        <ScrollSync totalStops={totalStops} />
-
-        <Float
-          rotation-x={-Math.PI / 4}
-          floatIntensity={0.4}
-          speed={2}
-          rotationIntensity={1}
-        >
-          <group position-x={-0.3}>
-            <Book />
-          </group>
-        </Float>
-      </ScrollControls>
+        <group position-x={-0.3}>
+          <Book />
+        </group>
+      </Float>
 
       <OrbitControls
         enableZoom={false}
