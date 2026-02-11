@@ -7,7 +7,13 @@ html, body {
   background: #181c14; 
   
   
+
 }
+::-webkit-scrollbar {
+  display: none;
+}
+
+
 
 
 .image-mask {
