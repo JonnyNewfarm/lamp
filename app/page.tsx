@@ -4,6 +4,7 @@ import { Experience } from "@/components/Experience";
 import SmoothScroll from "@/components/SmoothScroll";
 import { UI } from "@/components/UI";
 import { Canvas } from "@react-three/fiber";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -13,7 +14,7 @@ const page = () => {
 
   useEffect(() => {
     const update = () => {
-      setCameraZ(window.innerWidth > 800 ? 3.5 : 4.5);
+      setCameraZ(window.innerWidth > 800 ? 3.35 : 4.5);
     };
 
     update();
@@ -50,9 +51,12 @@ const page = () => {
           </p>
 
           <div className="mt-8">
-            <div className="inline-flex items-center border border-black/40 px-5 py-3 text-sm text-black/80">
+            <Link
+              href={"/shop"}
+              className="inline-flex items-center border border-black/40 px-5 py-3 text-sm text-black/80"
+            >
               Buy — €79
-            </div>
+            </Link>
           </div>
         </div>
 
@@ -69,10 +73,13 @@ const page = () => {
         </div>
         {/* Bottom giant type */}
         <div className="absolute left-10 bottom-10">
-          <div className="inline-flex mb-3 lg:hidden items-center border border-black/40 px-4 py-2.5 text-sm text-black/80 bg-[#ecebeb]">
+          <Link
+            href={"/shop"}
+            className="inline-flex mb-3 lg:hidden items-center border border-black/40 px-4 py-2.5 text-sm text-black/80 "
+          >
             Buy — €79
-          </div>
-          <div className="sm:text-6xl text-3xl leading-none font-semibold tracking-[0.06em] text-black">
+          </Link>
+          <div className="sm:text-6xl hidden md:block text-3xl leading-none font-semibold tracking-[0.06em] text-black">
             CALM BY DESIGN.
           </div>
         </div>
