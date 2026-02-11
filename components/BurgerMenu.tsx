@@ -37,14 +37,18 @@ const BurgerMenu = () => {
       <div
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="right-0 mr-5 absolute top-2 flex items-center justify-center lg:hidden cursor-pointer z-50"
+        className={`right-0 mr-5 absolute top-2 flex items-center justify-center lg:hidden cursor-pointer z-50 $`}
       >
         <span
           className={`text-lg font-normal px-2 py-2 rounded flex items-center gap-2 ${
-            isOpen ? "text-color" : "text-color"
+            isOpen ? "text-white" : "text-black"
           }`}
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-[#ecdfcc] inline-block" />
+          <span
+            className={`h-1.5 w-1.5 rounded-full inline-block ${
+              isOpen ? "bg-white" : "bg-black"
+            }`}
+          />
           {isOpen ? "Close" : "Menu"}
         </span>
       </div>

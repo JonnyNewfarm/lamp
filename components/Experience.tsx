@@ -14,7 +14,17 @@ export const Experience = () => {
 
   return (
     <>
-      <ScrollControls pages={totalStops} damping={0.15}>
+      <ScrollControls
+        pages={totalStops}
+        damping={0.15}
+        style={{
+          position: "fixed",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          touchAction: "pan-y",
+        }}
+      >
         <ResetOnMount />
         <ScrollSync totalStops={totalStops} />
 

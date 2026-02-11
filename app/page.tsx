@@ -36,7 +36,7 @@ const page = () => {
           <color attach="background" args={["#ecebeb"]} />
           <Experience />
         </Canvas>
-        <div className="absolute hidden xl:block left-10 top-1/2 -translate-y-1/2 max-w-xl">
+        <div className="absolute hidden lg:block left-10 top-1/2 -translate-y-1/2 max-w-xl">
           <h1 className="text-4xl  leading-[0.95] font-semibold text-black">
             Good light
             <br />
@@ -69,7 +69,7 @@ const page = () => {
         </div>
         {/* Bottom giant type */}
         <div className="absolute left-10 bottom-10">
-          <div className="inline-flex mb-3 md:hidden items-center border border-black/40 px-4 py-2.5 text-sm text-black/80 bg-[#ecebeb]">
+          <div className="inline-flex mb-3 lg:hidden items-center border border-black/40 px-4 py-2.5 text-sm text-black/80 bg-[#ecebeb]">
             Buy — €79
           </div>
           <div className="sm:text-6xl text-3xl leading-none font-semibold tracking-[0.06em] text-black">
