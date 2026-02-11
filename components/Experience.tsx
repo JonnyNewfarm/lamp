@@ -15,7 +15,7 @@ export const Experience = () => {
 
   return (
     <>
-      <ScrollDriver totalStops={totalStops} />
+      <ScrollDriver totalStops={totalStops} touchSpeed={0.55} />
       <Float
         rotation-x={-Math.PI / 4}
         floatIntensity={0.4}
