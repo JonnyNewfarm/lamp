@@ -26,6 +26,7 @@ const page = () => {
       <div className="fixed inset-0">
         <Canvas
           key={pathname}
+          style={{ touchAction: "pan-y" }}
           shadows
           camera={{
             position: [-0.5, 1, cameraZ],
@@ -68,10 +69,10 @@ const page = () => {
         </div>
         {/* Bottom giant type */}
         <div className="absolute left-10 bottom-10">
-          <div className="inline-flex mb-2 md:hidden items-center border border-black/40 px-5 py-3 text-sm text-black/80 bg-[#ecebeb]">
+          <div className="inline-flex mb-3 md:hidden items-center border border-black/40 px-4 py-2.5 text-sm text-black/80 bg-[#ecebeb]">
             Buy — €79
           </div>
-          <div className="sm:text-6xl text-2xl leading-none font-semibold tracking-[0.06em] text-black">
+          <div className="sm:text-6xl text-3xl leading-none font-semibold tracking-[0.06em] text-black">
             CALM BY DESIGN.
           </div>
         </div>

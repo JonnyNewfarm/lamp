@@ -30,7 +30,11 @@ export const Experience = () => {
         </Float>
       </ScrollControls>
 
-      <OrbitControls enableZoom={false} />
+      <OrbitControls
+        enableZoom={false}
+        enableRotate={false}
+        enablePan={false}
+      />
       <Environment preset="studio" />
 
       <directionalLight
