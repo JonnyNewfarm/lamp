@@ -26,7 +26,6 @@ export async function POST(req: NextRequest) {
     const shipping = session.shipping_details;
     const addr = shipping?.address;
 
-    // idempotent: upsert på stripeSessionId
     await prisma.order.upsert({
       where: { stripeSessionId: session.id },
       update: {

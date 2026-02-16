@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import NavbarMobile from "@/components/NavbarMobile";
+import Footer from "@/components/Footer";
 
 const mont = Montserrat({
   variable: "--font-geist-sans",
@@ -26,6 +27,7 @@ export default function RootLayout({
           <Navbar />
           <NavbarMobile />
           {children}
+          <Footer />
         </div>
       </body>
     </html>

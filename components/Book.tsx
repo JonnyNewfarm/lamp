@@ -20,7 +20,6 @@ import {
 import { degToRad } from "three/src/math/MathUtils.js";
 import { pageAtom, pages } from "./UI";
 
-/** ---- constants ---- */
 const easingFactor = 0.5;
 const easingFactorFold = 0.3;
 const insideCurveStrength = 0.18;
@@ -33,7 +32,6 @@ const PAGE_DEPTH = 0.003;
 const PAGE_SEGMENTS = 30;
 const SEGMENT_WIDTH = PAGE_WIDTH / PAGE_SEGMENTS;
 
-/** ---- geometry + skinning attrs (module-level) ---- */
 const pageGeometry = new BoxGeometry(
   PAGE_WIDTH,
   PAGE_HEIGHT,
@@ -78,13 +76,11 @@ const pageMaterialsBase: MeshStandardMaterial[] = [
   new MeshStandardMaterial({ color: whiteColor }),
 ];
 
-/** ---- preload textures ---- */
 pages.forEach((p) => {
   useTexture.preload(`/textures/${p.front}.png`);
   useTexture.preload(`/textures/${p.back}.jpg`);
 });
 
-/** ---- types ---- */
 type PageData = (typeof pages)[number];
 type GroupElementProps = ThreeElements["group"];
 
@@ -98,7 +94,6 @@ type PageProps = GroupElementProps &
 
 type BookProps = GroupElementProps;
 
-/** ---- Page (SCROLL ONLY, NO CLICK / NO HOVER) ---- */
 const Page: React.FC<PageProps> = ({
   number,
   front,
@@ -116,7 +111,7 @@ const Page: React.FC<PageProps> = ({
 
   const picture = textures[0]!;
   const picture2 = textures[1]!;
-  const pictureRoughness = textures[2]; // may be undefined
+  const pictureRoughness = textures[2];
 
   picture.colorSpace = SRGBColorSpace;
   picture2.colorSpace = SRGBColorSpace;
@@ -243,12 +238,7 @@ const Page: React.FC<PageProps> = ({
   });
 
   return (
-    <group
-      {...props}
-      ref={group}
-      // helt ikke-interaktiv: ingen click/hover, kun scroll styrer alt
-      raycast={null as any}
-    >
+    <group {...props} ref={group} raycast={null as any}>
       <primitive
         object={manualSkinnedMesh}
         ref={skinnedMeshRef}
@@ -258,7 +248,6 @@ const Page: React.FC<PageProps> = ({
   );
 };
 
-/** ---- Book ---- */
 export const Book: React.FC<BookProps> = (props) => {
   const [page] = useAtom(pageAtom);
   const [delayedPage, setDelayedPage] = useState<number>(page);

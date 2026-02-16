@@ -9,8 +9,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
 export function ScrollDriver({
   totalStops,
-  wheelSpeed = 0.0014, // desktop
-  touchSpeed = 0.85, // mobil: lavere = roligere
+  wheelSpeed = 0.0014,
+  touchSpeed = 0.85,
   snapOnRelease = true,
 }: {
   totalStops: number;
@@ -20,23 +20,19 @@ export function ScrollDriver({
 }) {
   const setPage = useSetAtom(pageAtom);
 
-  // virtuell scroll 0..1
   const target = useRef(0);
   const current = useRef(0);
 
   const lastPage = useRef(-1);
 
-  // touch
   const touchY = useRef<number | null>(null);
   const isTouching = useRef(false);
 
-  // “snap request” på release
   const snapRequested = useRef(false);
 
   const pageCount = totalStops - 1;
 
   const requestSnapToNearest = () => {
-    // snap target til nærmeste side (i 0..1 space)
     const raw = target.current * pageCount;
     const snapped = Math.round(raw) / pageCount;
     target.current = clamp(snapped, 0, 1);
@@ -46,7 +42,6 @@ export function ScrollDriver({
     const prevOverscroll = document.body.style.overscrollBehavior;
     const prevOverflow = document.body.style.overflow;
 
-    // hindre iOS bounce + “body scroll”
     document.body.style.overscrollBehavior = "none";
     document.body.style.overflow = "hidden";
 
@@ -67,12 +62,11 @@ export function ScrollDriver({
       e.preventDefault();
 
       const y = e.touches[0]?.clientY ?? touchY.current;
-      const dy = touchY.current - y; // swipe opp => dy + => fremover
+      const dy = touchY.current - y;
       touchY.current = y;
 
-      // viktig: skaler med skjermhøyde så iPhone 8 ikke blir “hyper”
       const h = window.innerHeight || 1;
-      const delta = (dy / h) * touchSpeed; // typ ~0.85 per hel skjerm-swipe
+      const delta = (dy / h) * touchSpeed;
 
       target.current = clamp(target.current + delta, 0, 1);
     };
@@ -82,7 +76,7 @@ export function ScrollDriver({
       touchY.current = null;
 
       if (snapOnRelease) {
-        snapRequested.current = true; // be om snap i frame-loop (smooth)
+        snapRequested.current = true;
       }
     };
 
@@ -105,18 +99,15 @@ export function ScrollDriver({
   }, [wheelSpeed, touchSpeed, snapOnRelease]);
 
   useFrame((_, dt) => {
-    // Smooth mot target (stabil uansett FPS)
     const smooth = 1 - Math.pow(0.00008, dt);
     current.current =
       current.current + (target.current - current.current) * smooth;
 
-    // Når touch slipper, snap target én gang (men smooth inn)
     if (snapRequested.current) {
       requestSnapToNearest();
       snapRequested.current = false;
     }
 
-    // Map til sideindex
     const raw = current.current * pageCount;
     const next = clamp(Math.round(raw), 0, pageCount);
 

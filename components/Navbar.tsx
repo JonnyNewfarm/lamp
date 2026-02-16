@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
 
 const Navbar = () => {
   return (
@@ -11,7 +10,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between">
             <div className="tracking-tighter">
               <h1 className="opacity-70 m-0 leading-none">Studio:</h1>
-              <p className="m-0 leading-tight">Lamp House</p>
+              <p className="m-0 leading-tight">Calero</p>
             </div>
 
             <div className="tracking-tighter">

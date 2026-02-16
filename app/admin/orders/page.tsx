@@ -13,7 +13,6 @@ export default async function AdminOrdersPage({
   const { key } = await searchParams;
 
   if (!key || key !== process.env.ADMIN_KEY) {
-    // enkel “auth”
     redirect("/?admin=denied");
   }
 

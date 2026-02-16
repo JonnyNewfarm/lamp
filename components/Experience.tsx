@@ -1,13 +1,6 @@
-import {
-  Environment,
-  Float,
-  OrbitControls,
-  ScrollControls,
-} from "@react-three/drei";
+import { Environment, Float, OrbitControls } from "@react-three/drei";
 import { Book } from "./Book";
-import { ScrollSync } from "./ScrollControls";
 import { pages } from "./UI";
-import { ResetOnMount } from "./ResetOnMount";
 import { ScrollDriver } from "./ScrollDriver";
 
 export const Experience = () => {
