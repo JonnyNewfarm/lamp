@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTexture } from "@react-three/drei";
-import { useFrame, type ThreeElements } from "@react-three/fiber";
+import { useFrame, useThree, type ThreeElements } from "@react-three/fiber";
 import { useAtom } from "jotai";
 import { easing } from "maath";
 import {
@@ -14,6 +14,8 @@ import {
   SRGBColorSpace,
   Uint16BufferAttribute,
   Vector3,
+  LinearFilter,
+  LinearMipMapLinearFilter,
   type Group,
   type Texture,
 } from "three";
@@ -77,7 +79,7 @@ const pageMaterialsBase: MeshStandardMaterial[] = [
 ];
 
 pages.forEach((p) => {
-  useTexture.preload(`/textures/${p.front}.png`);
+  useTexture.preload(`/textures/${p.front}.jpg`);
   useTexture.preload(`/textures/${p.back}.jpg`);
 });
 
@@ -115,6 +117,20 @@ const Page: React.FC<PageProps> = ({
 
   picture.colorSpace = SRGBColorSpace;
   picture2.colorSpace = SRGBColorSpace;
+
+  const gl = useThree((state) => state.gl);
+
+  useEffect(() => {
+    const maxAnisotropy = gl.capabilities.getMaxAnisotropy();
+
+    [picture, picture2].forEach((texture) => {
+      texture.anisotropy = maxAnisotropy;
+      texture.generateMipmaps = true;
+      texture.minFilter = LinearMipMapLinearFilter;
+      texture.magFilter = LinearFilter;
+      texture.needsUpdate = true;
+    });
+  }, [gl, picture, picture2]);
 
   const group = useRef<Group>(null);
   const turnedAt = useRef<number>(0);

@@ -104,7 +104,7 @@ export default function ShopPage() {
                 {/* Image / hero block */}
                 <div className="aspect-[16/10] bg-[#161310] relative overflow-hidden">
                   <Image
-                    src="/lamp.jpeg"
+                    src="/green-lamp.jpg"
                     alt="Good Light Lamp"
                     fill
                     priority

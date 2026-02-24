@@ -28,6 +28,7 @@ const LandingPageClient = () => {
       <div className="fixed inset-0">
         <Canvas
           key={pathname}
+          dpr={[1.25, 2]}
           style={{ touchAction: "pan-y" }}
           shadows
           camera={{
