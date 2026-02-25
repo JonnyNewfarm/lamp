@@ -6,13 +6,33 @@ import { useState } from "react";
 import SmoothScroll from "@/components/SmoothScroll";
 import MagneticComp from "./MagneticComp";
 
+type ColorKey = "green" | "red" | "white";
+
+const COLORS: {
+  key: ColorKey;
+  label: string;
+  image: string;
+  swatch: string;
+}[] = [
+  { key: "green", label: "Green", image: "/green-lamp.jpg", swatch: "#2f6b57" },
+  { key: "red", label: "Red", image: "/red-lamp.jpg", swatch: "#8b2f2f" },
+  { key: "white", label: "White", image: "/white-lamp.jpg", swatch: "#e2e2e2" },
+];
+
 export default function ShopPage() {
   const [loading, setLoading] = useState(false);
+  const [color, setColor] = useState<ColorKey>("green");
+
+  const active = COLORS.find((c) => c.key === color)!;
 
   const buy = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/checkout", { method: "POST" });
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ color }), // 👈 send valgt farge
+      });
       if (!res.ok) throw new Error("Checkout failed");
 
       const { url } = await res.json();
@@ -44,6 +64,34 @@ export default function ShopPage() {
                 Calm, focused light for desk work. Built to disappear into the
                 room and let you concentrate.
               </p>
+
+              {/* Color selector */}
+              <div className="mt-10">
+                <div className="text-xs tracking-wide text-black/60">Color</div>
+
+                <div className="mt-3 flex items-center gap-3">
+                  {COLORS.map((c) => {
+                    const selected = c.key === color;
+                    return (
+                      <button
+                        key={c.key}
+                        type="button"
+                        onClick={() => setColor(c.key)}
+                        className={`h-9 w-9 border transition ${
+                          selected ? "border-black" : "border-black/30"
+                        }`}
+                        aria-label={c.label}
+                        title={c.label}
+                        style={{ backgroundColor: c.swatch }}
+                      />
+                    );
+                  })}
+
+                  <div className="ml-3 text-sm text-black/70">
+                    {active.label}
+                  </div>
+                </div>
+              </div>
 
               <div className="mt-10 flex items-center gap-4">
                 <MagneticComp>
@@ -77,16 +125,14 @@ export default function ShopPage() {
                     <div className="text-xs tracking-wide text-black/60">
                       Material
                     </div>
-                    <div className="mt-1 text-black/90">
-                      Wood, fabric, brass
-                    </div>
+                    <div className="mt-1 text-black/90">Wood, metal</div>
                   </div>
 
                   <div>
                     <div className="text-xs tracking-wide text-black/60">
                       Light
                     </div>
-                    <div className="mt-1 text-black/90">Warm, diffused</div>
+                    <div className="mt-1 text-black/90">Warm, directed</div>
                   </div>
 
                   <div>
@@ -101,11 +147,10 @@ export default function ShopPage() {
 
             <div className="lg:col-span-7">
               <div className="border border-black/25">
-                {/* Image / hero block */}
                 <div className="aspect-[16/10] bg-[#161310] relative overflow-hidden">
                   <Image
-                    src="/green-lamp.jpg"
-                    alt="Good Light Lamp"
+                    src={active.image} // 👈 bytter med valgt farge
+                    alt={`Good Light Lamp — ${active.label}`}
                     fill
                     priority
                     className="object-contain"

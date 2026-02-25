@@ -41,6 +41,7 @@ export type OrderMinAggregateOutputType = {
   status: $Enums.OrderStatus | null
   productId: string | null
   productName: string | null
+  color: string | null
   unitAmount: number | null
   currency: string | null
   stripeSessionId: string | null
@@ -64,6 +65,7 @@ export type OrderMaxAggregateOutputType = {
   status: $Enums.OrderStatus | null
   productId: string | null
   productName: string | null
+  color: string | null
   unitAmount: number | null
   currency: string | null
   stripeSessionId: string | null
@@ -87,6 +89,7 @@ export type OrderCountAggregateOutputType = {
   status: number
   productId: number
   productName: number
+  color: number
   unitAmount: number
   currency: number
   stripeSessionId: number
@@ -120,6 +123,7 @@ export type OrderMinAggregateInputType = {
   status?: true
   productId?: true
   productName?: true
+  color?: true
   unitAmount?: true
   currency?: true
   stripeSessionId?: true
@@ -143,6 +147,7 @@ export type OrderMaxAggregateInputType = {
   status?: true
   productId?: true
   productName?: true
+  color?: true
   unitAmount?: true
   currency?: true
   stripeSessionId?: true
@@ -166,6 +171,7 @@ export type OrderCountAggregateInputType = {
   status?: true
   productId?: true
   productName?: true
+  color?: true
   unitAmount?: true
   currency?: true
   stripeSessionId?: true
@@ -276,6 +282,7 @@ export type OrderGroupByOutputType = {
   status: $Enums.OrderStatus
   productId: string
   productName: string
+  color: string | null
   unitAmount: number
   currency: string
   stripeSessionId: string
@@ -322,6 +329,7 @@ export type OrderWhereInput = {
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   productId?: Prisma.StringFilter<"Order"> | string
   productName?: Prisma.StringFilter<"Order"> | string
+  color?: Prisma.StringNullableFilter<"Order"> | string | null
   unitAmount?: Prisma.IntFilter<"Order"> | number
   currency?: Prisma.StringFilter<"Order"> | string
   stripeSessionId?: Prisma.StringFilter<"Order"> | string
@@ -345,6 +353,7 @@ export type OrderOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   productName?: Prisma.SortOrder
+  color?: Prisma.SortOrderInput | Prisma.SortOrder
   unitAmount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   stripeSessionId?: Prisma.SortOrder
@@ -372,6 +381,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   productId?: Prisma.StringFilter<"Order"> | string
   productName?: Prisma.StringFilter<"Order"> | string
+  color?: Prisma.StringNullableFilter<"Order"> | string | null
   unitAmount?: Prisma.IntFilter<"Order"> | number
   currency?: Prisma.StringFilter<"Order"> | string
   stripePaymentId?: Prisma.StringNullableFilter<"Order"> | string | null
@@ -394,6 +404,7 @@ export type OrderOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   productName?: Prisma.SortOrder
+  color?: Prisma.SortOrderInput | Prisma.SortOrder
   unitAmount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   stripeSessionId?: Prisma.SortOrder
@@ -425,6 +436,7 @@ export type OrderScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
   productId?: Prisma.StringWithAggregatesFilter<"Order"> | string
   productName?: Prisma.StringWithAggregatesFilter<"Order"> | string
+  color?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   unitAmount?: Prisma.IntWithAggregatesFilter<"Order"> | number
   currency?: Prisma.StringWithAggregatesFilter<"Order"> | string
   stripeSessionId?: Prisma.StringWithAggregatesFilter<"Order"> | string
@@ -448,6 +460,7 @@ export type OrderCreateInput = {
   status?: $Enums.OrderStatus
   productId: string
   productName: string
+  color?: string | null
   unitAmount: number
   currency: string
   stripeSessionId: string
@@ -471,6 +484,7 @@ export type OrderUncheckedCreateInput = {
   status?: $Enums.OrderStatus
   productId: string
   productName: string
+  color?: string | null
   unitAmount: number
   currency: string
   stripeSessionId: string
@@ -494,6 +508,7 @@ export type OrderUpdateInput = {
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitAmount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -517,6 +532,7 @@ export type OrderUncheckedUpdateInput = {
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitAmount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -540,6 +556,7 @@ export type OrderCreateManyInput = {
   status?: $Enums.OrderStatus
   productId: string
   productName: string
+  color?: string | null
   unitAmount: number
   currency: string
   stripeSessionId: string
@@ -563,6 +580,7 @@ export type OrderUpdateManyMutationInput = {
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitAmount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -586,6 +604,7 @@ export type OrderUncheckedUpdateManyInput = {
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   productName?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitAmount?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -609,6 +628,7 @@ export type OrderCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   productName?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   unitAmount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   stripeSessionId?: Prisma.SortOrder
@@ -636,6 +656,7 @@ export type OrderMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   productName?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   unitAmount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   stripeSessionId?: Prisma.SortOrder
@@ -659,6 +680,7 @@ export type OrderMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   productName?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   unitAmount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   stripeSessionId?: Prisma.SortOrder
@@ -691,16 +713,16 @@ export type EnumOrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.OrderStatus
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
-}
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
 }
 
 
@@ -712,6 +734,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   status?: boolean
   productId?: boolean
   productName?: boolean
+  color?: boolean
   unitAmount?: boolean
   currency?: boolean
   stripeSessionId?: boolean
@@ -735,6 +758,7 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   productId?: boolean
   productName?: boolean
+  color?: boolean
   unitAmount?: boolean
   currency?: boolean
   stripeSessionId?: boolean
@@ -758,6 +782,7 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   productId?: boolean
   productName?: boolean
+  color?: boolean
   unitAmount?: boolean
   currency?: boolean
   stripeSessionId?: boolean
@@ -781,6 +806,7 @@ export type OrderSelectScalar = {
   status?: boolean
   productId?: boolean
   productName?: boolean
+  color?: boolean
   unitAmount?: boolean
   currency?: boolean
   stripeSessionId?: boolean
@@ -797,7 +823,7 @@ export type OrderSelectScalar = {
   trackingNumber?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "status" | "productId" | "productName" | "unitAmount" | "currency" | "stripeSessionId" | "stripePaymentId" | "customerEmail" | "customerName" | "shipLine1" | "shipLine2" | "shipCity" | "shipState" | "shipPostalCode" | "shipCountry" | "supplierUrl" | "trackingNumber", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "status" | "productId" | "productName" | "color" | "unitAmount" | "currency" | "stripeSessionId" | "stripePaymentId" | "customerEmail" | "customerName" | "shipLine1" | "shipLine2" | "shipCity" | "shipState" | "shipPostalCode" | "shipCountry" | "supplierUrl" | "trackingNumber", ExtArgs["result"]["order"]>
 
 export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Order"
@@ -809,6 +835,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     status: $Enums.OrderStatus
     productId: string
     productName: string
+    color: string | null
     unitAmount: number
     currency: string
     stripeSessionId: string
@@ -1252,6 +1279,7 @@ export interface OrderFieldRefs {
   readonly status: Prisma.FieldRef<"Order", 'OrderStatus'>
   readonly productId: Prisma.FieldRef<"Order", 'String'>
   readonly productName: Prisma.FieldRef<"Order", 'String'>
+  readonly color: Prisma.FieldRef<"Order", 'String'>
   readonly unitAmount: Prisma.FieldRef<"Order", 'Int'>
   readonly currency: Prisma.FieldRef<"Order", 'String'>
   readonly stripeSessionId: Prisma.FieldRef<"Order", 'String'>

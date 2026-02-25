@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
 
     const shipping = session.shipping_details;
     const addr = shipping?.address;
+    const color = session.metadata?.color ?? "green";
 
     await prisma.order.upsert({
       where: { stripeSessionId: session.id },
@@ -39,6 +40,7 @@ export async function POST(req: NextRequest) {
         shipPostalCode: addr?.postal_code ?? null,
         shipCountry: addr?.country ?? null,
         status: "PAID",
+        color
       },
       create: {
         stripeSessionId: session.id,

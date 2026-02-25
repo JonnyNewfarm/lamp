@@ -2,8 +2,16 @@ import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { PRODUCT } from "@/lib/product";
 
-export async function POST() {
+type ColorKey = "green" | "red" | "white";
+
+export async function POST(req: Request) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
+  const body = await req.json().catch(() => ({}));
+
+  const color = (body?.color ?? "green") as ColorKey;
+
+  const safeColor: ColorKey =
+    color === "red" || color === "white" ? color : "green";
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
@@ -15,8 +23,12 @@ export async function POST() {
           currency: PRODUCT.currency,
           unit_amount: PRODUCT.unitAmount,
           product_data: {
-            name: PRODUCT.name,
+            name: `${PRODUCT.name}`, 
             description: PRODUCT.description,
+            metadata: {
+              productId: PRODUCT.id,
+              color: safeColor,
+            },
           },
         },
       },
@@ -48,10 +60,10 @@ export async function POST() {
     success_url: `${siteUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${siteUrl}/cancel`,
 
-    metadata: { productId: PRODUCT.id },
+    metadata: { productId: PRODUCT.id, color: safeColor },
 
     payment_intent_data: {
-      metadata: { productId: PRODUCT.id },
+      metadata: { productId: PRODUCT.id, color: safeColor },
     },
   });
 

@@ -524,6 +524,7 @@ export const OrderScalarFieldEnum = {
   status: 'status',
   productId: 'productId',
   productName: 'productName',
+  color: 'color',
   unitAmount: 'unitAmount',
   currency: 'currency',
   stripeSessionId: 'stripeSessionId',

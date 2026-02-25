@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../prisma/generated/client"; // juster path hvis du vil
+import { PrismaClient } from "../prisma/generated/prisma/client"; 
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 

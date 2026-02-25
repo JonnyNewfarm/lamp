@@ -24,6 +24,7 @@ model Order {
 
   productId   String
   productName String
+  color       String?
   unitAmount  Int
   currency    String
 
