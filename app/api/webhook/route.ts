@@ -23,9 +23,18 @@ export async function POST(req: NextRequest) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as any;
 
-    const shipping = session.shipping_details;
-    const addr = shipping?.address;
     const color = session.metadata?.color ?? "green";
+
+    // ✅ shipping_details ligger ofte her i payloaden din
+    const shipping =
+      session.shipping_details ??
+      session.collected_information?.shipping_details ??
+      null;
+
+    const addr =
+      shipping?.address ??
+      session.customer_details?.address ??
+      null;
 
     await prisma.order.upsert({
       where: { stripeSessionId: session.id },
@@ -33,14 +42,16 @@ export async function POST(req: NextRequest) {
         stripePaymentId: session.payment_intent ?? null,
         customerEmail: session.customer_details?.email ?? null,
         customerName: session.customer_details?.name ?? null,
+
         shipLine1: addr?.line1 ?? null,
         shipLine2: addr?.line2 ?? null,
         shipCity: addr?.city ?? null,
         shipState: addr?.state ?? null,
         shipPostalCode: addr?.postal_code ?? null,
         shipCountry: addr?.country ?? null,
+
         status: "PAID",
-        color
+        color,
       },
       create: {
         stripeSessionId: session.id,
@@ -62,6 +73,7 @@ export async function POST(req: NextRequest) {
 
         supplierUrl: PRODUCT.supplierUrl,
         status: "PAID",
+        color, // ✅ viktig
       },
     });
   }
