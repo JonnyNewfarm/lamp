@@ -3,7 +3,7 @@ import ShopPage from "@/components/ShopClient";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Good Light Lamp — Calm by Design",
+  title: "Desk lamp | Calero Studio",
   description:
     "Buy the Good Light Lamp. Calm, focused lighting for desk work. Designed to disappear into the room.",
   openGraph: {

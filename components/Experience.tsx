@@ -13,7 +13,7 @@ export const Experience = () => {
         rotation-x={-Math.PI / 4}
         floatIntensity={0.4}
         speed={2}
-        rotationIntensity={1}
+        rotationIntensity={0.8}
       >
         <group position-x={-0.2}>
           <Book />

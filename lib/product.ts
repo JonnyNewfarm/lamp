@@ -1,6 +1,6 @@
 export const PRODUCT = {
   id: "lamp-001",
-  name: "Good Light Lamp",
+  name: "Calero - Desk Lamp",
   description: "Calm, focused light for desk work.",
   currency: "eur" as const,
   unitAmount: 7900, 

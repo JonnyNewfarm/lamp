@@ -10,12 +10,12 @@ import { useEffect, useState } from "react";
 import MagneticComp from "./MagneticComp";
 
 const LandingPageClient = () => {
-  const [cameraZ, setCameraZ] = useState(4.5);
+  const [cameraZ, setCameraZ] = useState(4.3);
   const pathname = usePathname();
 
   useEffect(() => {
     const update = () => {
-      setCameraZ(window.innerWidth > 800 ? 3.35 : 4.5);
+      setCameraZ(window.innerWidth > 800 ? 3.35 : 4.3);
     };
 
     update();
