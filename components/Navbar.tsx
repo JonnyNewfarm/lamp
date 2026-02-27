@@ -20,7 +20,7 @@ const Navbar = () => {
 
             <div className="tracking-tighter">
               <h1 className="opacity-70 m-0 leading-none">Material:</h1>
-              <p className="m-0 leading-tight">Wood, fabric, brass</p>
+              <p className="m-0 leading-tight">Wood, metal</p>
             </div>
 
             <div className="tracking-tighter">
