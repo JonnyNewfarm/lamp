@@ -1,6 +1,5 @@
 "use client";
 import { Experience } from "@/components/Experience";
-
 import SmoothScroll from "@/components/SmoothScroll";
 import { UI } from "@/components/UI";
 import { Canvas } from "@react-three/fiber";
@@ -8,6 +7,37 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import MagneticComp from "./MagneticComp";
+import { motion } from "framer-motion";
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 10, filter: "blur(4px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.7, ease },
+  },
+};
+
+const subtle = {
+  hidden: { opacity: 0, y: 6, filter: "blur(3px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.8, ease, delay: 0.15 },
+  },
+};
 
 const LandingPageClient = () => {
   const [cameraZ, setCameraZ] = useState(4.3);
@@ -22,9 +52,11 @@ const LandingPageClient = () => {
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
+
   return (
     <SmoothScroll>
       <UI />
+
       <div className="fixed inset-0">
         <Canvas
           key={pathname}
@@ -39,20 +71,33 @@ const LandingPageClient = () => {
           <color attach="background" args={["#ecebeb"]} />
           <Experience />
         </Canvas>
-        <div className="absolute hidden lg:block left-10 top-1/2 -translate-y-1/2 max-w-xl">
-          <h1 className="text-4xl  leading-[0.95] font-semibold text-[#161310]">
+
+        {/* Left text block */}
+        <motion.div
+          className="absolute hidden lg:block left-10 top-1/2 -translate-y-1/2 max-w-xl"
+          variants={container}
+          initial="hidden"
+          animate="show"
+        >
+          <motion.h1
+            className="text-4xl leading-[0.95] font-semibold text-[#161310]"
+            variants={item}
+          >
             Good light
             <br />
             doesn’t shout.
-          </h1>
+          </motion.h1>
 
-          <p className="mt-6 text-base leading-relaxed text-black/70 max-w-md">
+          <motion.p
+            className="mt-6 text-base leading-relaxed text-black/70 max-w-md"
+            variants={item}
+          >
             A desk lamp designed for calm,
             <br />
             focused work.
-          </p>
+          </motion.p>
 
-          <div className="mt-8">
+          <motion.div className="mt-8" variants={item}>
             <MagneticComp>
               <Link
                 href={"/shop"}
@@ -61,30 +106,51 @@ const LandingPageClient = () => {
                 Buy — €79
               </Link>
             </MagneticComp>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="absolute right-6 hidden md:block top-1/2 -translate-y-1/2">
+        {/* Right vertical label (desktop) */}
+        <motion.div
+          className="absolute right-6 hidden md:block top-1/2 -translate-y-1/2"
+          variants={subtle}
+          initial="hidden"
+          animate="show"
+        >
           <div className="text-lg tracking-[0.45em] text-black/50 [writing-mode:vertical-rl]">
             CALM BY DESIGN
           </div>
-        </div>
-        <div className="absolute md:hidden left-6  top-1/2 -translate-y-1/2">
+        </motion.div>
+
+        {/* Vertical label (mobile) */}
+        <motion.div
+          className="absolute md:hidden left-6 top-1/2 -translate-y-1/2"
+          variants={subtle}
+          initial="hidden"
+          animate="show"
+        >
           <div className="text-lg tracking-[0.45em] text-black/50 [writing-mode:vertical-rl]">
             CALM BY DESIGN
           </div>
-        </div>
-        <div className="absolute left-10 bottom-10">
+        </motion.div>
+
+        {/* Bottom area */}
+        <motion.div
+          className="absolute left-10 bottom-10"
+          initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.8, ease, delay: 0.2 }}
+        >
           <Link
             href={"/shop"}
-            className="inline-flex mb-3 lg:hidden items-center border border-black/40 px-4 py-2.5 text-sm text-black/80 "
+            className="inline-flex mb-3 lg:hidden items-center border border-black/40 px-4 py-2.5 text-sm text-black/80"
           >
             Buy — €79
           </Link>
+
           <div className="sm:text-6xl hidden md:block text-3xl leading-none font-semibold tracking-[0.06em] text-[#161310]">
             CALM BY DESIGN.
           </div>
-        </div>
+        </motion.div>
       </div>
     </SmoothScroll>
   );

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import SmoothScroll from "@/components/SmoothScroll";
 import MagneticComp from "./MagneticComp";
+import { AnimatePresence, motion } from "framer-motion";
 
 type ColorKey = "green" | "red" | "white";
 
@@ -34,6 +35,26 @@ const COLORS: {
   },
 ];
 
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const textParent = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06, delayChildren: 0.05 },
+  },
+};
+
+const textItem = {
+  hidden: { opacity: 0, y: 8, filter: "blur(2px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.6, ease },
+  },
+};
+
 export default function ShopPage() {
   const [loading, setLoading] = useState(false);
   const [color, setColor] = useState<ColorKey>("green");
@@ -44,7 +65,6 @@ export default function ShopPage() {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsOpen(false);
     };
-
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
@@ -73,44 +93,107 @@ export default function ShopPage() {
 
   return (
     <SmoothScroll>
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 p-5 flex items-center justify-center"
-          onClick={() => setIsOpen(false)}
-        >
-          <div className="relative w-full h-full max-w-6xl max-h-[90vh]">
-            <Image
-              src={activeImage}
-              alt={`Good Light Lamp — ${active.label}`}
-              fill
-              priority
-              quality={100}
-              className="object-contain"
-            />
-          </div>
-        </div>
-      )}
+      {/* Fullscreen overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="fixed inset-0 z-50 bg-black/90 p-5"
+            onClick={() => setIsOpen(false)}
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+              transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
+            }}
+            exit={{
+              opacity: 0,
+              transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+            }}
+          >
+            {/* This centers the image, but DOES NOT block clicks */}
+            <div className="w-full h-full flex items-center justify-center">
+              {/* Only the image box stops propagation */}
+              <motion.div
+                className="relative w-full h-full max-w-6xl max-h-[90vh]"
+                initial={{ scale: 0.985, opacity: 0 }}
+                animate={{
+                  scale: 1,
+                  opacity: 1,
+                  transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+                }}
+                exit={{
+                  scale: 0.99,
+                  opacity: 0,
+                  transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
+                }}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`${color}-${view}-fullscreen`}
+                    className="absolute inset-0"
+                    initial={{ opacity: 0, filter: "blur(6px)" }}
+                    animate={{
+                      opacity: 1,
+                      filter: "blur(0px)",
+                      transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+                    }}
+                    exit={{
+                      opacity: 0,
+                      filter: "blur(6px)",
+                      transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
+                    }}
+                  >
+                    <Image
+                      src={activeImage}
+                      alt={`Good Light Lamp — ${active.label}`}
+                      fill
+                      priority
+                      quality={100}
+                      className="object-contain"
+                      sizes="100vw"
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main className="min-h-screen bg-[#ecebeb] text-[#161310]">
         <section className="px-6 mt-10 pt-16 pb-16">
           <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-10">
-            <div className="lg:col-span-5">
-              <div className="text-xs tracking-wide text-black/60">
+            {/* Left */}
+            <motion.div
+              className="lg:col-span-5"
+              variants={textParent}
+              initial="hidden"
+              animate="show"
+            >
+              <motion.div
+                className="text-xs tracking-wide text-black/60"
+                variants={textItem}
+              >
                 Product / Desk Lamp
-              </div>
+              </motion.div>
 
-              <h1 className="mt-6 text-5xl leading-[0.95] font-semibold text-[#161310]">
+              <motion.h1
+                className="mt-6 text-5xl leading-[0.95] font-semibold text-[#161310]"
+                variants={textItem}
+              >
                 Good light
                 <br />
                 doesn’t shout.
-              </h1>
+              </motion.h1>
 
-              <p className="mt-6 text-base leading-relaxed text-black/70 max-w-md">
+              <motion.p
+                className="mt-6 text-base leading-relaxed text-black/70 max-w-md"
+                variants={textItem}
+              >
                 Calm, focused light for desk work. Built to disappear into the
                 room and let you concentrate.
-              </p>
+              </motion.p>
 
-              <div className="mt-10">
+              <motion.div className="mt-10" variants={textItem}>
                 <div className="text-xs tracking-wide text-black/60">Color</div>
 
                 <div className="mt-3 flex items-center gap-3">
@@ -134,13 +217,37 @@ export default function ShopPage() {
                     );
                   })}
 
+                  {/* Smooth label change */}
                   <div className="ml-3 text-sm text-black/70">
-                    {active.label}
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={active.label}
+                        initial={{ opacity: 0, y: 4, filter: "blur(3px)" }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                          filter: "blur(0px)",
+                          transition: { duration: 0.28, ease },
+                        }}
+                        exit={{
+                          opacity: 0,
+                          y: -4,
+                          filter: "blur(3px)",
+                          transition: { duration: 0.18, ease },
+                        }}
+                        className="inline-block"
+                      >
+                        {active.label}
+                      </motion.span>
+                    </AnimatePresence>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="mt-10 flex items-center gap-4">
+              <motion.div
+                className="mt-10 flex items-center gap-4"
+                variants={textItem}
+              >
                 <MagneticComp>
                   <button
                     onClick={buy}
@@ -157,9 +264,12 @@ export default function ShopPage() {
                 >
                   Back to story
                 </Link>
-              </div>
+              </motion.div>
 
-              <div className="mt-12 border-t border-black/20 pt-8">
+              <motion.div
+                className="mt-12 border-t border-black/20 pt-8"
+                variants={textItem}
+              >
                 <div className="grid grid-cols-2 gap-x-10 gap-y-6 text-sm">
                   <div>
                     <div className="text-xs tracking-wide text-black/60">
@@ -167,21 +277,18 @@ export default function ShopPage() {
                     </div>
                     <div className="mt-1 text-black/90">Focused work</div>
                   </div>
-
                   <div>
                     <div className="text-xs tracking-wide text-black/60">
                       Material
                     </div>
                     <div className="mt-1 text-black/90">Wood, metal</div>
                   </div>
-
                   <div>
                     <div className="text-xs tracking-wide text-black/60">
                       Light
                     </div>
                     <div className="mt-1 text-black/90">Warm, directed</div>
                   </div>
-
                   <div>
                     <div className="text-xs tracking-wide text-black/60">
                       Price
@@ -189,28 +296,60 @@ export default function ShopPage() {
                     <div className="mt-1 text-black/90">€79</div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
+            {/* Right */}
             <div className="lg:col-span-7 border-l border-black/25 p-6 lg:p-8">
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_84px] gap-1 items-start">
-                <div className="aspect-[16/10] overflow-hidden flex items-start">
+                {/* Main image with smooth transition */}
+                <div className="aspect-[16/10] overflow-hidden">
                   <button
                     type="button"
                     onClick={() => setIsOpen(true)}
-                    className="h-full w-fit cursor-zoom-in"
+                    className="relative h-full w-full cursor-zoom-in"
                     aria-label="Open image fullscreen"
                     title="Open image"
                   >
-                    <Image
-                      src={activeImage}
-                      alt={`Good Light Lamp — ${active.label}`}
-                      width={1600}
-                      height={1000}
-                      priority
-                      quality={100}
-                      className="h-full w-auto max-w-full object-contain object-left"
-                    />
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`${color}-${view}-main`}
+                        className="absolute inset-0"
+                        initial={{
+                          opacity: 0,
+                          scale: 1.01,
+                          filter: "blur(6px)",
+                        }}
+                        animate={{
+                          opacity: 1,
+                          scale: 1,
+                          filter: "blur(0px)",
+                          transition: {
+                            duration: 0.32,
+                            ease: [0.22, 1, 0.36, 1],
+                          },
+                        }}
+                        exit={{
+                          opacity: 0,
+                          scale: 0.995,
+                          filter: "blur(6px)",
+                          transition: {
+                            duration: 0.2,
+                            ease: [0.22, 1, 0.36, 1],
+                          },
+                        }}
+                      >
+                        <Image
+                          src={activeImage}
+                          alt={`Good Light Lamp — ${active.label}`}
+                          fill
+                          priority
+                          quality={100}
+                          className="object-contain object-left"
+                          sizes="(min-width: 1024px) 60vw, 100vw"
+                        />
+                      </motion.div>
+                    </AnimatePresence>
                   </button>
                 </div>
 
@@ -275,7 +414,6 @@ export default function ShopPage() {
                     <h2 className="text-2xl font-semibold">
                       Nordic Light — Wood Edition
                     </h2>
-
                     <p className="mt-2 text-black/70 max-w-lg">
                       Designed to feel quiet. A clean wooden base, adjustable
                       arm, and a warm shade that keeps the focus where it
