@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SmoothScroll from "@/components/SmoothScroll";
 import MagneticComp from "./MagneticComp";
 
@@ -11,17 +11,33 @@ type ColorKey = "green" | "red" | "white";
 const COLORS: {
   key: ColorKey;
   label: string;
-  image: string;
+  images: [string, string];
   swatch: string;
 }[] = [
-  { key: "green", label: "Green", image: "/green-lamp.jpg", swatch: "#2f6b57" },
-  { key: "red", label: "Red", image: "/red-lamp.jpg", swatch: "#8b2f2f" },
-  { key: "white", label: "White", image: "/white-lamp.jpg", swatch: "#e2e2e2" },
+  {
+    key: "green",
+    label: "Green",
+    images: ["/green-lamp.jpg", "/green-lamp2.jpg"],
+    swatch: "#71978d",
+  },
+  {
+    key: "red",
+    label: "Red",
+    images: ["/red-lamp.jpg", "/red-lamp2.jpg"],
+    swatch: "#a0574b",
+  },
+  {
+    key: "white",
+    label: "White",
+    images: ["/white-lamp.jpg", "/white-lamp2.jpg"],
+    swatch: "#e2e2e2",
+  },
 ];
 
 export default function ShopPage() {
   const [loading, setLoading] = useState(false);
   const [color, setColor] = useState<ColorKey>("green");
+  const [view, setView] = useState<0 | 1>(0);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -33,7 +49,8 @@ export default function ShopPage() {
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
-  const active = COLORS.find((c) => c.key === color)!;
+  const active = useMemo(() => COLORS.find((c) => c.key === color)!, [color]);
+  const activeImage = active.images[view];
 
   const buy = async () => {
     setLoading(true);
@@ -41,7 +58,7 @@ export default function ShopPage() {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ color }), // 👈 send valgt farge
+        body: JSON.stringify({ color }),
       });
       if (!res.ok) throw new Error("Checkout failed");
 
@@ -61,16 +78,19 @@ export default function ShopPage() {
           className="fixed inset-0 z-50 bg-black/90 p-5 flex items-center justify-center"
           onClick={() => setIsOpen(false)}
         >
-          <div className="relative w-full h-full  max-w-6xl max-h-[90vh]">
+          <div className="relative w-full h-full max-w-6xl max-h-[90vh]">
             <Image
-              src={active.image}
+              src={activeImage}
               alt={`Good Light Lamp — ${active.label}`}
               fill
+              priority
+              quality={100}
               className="object-contain"
             />
           </div>
         </div>
       )}
+
       <main className="min-h-screen bg-[#ecebeb] text-[#161310]">
         <section className="px-6 mt-10 pt-16 pb-16">
           <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -100,8 +120,11 @@ export default function ShopPage() {
                       <button
                         key={c.key}
                         type="button"
-                        onClick={() => setColor(c.key)}
-                        className={`h-9 w-9 border transition ${
+                        onClick={() => {
+                          setColor(c.key);
+                          setView(0);
+                        }}
+                        className={`h-9 w-9 border cursor-pointer transition ${
                           selected ? "border-black" : "border-black/30"
                         }`}
                         aria-label={c.label}
@@ -170,25 +193,93 @@ export default function ShopPage() {
             </div>
 
             <div className="lg:col-span-7 border-l border-black/25 p-6 lg:p-8">
-              {" "}
-              <div className="aspect-[16/10] relative overflow-hidden cursor-zoom-in">
-                <Image
-                  src={active.image}
-                  alt={`Good Light Lamp — ${active.label}`}
-                  fill
-                  priority
-                  onClick={() => setIsOpen(true)}
-                  className="object-contain object-left"
-                />
+              <div className="grid grid-cols-1 lg:grid-cols-[1fr_84px] gap-1 items-start">
+                <div className="aspect-[16/10] overflow-hidden flex items-start">
+                  <button
+                    type="button"
+                    onClick={() => setIsOpen(true)}
+                    className="h-full w-fit cursor-zoom-in"
+                    aria-label="Open image fullscreen"
+                    title="Open image"
+                  >
+                    <Image
+                      src={activeImage}
+                      alt={`Good Light Lamp — ${active.label}`}
+                      width={1600}
+                      height={1000}
+                      priority
+                      quality={100}
+                      className="h-full w-auto max-w-full object-contain object-left"
+                    />
+                  </button>
+                </div>
+
+                {/* Thumbnails desk */}
+                <div className="hidden lg:flex flex-col gap-3">
+                  {[0, 1].map((i) => {
+                    const selected = view === i;
+                    const src = active.images[i as 0 | 1];
+                    return (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setView(i as 0 | 1)}
+                        className={`relative w-[75px] aspect-[4/5] border transition cursor-pointer ${
+                          selected ? "border-black" : "border-black/30"
+                        }`}
+                        aria-label={i === 0 ? "Main image" : "Alternate image"}
+                        title={i === 0 ? "Main image" : "Alternate image"}
+                      >
+                        <Image
+                          src={src}
+                          alt={`${active.label} thumbnail ${i + 1}`}
+                          fill
+                          className="object-cover w-full"
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
+
+              {/* Thumbnails mobile */}
+              <div className="mt-4 flex gap-3 lg:hidden">
+                {[0, 1].map((i) => {
+                  const selected = view === i;
+                  const src = active.images[i as 0 | 1];
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setView(i as 0 | 1)}
+                      className={`relative w-[75px] aspect-[4/5] border transition ${
+                        selected ? "border-black" : "border-black/30"
+                      }`}
+                      aria-label={i === 0 ? "Main image" : "Alternate image"}
+                      title={i === 0 ? "Main image" : "Alternate image"}
+                    >
+                      <Image
+                        src={src}
+                        alt={`${active.label} thumbnail ${i + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+
               <div className="mt-8">
                 <div className="flex items-start justify-between gap-6">
                   <div>
-                    <h2 className="text-2xl font-semibold">Desk Lamp</h2>
+                    <h2 className="text-2xl font-semibold">
+                      Nordic Light — Wood Edition
+                    </h2>
 
                     <p className="mt-2 text-black/70 max-w-lg">
-                      Designed to feel quiet. A tripod silhouette, warm shade,
-                      and a finish that doesn’t beg for attention.
+                      Designed to feel quiet. A clean wooden base, adjustable
+                      arm, and a warm shade that keeps the focus where it
+                      belongs.
                     </p>
                   </div>
 
@@ -209,13 +300,14 @@ export default function ShopPage() {
                     <button
                       onClick={buy}
                       disabled={loading}
-                      className="border whitespace-nowrap border-black/50 px-6 py-3 text-sm text-black/90 hover:bg-[#161310] hover:text-white transition disabled:opacity-50"
+                      className="border cursor-pointer whitespace-nowrap border-black/50 px-6 py-3 text-sm text-black/90 hover:bg-[#161310] hover:text-white transition disabled:opacity-50"
                     >
                       {loading ? "Redirecting…" : "Buy — €79"}
                     </button>
                   </MagneticComp>
                 </div>
               </div>
+
               <div className="hidden lg:block fixed right-6 top-1/2 -translate-y-1/2 pointer-events-none">
                 <div className="text-xs tracking-[0.45em] text-black/50 [writing-mode:vertical-rl]">
                   CALM BY DESIGN
