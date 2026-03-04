@@ -55,11 +55,68 @@ const textItem = {
   },
 };
 
+type Currency = "usd" | "gbp" | "eur" | "nok";
+
+function guessCurrency(): Currency {
+  if (typeof navigator === "undefined") return "eur";
+
+  const lang = (navigator.language || "").toLowerCase();
+
+  // Enkle regler (du kan utvide)
+  if (lang.startsWith("en-us")) return "usd";
+  if (lang.startsWith("en-gb")) return "gbp";
+  if (lang.startsWith("nb") || lang.startsWith("nn") || lang.startsWith("no"))
+    return "nok";
+
+  // Mange europeiske locales -> EUR som default
+  if (
+    lang.startsWith("de") ||
+    lang.startsWith("fr") ||
+    lang.startsWith("es") ||
+    lang.startsWith("it") ||
+    lang.startsWith("nl") ||
+    lang.startsWith("pt") ||
+    lang.startsWith("fi") ||
+    lang.startsWith("sv") ||
+    lang.startsWith("da")
+  ) {
+    return "eur";
+  }
+
+  return "eur";
+}
+
+const PRICE_BY_CURRENCY: Record<Currency, number> = {
+  usd: 99, // $119
+  gbp: 89, // £89
+  eur: 89, // €89
+  nok: 1099, // kr 1099
+};
+
+function formatPrice(amount: number, currency: Currency) {
+  return new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: currency.toUpperCase(),
+    maximumFractionDigits: currency === "nok" ? 0 : 0, // endre til 2 hvis du vil ha cents
+  }).format(amount);
+}
+
 export default function ShopPage() {
   const [loading, setLoading] = useState(false);
   const [color, setColor] = useState<ColorKey>("green");
   const [view, setView] = useState<0 | 1>(0);
   const [isOpen, setIsOpen] = useState(false);
+
+  const [currency, setCurrency] = useState<Currency>("eur");
+
+  useEffect(() => {
+    setCurrency(guessCurrency());
+  }, []);
+
+  const priceLabel = useMemo(() => {
+    const amount = PRICE_BY_CURRENCY[currency];
+    return formatPrice(amount, currency);
+  }, [currency]);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -78,7 +135,7 @@ export default function ShopPage() {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ color }),
+        body: JSON.stringify({ color, currency }),
       });
       if (!res.ok) throw new Error("Checkout failed");
 
@@ -254,7 +311,7 @@ export default function ShopPage() {
                     disabled={loading}
                     className="border cursor-pointer whitespace-nowrap text-nowrap border-black/50 px-6 py-3 text-sm text-black/90 hover:bg-[#161310] hover:text-white transition disabled:opacity-50"
                   >
-                    {loading ? "Redirecting…" : "Buy — €79"}
+                    {loading ? "Redirecting…" : `Buy — ${priceLabel}`}
                   </button>
                 </MagneticComp>
 
@@ -293,7 +350,7 @@ export default function ShopPage() {
                     <div className="text-xs tracking-wide text-black/60">
                       Price
                     </div>
-                    <div className="mt-1 text-black/90">€79</div>
+                    <div className="mt-1 text-black/90">{priceLabel}</div>
                   </div>
                 </div>
               </motion.div>
@@ -425,13 +482,15 @@ export default function ShopPage() {
                     <div className="text-xs tracking-wide text-black/60">
                       Price
                     </div>
-                    <div className="mt-1 text-lg text-black/90">€79</div>
+                    <div className="mt-1 text-lg text-black/90">
+                      {priceLabel}
+                    </div>
                   </div>
                 </div>
 
                 <div className="mt-8 border-t border-black/15 pt-6 flex items-center justify-between">
                   <div className="text-xs tracking-wide text-black/60">
-                    Ships in 2–5 days · EU shipping
+                    Free Shipping
                   </div>
 
                   <MagneticComp>
@@ -440,7 +499,7 @@ export default function ShopPage() {
                       disabled={loading}
                       className="border cursor-pointer whitespace-nowrap border-black/50 px-6 py-3 text-sm text-black/90 hover:bg-[#161310] hover:text-white transition disabled:opacity-50"
                     >
-                      {loading ? "Redirecting…" : "Buy — €79"}
+                      {loading ? "Redirecting…" : `Buy — ${priceLabel}`}{" "}
                     </button>
                   </MagneticComp>
                 </div>
