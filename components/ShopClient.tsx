@@ -97,7 +97,7 @@ function formatPrice(amount: number, currency: Currency) {
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency: currency.toUpperCase(),
-    maximumFractionDigits: currency === "nok" ? 0 : 0, // endre til 2 hvis du vil ha cents
+    maximumFractionDigits: currency === "nok" ? 0 : 0,
   }).format(amount);
 }
 

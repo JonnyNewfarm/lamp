@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
-import { PRODUCT } from "@/lib/product";
+import { PRODUCT, type SupportedCurrency } from "@/lib/product";
+
+function isSupportedCurrency(x: any): x is SupportedCurrency {
+  return x === "usd" || x === "eur" || x === "gbp" || x === "nok";
+}
+
+export const runtime = "nodejs"; // anbefalt for Stripe webhooks i App Router
 
 export async function POST(req: NextRequest) {
   const sig = req.headers.get("stripe-signature");
@@ -36,6 +42,22 @@ export async function POST(req: NextRequest) {
       session.customer_details?.address ??
       null;
 
+    // ✅ currency: bruk Stripe sin session.currency først
+    const metaCurrency = session.metadata?.currency;
+    const sessionCurrency = session.currency;
+
+    const currency: SupportedCurrency = isSupportedCurrency(sessionCurrency)
+      ? sessionCurrency
+      : isSupportedCurrency(metaCurrency)
+        ? metaCurrency
+        : "usd";
+
+    // ✅ amount_total er det som faktisk ble betalt (minor units)
+    const unitAmount: number =
+      typeof session.amount_total === "number"
+        ? session.amount_total
+        : PRODUCT.prices[currency]; // fallback
+
     await prisma.order.upsert({
       where: { stripeSessionId: session.id },
       update: {
@@ -52,6 +74,10 @@ export async function POST(req: NextRequest) {
 
         status: "PAID",
         color,
+
+        // (valgfritt men smart) oppdater disse også ved re-run
+        unitAmount,
+        currency,
       },
       create: {
         stripeSessionId: session.id,
@@ -61,8 +87,8 @@ export async function POST(req: NextRequest) {
 
         productId: session.metadata?.productId ?? PRODUCT.id,
         productName: PRODUCT.name,
-        unitAmount: PRODUCT.unitAmount,
-        currency: PRODUCT.currency,
+        unitAmount,
+        currency,
 
         shipLine1: addr?.line1 ?? null,
         shipLine2: addr?.line2 ?? null,
@@ -73,7 +99,7 @@ export async function POST(req: NextRequest) {
 
         supplierUrl: PRODUCT.supplierUrl,
         status: "PAID",
-        color, // ✅ viktig
+        color,
       },
     });
   }
