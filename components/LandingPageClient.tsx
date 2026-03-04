@@ -85,11 +85,11 @@ const LandingPageClient = () => {
           >
             Good light
             <br />
-            doesn’t shout.
+            doesn’t shout
           </motion.h1>
 
           <motion.p
-            className="mt-6 text-base leading-relaxed text-black/70 max-w-md"
+            className="mt-5 text-base leading-relaxed text-black/70 max-w-md"
             variants={item}
           >
             A desk lamp designed for calm,
@@ -97,7 +97,7 @@ const LandingPageClient = () => {
             focused work.
           </motion.p>
 
-          <motion.div className="mt-8" variants={item}>
+          <motion.div className="mt-6" variants={item}>
             <MagneticComp>
               <Link
                 href={"/shop"}
@@ -128,7 +128,7 @@ const LandingPageClient = () => {
           initial="hidden"
           animate="show"
         >
-          <div className="text-lg tracking-[0.45em] text-black/50 [writing-mode:vertical-rl]">
+          <div className="text-lg landscape:text-sm tracking-[0.45em] text-black/50 [writing-mode:vertical-rl]">
             CALM BY DESIGN
           </div>
         </motion.div>
