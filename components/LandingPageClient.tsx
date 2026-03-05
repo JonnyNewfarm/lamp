@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import MagneticComp from "./MagneticComp";
 import { motion } from "framer-motion";
+import PreLoader from "@/components/PreLoader";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -41,6 +42,10 @@ const subtle = {
 
 const LandingPageClient = () => {
   const [cameraZ, setCameraZ] = useState(4.3);
+
+  // null = ikke sjekket storage enda (hindrer flash/feil state)
+  const [preloaded, setPreloaded] = useState<boolean | null>(null);
+
   const pathname = usePathname();
 
   useEffect(() => {
@@ -53,8 +58,25 @@ const LandingPageClient = () => {
     return () => window.removeEventListener("resize", update);
   }, []);
 
+  // ✅ Sjekk om preloader er vist tidligere i denne tabben
+  useEffect(() => {
+    const seen = sessionStorage.getItem("seen_home_preloader") === "1";
+    setPreloaded(seen ? true : false);
+  }, []);
+
   return (
     <SmoothScroll>
+      {/* ✅ Preloader overlay (kun første gang per session/tab) */}
+      {preloaded === false && (
+        <PreLoader
+          holdMs={1200}
+          onDone={() => {
+            sessionStorage.setItem("seen_home_preloader", "1");
+            setPreloaded(true);
+          }}
+        />
+      )}
+
       <UI />
 
       <div className="fixed inset-0">
@@ -74,10 +96,10 @@ const LandingPageClient = () => {
 
         {/* Left text block */}
         <motion.div
-          className="absolute hidden lg:block left-10 top-1/2 -translate-y-1/2 max-w-xl"
+          className="absolute z-10 hidden lg:block left-10 top-1/2 -translate-y-1/2 max-w-xl"
           variants={container}
           initial="hidden"
-          animate="show"
+          animate={preloaded ? "show" : "hidden"}
         >
           <motion.h1
             className="text-4xl leading-[0.95] font-semibold text-[#161310]"
@@ -111,10 +133,10 @@ const LandingPageClient = () => {
 
         {/* Right vertical label (desktop) */}
         <motion.div
-          className="absolute right-6 hidden md:block top-1/2 -translate-y-1/2"
+          className="absolute z-10 right-6 hidden md:block top-1/2 -translate-y-1/2"
           variants={subtle}
           initial="hidden"
-          animate="show"
+          animate={preloaded ? "show" : "hidden"}
         >
           <div className="text-lg tracking-[0.45em] text-black/50 [writing-mode:vertical-rl]">
             CALM BY DESIGN
@@ -123,10 +145,10 @@ const LandingPageClient = () => {
 
         {/* Vertical label (mobile) */}
         <motion.div
-          className="absolute md:hidden left-6 top-1/2 -translate-y-1/2"
+          className="absolute z-10 md:hidden left-6 top-1/2 -translate-y-1/2"
           variants={subtle}
           initial="hidden"
-          animate="show"
+          animate={preloaded ? "show" : "hidden"}
         >
           <div className="text-lg landscape:text-sm tracking-[0.45em] text-black/50 [writing-mode:vertical-rl]">
             CALM BY DESIGN
@@ -135,9 +157,13 @@ const LandingPageClient = () => {
 
         {/* Bottom area */}
         <motion.div
-          className="absolute left-10 bottom-10"
+          className="absolute z-10 left-10 bottom-10"
           initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          animate={
+            preloaded
+              ? { opacity: 1, y: 0, filter: "blur(0px)" }
+              : { opacity: 0, y: 10, filter: "blur(4px)" }
+          }
           transition={{ duration: 0.8, ease, delay: 0.2 }}
         >
           <Link
