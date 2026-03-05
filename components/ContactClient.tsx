@@ -42,7 +42,6 @@ export default function ContactClient() {
         initial="hidden"
         animate="show"
       >
-        {/* Left */}
         <motion.div className="lg:col-span-5" variants={parent}>
           <motion.div
             className="text-xs tracking-wide text-black/60"
@@ -69,7 +68,6 @@ export default function ContactClient() {
           </motion.p>
         </motion.div>
 
-        {/* Right */}
         <div className="lg:col-span-7">
           <motion.div className="border border-black/25 p-8" variants={panel}>
             <div className="space-y-8">
@@ -113,7 +111,6 @@ export default function ContactClient() {
             </div>
           </motion.div>
 
-          {/* Vertical label */}
           <motion.div
             className="hidden lg:block fixed right-6 top-1/2 -translate-y-1/2 pointer-events-none"
             initial={{ opacity: 0, y: 6, filter: "blur(3px)" }}

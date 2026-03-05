@@ -62,13 +62,11 @@ function guessCurrency(): Currency {
 
   const lang = (navigator.language || "").toLowerCase();
 
-  // Enkle regler (du kan utvide)
   if (lang.startsWith("en-us")) return "usd";
   if (lang.startsWith("en-gb")) return "gbp";
   if (lang.startsWith("nb") || lang.startsWith("nn") || lang.startsWith("no"))
     return "nok";
 
-  // Mange europeiske locales -> EUR som default
   if (
     lang.startsWith("de") ||
     lang.startsWith("fr") ||
@@ -87,10 +85,10 @@ function guessCurrency(): Currency {
 }
 
 const PRICE_BY_CURRENCY: Record<Currency, number> = {
-  usd: 99, // $119
-  gbp: 89, // £89
-  eur: 89, // €89
-  nok: 1099, // kr 1099
+  usd: 99,
+  gbp: 89,
+  eur: 89,
+  nok: 1099,
 };
 
 function formatPrice(amount: number, currency: Currency) {
@@ -150,7 +148,6 @@ export default function ShopPage() {
 
   return (
     <SmoothScroll>
-      {/* Fullscreen overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -166,9 +163,7 @@ export default function ShopPage() {
               transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] },
             }}
           >
-            {/* This centers the image, but DOES NOT block clicks */}
             <div className="w-full h-full flex items-center justify-center">
-              {/* Only the image box stops propagation */}
               <motion.div
                 className="relative w-full h-full max-w-6xl max-h-[90vh]"
                 initial={{ scale: 0.985, opacity: 0 }}
@@ -219,7 +214,6 @@ export default function ShopPage() {
       <main className="min-h-screen bg-[#ecebeb] text-[#161310]">
         <section className="px-6 mt-10 pt-16 pb-16">
           <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-10">
-            {/* Left */}
             <motion.div
               className="lg:col-span-5"
               variants={textParent}
@@ -274,7 +268,6 @@ export default function ShopPage() {
                     );
                   })}
 
-                  {/* Smooth label change */}
                   <div className="ml-3 text-sm text-black/70">
                     <AnimatePresence mode="wait">
                       <motion.span
@@ -356,10 +349,8 @@ export default function ShopPage() {
               </motion.div>
             </motion.div>
 
-            {/* Right */}
             <div className="lg:col-span-7 border-l border-black/25 p-6 lg:p-8">
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_84px] gap-1 items-start">
-                {/* Main image with smooth transition */}
                 <div className="aspect-[16/10] overflow-hidden">
                   <button
                     type="button"
@@ -410,7 +401,6 @@ export default function ShopPage() {
                   </button>
                 </div>
 
-                {/* Thumbnails desk */}
                 <div className="hidden lg:flex flex-col gap-3">
                   {[0, 1].map((i) => {
                     const selected = view === i;
@@ -438,7 +428,6 @@ export default function ShopPage() {
                 </div>
               </div>
 
-              {/* Thumbnails mobile */}
               <div className="mt-4 flex gap-3 lg:hidden">
                 {[0, 1].map((i) => {
                   const selected = view === i;

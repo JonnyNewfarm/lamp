@@ -10,14 +10,11 @@ export function ResetOnMount() {
   const setPage = useSetAtom(pageAtom);
 
   useEffect(() => {
-    // reset state
     setPage(0);
 
-    // reset ScrollControls sin container
     const el = scroll.el;
     if (el) el.scrollTop = 0;
 
-    // noen ganger må den “poke” en gang til etter layout
     requestAnimationFrame(() => {
       const el2 = scroll.el;
       if (el2) el2.scrollTop = 0;

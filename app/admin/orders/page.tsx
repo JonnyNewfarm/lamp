@@ -21,8 +21,6 @@ export default async function AdminOrdersPage({
     take: 200,
   });
 
-  console.log("Order scalar fields:", Object.keys(prisma.order.fields ?? {}));
-
   return (
     <main className="min-h-screen  bg-[#ecebeb] text-[#161310]">
       <div className="mx-auto max-w-6xl px-6 py-12">

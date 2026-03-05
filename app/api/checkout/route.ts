@@ -15,7 +15,6 @@ export async function POST(req: Request) {
   const color = (body?.color ?? "green") as ColorKey;
   const safeColor: ColorKey = color === "red" || color === "white" ? color : "green";
 
-  // Velg currency fra request (default: usd)
   const currency: SupportedCurrency = isSupportedCurrency(body?.currency)
     ? body.currency
     : "usd";
@@ -57,7 +56,7 @@ export async function POST(req: Request) {
         shipping_rate_data: {
           display_name: "Free shipping",
           type: "fixed_amount",
-          fixed_amount: { amount: 0, currency }, // 👈 viktig: samme currency
+          fixed_amount: { amount: 0, currency }, 
           delivery_estimate: {
             minimum: { unit: "business_day", value: 7 },
             maximum: { unit: "business_day", value: 18 },
@@ -79,6 +78,5 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Missing session url" }, { status: 500 });
   }
 
-  // Returnér også pris info så UI kan matche (valgfritt, men nice)
   return NextResponse.json({ url: session.url, currency, unitAmount });
 }

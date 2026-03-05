@@ -43,7 +43,6 @@ const subtle = {
 const LandingPageClient = () => {
   const [cameraZ, setCameraZ] = useState(4.3);
 
-  // null = ikke sjekket storage enda (hindrer flash/feil state)
   const [preloaded, setPreloaded] = useState<boolean | null>(null);
 
   const pathname = usePathname();
@@ -58,7 +57,6 @@ const LandingPageClient = () => {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  // ✅ Sjekk om preloader er vist tidligere i denne tabben
   useEffect(() => {
     const seen = sessionStorage.getItem("seen_home_preloader") === "1";
     setPreloaded(seen ? true : false);
@@ -66,7 +64,6 @@ const LandingPageClient = () => {
 
   return (
     <SmoothScroll>
-      {/* ✅ Preloader overlay (kun første gang per session/tab) */}
       {preloaded === false && (
         <PreLoader
           holdMs={1200}
@@ -94,7 +91,6 @@ const LandingPageClient = () => {
           <Experience />
         </Canvas>
 
-        {/* Left text block */}
         <motion.div
           className="absolute z-10 hidden lg:block left-10 top-1/2 -translate-y-1/2 max-w-xl"
           variants={container}
@@ -131,7 +127,6 @@ const LandingPageClient = () => {
           </motion.div>
         </motion.div>
 
-        {/* Right vertical label (desktop) */}
         <motion.div
           className="absolute z-10 right-6 hidden md:block top-1/2 -translate-y-1/2"
           variants={subtle}
@@ -143,7 +138,6 @@ const LandingPageClient = () => {
           </div>
         </motion.div>
 
-        {/* Vertical label (mobile) */}
         <motion.div
           className="absolute z-10 md:hidden left-6 top-1/2 -translate-y-1/2"
           variants={subtle}
@@ -155,7 +149,6 @@ const LandingPageClient = () => {
           </div>
         </motion.div>
 
-        {/* Bottom area */}
         <motion.div
           className="absolute z-10 left-10 bottom-10"
           initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
