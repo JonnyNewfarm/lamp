@@ -101,9 +101,9 @@ const LandingPageClient = () => {
             className="text-4xl leading-[0.95] font-semibold text-[#161310]"
             variants={item}
           >
-            Good light
+            Light,
             <br />
-            doesn’t shout
+            designed for calm.
           </motion.h1>
 
           <motion.p

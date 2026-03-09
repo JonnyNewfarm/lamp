@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description:
     "Minimalist wood desk lamp designed for calm, focused work. Natural materials and warm lighting for modern interiors.",
   openGraph: {
-    title: "Wood Desk Lamp — Calero Studio",
+    title: "Nordic Light — Wood Edition | Calero Studio",
     description:
       "Minimalist wood desk lamp designed for calm, focused work. Discover the lamp from Calero Studio.",
     url: "https://calero.studio/shop",
