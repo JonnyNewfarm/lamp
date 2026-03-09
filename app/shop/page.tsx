@@ -3,38 +3,35 @@ import ShopPage from "@/components/ShopClient";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Desk lamp | Calero Studio",
+  title: "Nordic Light — Wood Edition | Calero Studio",
   description:
-    "Buy the Good Light Lamp. Calm, focused lighting for desk work. Designed to disappear into the room.",
+    "Minimalist wood desk lamp designed for calm, focused work. Natural materials and warm lighting for modern interiors.",
   openGraph: {
-    title: "Good Light Lamp — Calm by Design",
-    description: "Calm, focused light for desk work. Buy the Good Light Lamp.",
-    url: "https://yourdomain.com/shop",
-    siteName: "Calm by Design",
+    title: "Wood Desk Lamp — Calero Studio",
+    description:
+      "Minimalist wood desk lamp designed for calm, focused work. Discover the lamp from Calero Studio.",
+    url: "https://calero.studio/shop",
+    siteName: "Calero Studio",
     images: [
       {
         url: "/lamp.jpeg",
         width: 1200,
         height: 630,
-        alt: "Good Light Lamp",
+        alt: "Wood Desk Lamp — Calero Studio",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Good Light Lamp — Calm by Design",
-    description: "Calm, focused light for desk work. Buy the Good Light Lamp.",
+    title: "Wood Desk Lamp — Calero Studio",
+    description: "Minimalist wood desk lamp designed for calm, focused work.",
     images: ["/lamp.jpeg"],
   },
 };
 
 const page = () => {
-  return (
-    <>
-      <ShopPage />
-    </>
-  );
+  return <ShopPage />;
 };
 
 export default page;
