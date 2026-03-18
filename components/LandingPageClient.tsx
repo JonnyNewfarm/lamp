@@ -1,4 +1,5 @@
 "use client";
+
 import { Experience } from "@/components/Experience";
 import SmoothScroll from "@/components/SmoothScroll";
 import { UI } from "@/components/UI";
@@ -21,29 +22,27 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 10, filter: "blur(4px)" },
+  hidden: { opacity: 0, y: 10 },
   show: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.7, ease },
   },
 };
 
 const subtle = {
-  hidden: { opacity: 0, y: 6, filter: "blur(3px)" },
+  hidden: { opacity: 0, y: 6 },
   show: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.8, ease, delay: 0.15 },
   },
 };
 
 const LandingPageClient = () => {
   const [cameraZ, setCameraZ] = useState(4.3);
-
   const [preloaded, setPreloaded] = useState<boolean | null>(null);
+  const [mountScene, setMountScene] = useState(false);
 
   const pathname = usePathname();
 
@@ -59,46 +58,65 @@ const LandingPageClient = () => {
 
   useEffect(() => {
     const seen = sessionStorage.getItem("seen_home_preloader") === "1";
-    setPreloaded(seen ? true : false);
+
+    if (seen) {
+      setPreloaded(true);
+      setMountScene(true);
+    } else {
+      setPreloaded(false);
+    }
   }, []);
+
+  const handlePreloaderDone = () => {
+    sessionStorage.setItem("seen_home_preloader", "1");
+    setPreloaded(true);
+
+    requestAnimationFrame(() => {
+      setMountScene(true);
+    });
+  };
+
+  if (preloaded === null) return null;
 
   return (
     <SmoothScroll>
       {preloaded === false && (
-        <PreLoader
-          holdMs={1200}
-          onDone={() => {
-            sessionStorage.setItem("seen_home_preloader", "1");
-            setPreloaded(true);
-          }}
-        />
+        <PreLoader holdMs={2400} onDone={handlePreloaderDone} />
       )}
 
       <UI />
 
-      <div className="fixed inset-0">
-        <Canvas
-          key={pathname}
-          dpr={[1.25, 2]}
-          style={{ touchAction: "pan-y" }}
-          shadows
-          camera={{
-            position: [-0.5, 1, cameraZ],
-            fov: 45,
-          }}
-        >
-          <color attach="background" args={["#ecebeb"]} />
-          <Experience />
-        </Canvas>
+      <div className="fixed inset-0 bg-[#ecebeb]">
+        {mountScene ? (
+          <Canvas
+            key={pathname}
+            dpr={[1, 1.5]}
+            style={{ touchAction: "pan-y" }}
+            camera={{
+              position: [-0.5, 1, cameraZ],
+              fov: 45,
+            }}
+          >
+            <color attach="background" args={["#ecebeb"]} />
+            <Experience />
+          </Canvas>
+        ) : (
+          <div className="absolute inset-0 bg-[#ecebeb]" />
+        )}
 
         <motion.div
-          className="absolute z-10 hidden lg:block left-10 top-1/2 -translate-y-1/2 max-w-xl"
+          className="absolute z-10 hidden xl:block left-10 top-1/2 -translate-y-1/2 max-w-xl"
           variants={container}
           initial="hidden"
           animate={preloaded ? "show" : "hidden"}
         >
+          <motion.div variants={item} className="mb-2 ml-3">
+            <span className="text-[11px] uppercase tracking-[0.24em] text-black/45">
+              Object 01
+            </span>
+          </motion.div>
           <motion.h1
-            className="text-4xl leading-[0.95] font-semibold text-[#161310]"
+            className="text-[2.4rem] leading-[0.95] font-semibold text-[#161310]"
             variants={item}
           >
             Nordic Light,
@@ -107,7 +125,7 @@ const LandingPageClient = () => {
           </motion.h1>
 
           <motion.p
-            className="mt-5 text-base leading-relaxed text-black/70 max-w-md"
+            className="mt-2.5 text-base leading-relaxed text-black/70 max-w-md"
             variants={item}
           >
             A desk lamp designed for calm,
@@ -115,10 +133,10 @@ const LandingPageClient = () => {
             focused work.
           </motion.p>
 
-          <motion.div className="mt-6" variants={item}>
+          <motion.div className="mt-4" variants={item}>
             <MagneticComp>
               <Link
-                href={"/shop"}
+                href="/shop"
                 className="inline-flex items-center hover:bg-[#161310] hover:text-white border border-black/40 px-5 py-3 text-sm text-[#161310]"
               >
                 Buy — €79
@@ -151,16 +169,12 @@ const LandingPageClient = () => {
 
         <motion.div
           className="absolute z-10 left-10 bottom-10"
-          initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
-          animate={
-            preloaded
-              ? { opacity: 1, y: 0, filter: "blur(0px)" }
-              : { opacity: 0, y: 10, filter: "blur(4px)" }
-          }
+          initial={{ opacity: 0, y: 10 }}
+          animate={preloaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
           transition={{ duration: 0.8, ease, delay: 0.2 }}
         >
           <Link
-            href={"/shop"}
+            href="/shop"
             className="inline-flex mb-3 lg:hidden items-center border border-black/40 px-4 py-2.5 text-sm text-black/80"
           >
             Buy — €79

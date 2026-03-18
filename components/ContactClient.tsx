@@ -51,7 +51,7 @@ export default function ContactClient() {
           </motion.div>
 
           <motion.h1
-            className="mt-6 text-5xl leading-[0.95] font-semibold"
+            className="mt-6 text-6xl leading-[0.95] font-semibold"
             variants={item}
           >
             Let’s keep it
@@ -69,7 +69,7 @@ export default function ContactClient() {
         </motion.div>
 
         <div className="lg:col-span-7">
-          <motion.div className="border border-black/25 p-8" variants={panel}>
+          <motion.div className="border-l border-black/25 p-8" variants={panel}>
             <div className="space-y-8">
               <div>
                 <div className="text-xs tracking-wide text-black/60">Email</div>
