@@ -116,7 +116,7 @@ const LandingPageClient = () => {
             </span>
           </motion.div>
           <motion.h1
-            className="text-[2.4rem] leading-[0.95] font-semibold text-[#161310]"
+            className="xl:text-[2.2rem]   leading-[0.95] font-semibold text-[#161310]"
             variants={item}
           >
             Nordic Light,
@@ -132,17 +132,6 @@ const LandingPageClient = () => {
             <br />
             focused work.
           </motion.p>
-
-          <motion.div className="mt-4" variants={item}>
-            <MagneticComp>
-              <Link
-                href="/shop"
-                className="inline-flex items-center hover:bg-[#161310] hover:text-white border border-black/40 px-5 py-3 text-sm text-[#161310]"
-              >
-                Buy — €79
-              </Link>
-            </MagneticComp>
-          </motion.div>
         </motion.div>
 
         <motion.div
@@ -175,14 +164,36 @@ const LandingPageClient = () => {
         >
           <Link
             href="/shop"
-            className="inline-flex mb-3 lg:hidden items-center border border-black/40 px-4 py-2.5 text-sm text-black/80"
+            className="inline-flex mb-3 md:hidden items-center border border-black/40 px-4 py-2.5 text-sm sm:text-lg text-black/80"
           >
             Buy — €79
           </Link>
 
-          <div className="sm:text-6xl hidden md:block text-3xl leading-none font-semibold tracking-[0.06em] text-[#161310]">
+          <div className="sm:text-md ml-1 mb-1 hidden md:block xl:hidden uppercase  leading-none font-semibold tracking-[0.06em] text-[#161310]">
+            Object 01{" "}
+          </div>
+
+          <div className="sm:text-2xl ml-1 mb-1 hidden md:block xl:hidden uppercase  leading-none font-semibold tracking-[0.06em] text-[#161310]">
+            Nordic lights,
+          </div>
+
+          <div className="sm:text-6xl hidden md:block  leading-none font-semibold tracking-[0.06em] text-[#161310]">
             CALM BY DESIGN.
           </div>
+        </motion.div>
+
+        <motion.div
+          className="mt-4 absolute right-10 bottom-10 hidden lg:block"
+          variants={item}
+        >
+          <MagneticComp>
+            <Link
+              href="/shop"
+              className="inline-flex items-center hover:bg-[#161310] hover:text-white border border-black/40 px-5 py-3 text-lg text-[#161310]"
+            >
+              Buy — €79
+            </Link>
+          </MagneticComp>
         </motion.div>
       </div>
     </SmoothScroll>

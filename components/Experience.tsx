@@ -15,7 +15,7 @@ export const Experience = () => {
         speed={2}
         rotationIntensity={0.8}
       >
-        <group position-x={-0.2}>
+        <group position-x={-0.1}>
           <Book />
         </group>
       </Float>
