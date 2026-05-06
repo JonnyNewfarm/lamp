@@ -1,82 +1,148 @@
+// app/api/checkout/route.ts
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
-import { PRODUCT, type SupportedCurrency } from "@/lib/product";
 
-type ColorKey = "green" | "red" | "white";
+type CheckoutCartItem = {
+  productId: string;
+  variantId: string;
+  quantity: number;
+};
 
-function isSupportedCurrency(x: any): x is SupportedCurrency {
-  return x === "usd" || x === "eur" || x === "gbp" || x === "nok";
-}
+export async function POST(request: Request) {
+  try {
+    const body = (await request.json()) as {
+      items?: CheckoutCartItem[];
+    };
 
-export async function POST(req: Request) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
-  const body = await req.json().catch(() => ({}));
+    const items = body.items || [];
 
-  const color = (body?.color ?? "green") as ColorKey;
-  const safeColor: ColorKey = color === "red" || color === "white" ? color : "green";
+    if (!items.length) {
+      return NextResponse.json(
+        { error: "Cart is empty" },
+        { status: 400 },
+      );
+    }
 
-  const currency: SupportedCurrency = isSupportedCurrency(body?.currency)
-    ? body.currency
-    : "usd";
+    const appUrl =
+      process.env.NEXT_PUBLIC_APP_URL || request.headers.get("origin");
 
-  const unitAmount = PRODUCT.prices[currency];
+    if (!appUrl) {
+      return NextResponse.json(
+        { error: "Missing app URL" },
+        { status: 500 },
+      );
+    }
 
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
+    const variantIds = items.map((item) => item.variantId);
 
-    line_items: [
-      {
-        quantity: 1,
-        price_data: {
-          currency,
-          unit_amount: unitAmount,
-          product_data: {
-            name: PRODUCT.name,
-            description: PRODUCT.description,
-            metadata: {
-              productId: PRODUCT.id,
-              color: safeColor,
+    const variants = await prisma.productVariant.findMany({
+      where: {
+        id: {
+          in: variantIds,
+        },
+        product: {
+          status: "ACTIVE",
+        },
+      },
+      include: {
+        product: {
+          include: {
+            images: {
+              orderBy: {
+                order: "asc",
+              },
             },
           },
         },
-      },
-    ],
-
-    shipping_address_collection: {
-      allowed_countries: [
-        "US","CA","GB","IE","AU","NZ",
-        "DE","FR","ES","IT","NL","BE","SE","NO","DK","FI","CH",
-        "PL","AT","PT","CZ","RO","HU","GR",
-        "JP","KR","SG","HK","AE"
-      ],
-    },
-
-    shipping_options: [
-      {
-        shipping_rate_data: {
-          display_name: "Free shipping",
-          type: "fixed_amount",
-          fixed_amount: { amount: 0, currency }, 
-          delivery_estimate: {
-            minimum: { unit: "business_day", value: 7 },
-            maximum: { unit: "business_day", value: 18 },
+        images: {
+          orderBy: {
+            order: "asc",
           },
         },
       },
-    ],
+    });
 
-    success_url: `${siteUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${siteUrl}/cancel`,
+    const lineItems = items.map((cartItem) => {
+      const variant = variants.find((item) => item.id === cartItem.variantId);
 
-    metadata: { productId: PRODUCT.id, color: safeColor, currency },
-    payment_intent_data: {
-      metadata: { productId: PRODUCT.id, color: safeColor, currency },
-    },
-  });
+      if (!variant) {
+        throw new Error("Product variant not found");
+      }
 
-  if (!session.url) {
-    return NextResponse.json({ error: "Missing session url" }, { status: 500 });
+      if (variant.stock < cartItem.quantity) {
+        throw new Error(`${variant.product.title} is out of stock`);
+      }
+
+      const unitAmount = variant.price || variant.product.price;
+      const image = variant.images[0] || variant.product.images[0];
+
+      return {
+        quantity: cartItem.quantity,
+        price_data: {
+          currency: variant.product.currency,
+          unit_amount: unitAmount,
+          product_data: {
+            name: `${variant.product.title} - ${variant.name}`,
+            description: variant.color || variant.product.description,
+            images: image?.url ? [image.url] : undefined,
+            metadata: {
+              productId: variant.product.id,
+              variantId: variant.id,
+            },
+          },
+        },
+      };
+    });
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      line_items: lineItems,
+      success_url: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/shop`,
+      billing_address_collection: "auto",
+      shipping_address_collection: {
+        allowed_countries: [
+          "US",
+          "CA",
+          "GB",
+          "AU",
+          "NO",
+          "SE",
+          "DK",
+          "FI",
+          "DE",
+          "FR",
+          "NL",
+          "ES",
+          "IT",
+        ],
+      },
+      metadata: {
+        cart: JSON.stringify(
+          items.map((item) => ({
+            productId: item.productId,
+            variantId: item.variantId,
+            quantity: item.quantity,
+          })),
+        ),
+      },
+    });
+
+    return NextResponse.json({
+      url: session.url,
+    });
+  } catch (error) {
+    console.error("[CHECKOUT_ERROR]", error);
+
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while creating checkout",
+      },
+      { status: 500 },
+    );
   }
-
-  return NextResponse.json({ url: session.url, currency, unitAmount });
 }

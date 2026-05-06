@@ -1,4 +1,7 @@
+import FeaturedCollection from "@/components/FeaturedCollection";
 import LandingPageClient from "@/components/LandingPageClient";
+import LightingByMood from "@/components/LightingByMood";
+import ScrollSection from "@/components/SmoothScroll";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -42,7 +45,11 @@ export const metadata: Metadata = {
 const page = () => {
   return (
     <>
-      <LandingPageClient />
+      <ScrollSection>
+        <LandingPageClient />
+        <FeaturedCollection />
+        <LightingByMood />
+      </ScrollSection>
     </>
   );
 };

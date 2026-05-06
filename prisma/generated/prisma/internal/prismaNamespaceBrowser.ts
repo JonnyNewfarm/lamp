@@ -51,7 +51,11 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Order: 'Order'
+  Order: 'Order',
+  Category: 'Category',
+  Product: 'Product',
+  ProductVariant: 'ProductVariant',
+  ProductImage: 'ProductImage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -95,6 +99,65 @@ export const OrderScalarFieldEnum = {
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  slug: 'slug'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const ProductScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  title: 'title',
+  slug: 'slug',
+  description: 'description',
+  status: 'status',
+  featured: 'featured',
+  price: 'price',
+  compareAtPrice: 'compareAtPrice',
+  currency: 'currency',
+  supplierUrl: 'supplierUrl',
+  categoryId: 'categoryId'
+} as const
+
+export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ProductVariantScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  productId: 'productId',
+  name: 'name',
+  color: 'color',
+  colorHex: 'colorHex',
+  price: 'price',
+  stock: 'stock',
+  sku: 'sku'
+} as const
+
+export type ProductVariantScalarFieldEnum = (typeof ProductVariantScalarFieldEnum)[keyof typeof ProductVariantScalarFieldEnum]
+
+
+export const ProductImageScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  productId: 'productId',
+  variantId: 'variantId',
+  url: 'url',
+  alt: 'alt',
+  order: 'order'
+} as const
+
+export type ProductImageScalarFieldEnum = (typeof ProductImageScalarFieldEnum)[keyof typeof ProductImageScalarFieldEnum]
 
 
 export const SortOrder = {

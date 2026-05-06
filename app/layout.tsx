@@ -5,6 +5,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import NavbarMobile from "@/components/NavbarMobile";
 import Footer from "@/components/Footer";
+import { CartProvider } from "@/components/cart/CartProvider";
+import CartDrawer from "@/components/cart/CartDrawer";
 
 const mont = Montserrat({
   variable: "--font-geist-sans",
@@ -45,12 +47,16 @@ export default function RootLayout({
           }}
         />
 
-        <div className="relative h-full w-full">
-          <Navbar />
-          <NavbarMobile />
-          {children}
-          <Footer />
-        </div>
+        <CartProvider>
+          <div className="relative h-full w-full">
+            <Navbar />
+            <NavbarMobile />
+            {children}
+            <Footer />
+          </div>
+
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );

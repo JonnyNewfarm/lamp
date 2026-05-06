@@ -1,19 +1,24 @@
-import BurgerMenu from "./BurgerMenu";
+// components/NavbarMobile.tsx
+"use client";
+
 import Link from "next/link";
-import { FaRegCopyright } from "react-icons/fa";
+import BurgerMenu from "./BurgerMenu";
+import CartButton from "./cart/CartButton";
 
 const NavbarMobile = () => {
   return (
-    <div className="w-full z-50 text-color py-3 px-10 items-center bg-transparent fixed md:hidden flex justify-between">
+    <div className="fixed left-0 top-0 z-50 flex w-full items-center justify-between border-b border-[#161310]/15 bg-[#ecebeb]/75 px-4 py-5 text-[#161310] backdrop-blur-md md:hidden">
       <Link
         href="/"
-        className="text-lg flex items-center mt-1 justify-center gap-x-1"
+        className="text-xl font-medium uppercase tracking-[-0.04em]"
       >
-        <FaRegCopyright size={18} />
-        <h1 className="">Calero Studio</h1>
+        Calero
       </Link>
 
-      <BurgerMenu />
+      <div className="flex items-center gap-8 text-lg font-medium">
+        <BurgerMenu />
+        <CartButton />
+      </div>
     </div>
   );
 };
