@@ -9,6 +9,7 @@ import type {
 } from "@/prisma/generated/prisma/client";
 import { useMemo, useState } from "react";
 import { createProduct, updateProduct } from "@/lib/actions/product.actions";
+import ImageUploadField from "@/components/admin/ImageUploadField";
 
 type ProductWithVariants = Product & {
   images: ProductImage[];
@@ -334,12 +335,17 @@ export default function ProductForm({
               Variant images should be clean product images. Product-level
               images should be lifestyle, mood or room images.
             </p>
+
+            <p className="mt-3">
+              The first image of the first variant is used in the shop grid.
+            </p>
           </div>
         </div>
       </div>
 
+      {/* Product-level / lifestyle images */}
       <div className="mt-16 border-t border-[#161310]/15 pt-10">
-        <div className="mb-8 flex items-end justify-between gap-8">
+        <div className="mb-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.34em] text-[#161310]/45">
               Product-level images
@@ -351,58 +357,73 @@ export default function ProductForm({
 
             <p className="mt-4 max-w-xl text-sm leading-[1.8] text-[#161310]/55">
               These images are not tied to a variant. Use them for room shots,
-              atmosphere images and lifestyle content shown lower on the product
-              page.
+              atmosphere images and lifestyle content.
             </p>
           </div>
 
           <button
             type="button"
             onClick={addProductImage}
-            className="border border-[#161310]/20 px-5 py-3 text-sm"
+            className="w-fit border border-[#161310]/20 px-5 py-3 text-sm"
           >
-            Add image
+            Add lifestyle image
           </button>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {productImages.map((image, imageIndex) => (
-            <div
-              key={imageIndex}
-              className="grid gap-4 md:grid-cols-[1fr_1fr_auto]"
-            >
-              <input
-                value={image.url}
-                onChange={(event) =>
-                  updateProductImage(imageIndex, "url", event.target.value)
-                }
-                placeholder="Lifestyle image URL"
-                className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
-              />
+            <div key={imageIndex} className="border border-[#161310]/15 p-5">
+              <div className="mb-4 flex items-center justify-between">
+                <p className="text-sm text-[#161310]/45">
+                  Lifestyle image {imageIndex + 1}
+                </p>
 
-              <input
-                value={image.alt}
-                onChange={(event) =>
-                  updateProductImage(imageIndex, "alt", event.target.value)
-                }
-                placeholder="Alt text"
-                className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
-              />
+                <button
+                  type="button"
+                  onClick={() => removeProductImage(imageIndex)}
+                  className="text-sm text-[#161310]/45 hover:text-[#161310]"
+                >
+                  Remove
+                </button>
+              </div>
 
-              <button
-                type="button"
-                onClick={() => removeProductImage(imageIndex)}
-                className="border border-[#161310]/15 px-4 py-4 text-sm text-[#161310]/45"
-              >
-                Remove
-              </button>
+              <div className="grid gap-5 md:grid-cols-[1fr_1fr]">
+                <div className="space-y-4">
+                  <input
+                    value={image.url}
+                    onChange={(event) =>
+                      updateProductImage(imageIndex, "url", event.target.value)
+                    }
+                    placeholder="Lifestyle image URL"
+                    className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
+                  />
+
+                  <ImageUploadField
+                    label="Upload lifestyle image"
+                    value={image.url}
+                    onChange={(url) =>
+                      updateProductImage(imageIndex, "url", url)
+                    }
+                  />
+                </div>
+
+                <input
+                  value={image.alt}
+                  onChange={(event) =>
+                    updateProductImage(imageIndex, "alt", event.target.value)
+                  }
+                  placeholder="Alt text"
+                  className="h-fit w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
+                />
+              </div>
             </div>
           ))}
         </div>
       </div>
 
+      {/* Variants */}
       <div className="mt-16 border-t border-[#161310]/15 pt-10">
-        <div className="mb-8 flex items-end justify-between gap-8">
+        <div className="mb-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.34em] text-[#161310]/45">
               Variants
@@ -421,7 +442,7 @@ export default function ProductForm({
           <button
             type="button"
             onClick={addVariant}
-            className="border border-[#161310]/20 px-5 py-3 text-sm"
+            className="w-fit border border-[#161310]/20 px-5 py-3 text-sm"
           >
             Add variant
           </button>
@@ -529,55 +550,78 @@ export default function ProductForm({
                   <button
                     type="button"
                     onClick={() => addVariantImage(variantIndex)}
-                    className="text-sm underline"
+                    className="text-sm underline underline-offset-4"
                   >
                     Add image
                   </button>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {variant.images.map((image, imageIndex) => (
                     <div
                       key={imageIndex}
-                      className="grid gap-4 md:grid-cols-[1fr_1fr_auto]"
+                      className="border border-[#161310]/10 p-5"
                     >
-                      <input
-                        value={image.url}
-                        onChange={(event) =>
-                          updateVariantImage(
-                            variantIndex,
-                            imageIndex,
-                            "url",
-                            event.target.value,
-                          )
-                        }
-                        placeholder="Clean product image URL"
-                        className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
-                      />
+                      <div className="mb-4 flex items-center justify-between">
+                        <p className="text-sm text-[#161310]/45">
+                          Product image {imageIndex + 1}
+                        </p>
 
-                      <input
-                        value={image.alt}
-                        onChange={(event) =>
-                          updateVariantImage(
-                            variantIndex,
-                            imageIndex,
-                            "alt",
-                            event.target.value,
-                          )
-                        }
-                        placeholder="Alt text"
-                        className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
-                      />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            removeVariantImage(variantIndex, imageIndex)
+                          }
+                          className="text-sm text-[#161310]/45 hover:text-[#161310]"
+                        >
+                          Remove
+                        </button>
+                      </div>
 
-                      <button
-                        type="button"
-                        onClick={() =>
-                          removeVariantImage(variantIndex, imageIndex)
-                        }
-                        className="border border-[#161310]/15 px-4 py-4 text-sm text-[#161310]/45"
-                      >
-                        Remove
-                      </button>
+                      <div className="grid gap-5 md:grid-cols-[1fr_1fr]">
+                        <div className="space-y-4">
+                          <input
+                            value={image.url}
+                            onChange={(event) =>
+                              updateVariantImage(
+                                variantIndex,
+                                imageIndex,
+                                "url",
+                                event.target.value,
+                              )
+                            }
+                            placeholder="Clean product image URL"
+                            className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
+                          />
+
+                          <ImageUploadField
+                            label="Upload product image"
+                            value={image.url}
+                            onChange={(url) =>
+                              updateVariantImage(
+                                variantIndex,
+                                imageIndex,
+                                "url",
+                                url,
+                              )
+                            }
+                          />
+                        </div>
+
+                        <input
+                          value={image.alt}
+                          onChange={(event) =>
+                            updateVariantImage(
+                              variantIndex,
+                              imageIndex,
+                              "alt",
+                              event.target.value,
+                            )
+                          }
+                          placeholder="Alt text"
+                          className="h-fit w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
