@@ -20,7 +20,7 @@ export default function ShopFilters({
   currentAvailability,
 }: ShopFiltersProps) {
   return (
-    <aside className="space-y-10">
+    <aside className="space-y-12 text-[#161310]">
       <FilterGroup title="Categories">
         <FilterLink href="/shop" active={!currentCategory}>
           All
@@ -29,7 +29,12 @@ export default function ShopFilters({
         {categories.map((category) => (
           <FilterLink
             key={category.id}
-            href={`/shop?category=${category.slug}`}
+            href={createHref({
+              category: category.slug,
+              color: currentColor,
+              sort: currentSort,
+              availability: currentAvailability,
+            })}
             active={currentCategory === category.slug}
           >
             {category.name}
@@ -143,8 +148,9 @@ function createHref(params: {
   if (params.category) searchParams.set("category", params.category);
   if (params.color) searchParams.set("color", params.color);
   if (params.sort) searchParams.set("sort", params.sort);
-  if (params.availability)
+  if (params.availability) {
     searchParams.set("availability", params.availability);
+  }
 
   const query = searchParams.toString();
 
@@ -159,8 +165,9 @@ function FilterGroup({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <h2 className="mb-4 text-sm text-[#161310]/45">{title}</h2>
+    <div className="border-t border-[#161310]/12 pt-5 first:border-t-0 first:pt-0">
+      <h2 className="mb-5 text-sm font-medium text-[#161310]/65">{title}</h2>
+
       <div className="space-y-3">{children}</div>
     </div>
   );
@@ -178,11 +185,19 @@ function FilterLink({
   return (
     <Link
       href={href}
-      className={`block text-sm transition ${
-        active ? "text-[#161310]" : "text-[#161310]/45 hover:text-[#161310]"
+      className={`group flex items-center justify-between text-sm transition ${
+        active
+          ? "font-medium text-[#161310]"
+          : "text-[#161310]/55 hover:text-[#161310]"
       }`}
     >
-      {children}
+      <span>{children}</span>
+
+      <span
+        className={`h-px transition-all duration-500 ${
+          active ? "w-7 bg-[#161310]" : "w-0 bg-[#161310]/60 group-hover:w-5"
+        }`}
+      />
     </Link>
   );
 }

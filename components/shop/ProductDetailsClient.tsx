@@ -208,19 +208,19 @@ export default function ProductDetailsClient({
             </h1>
 
             <div className="mt-8 flex items-center gap-4">
-              <p className="text-2xl font-light tracking-[-0.04em]">
+              <p className="text-3xl font-light tracking-[-0.04em]">
                 {formatPrice(price, product.currency)}
               </p>
 
               {product.compareAtPrice && (
-                <p className="text-lg text-[#161310]/35 line-through">
+                <p className="text-xl text-[#161310]/35 line-through">
                   {formatPrice(product.compareAtPrice, product.currency)}
                 </p>
               )}
             </div>
 
             <div className="mt-8 max-w-md">
-              <p className="text-base leading-[1.8] text-[#161310]/60">
+              <p className="text-lg leading-[1.8] text-[#161310]/80">
                 {visibleDescription}
               </p>
 
