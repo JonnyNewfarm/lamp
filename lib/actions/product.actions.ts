@@ -7,6 +7,11 @@ import { ProductStatus } from "@/prisma/generated/prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+type ImageInput = {
+  url: string;
+  alt?: string;
+};
+
 type VariantInput = {
   name: string;
   color?: string;
@@ -14,10 +19,7 @@ type VariantInput = {
   price?: number | null;
   stock: number;
   sku?: string;
-  images: {
-    url: string;
-    alt?: string;
-  }[];
+  images: ImageInput[];
 };
 
 function parseMoneyToCents(value: FormDataEntryValue | null) {
@@ -67,6 +69,22 @@ function parseVariants(formData: FormData): VariantInput[] {
   }
 }
 
+function parseProductImages(formData: FormData): ImageInput[] {
+  const raw = formData.get("productImages");
+
+  if (!raw || typeof raw !== "string") {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as ImageInput[];
+
+    return parsed.filter((image) => image.url.trim().length > 0);
+  } catch {
+    return [];
+  }
+}
+
 async function createUniqueSlug(title: string, productId?: string) {
   const baseSlug = slugify(title);
   let slug = baseSlug;
@@ -101,6 +119,7 @@ export async function createProduct(formData: FormData) {
   );
 
   const variants = parseVariants(formData);
+  const productImages = parseProductImages(formData);
 
   if (!title || !description || !categoryId || !price) {
     throw new Error("Missing required product fields");
@@ -121,6 +140,20 @@ export async function createProduct(formData: FormData) {
       supplierUrl: supplierUrl || null,
     },
   });
+
+  for (let index = 0; index < productImages.length; index++) {
+    const image = productImages[index];
+
+    await prisma.productImage.create({
+      data: {
+        productId: product.id,
+        variantId: null,
+        url: image.url,
+        alt: image.alt || `${product.title} lifestyle image`,
+        order: index,
+      },
+    });
+  }
 
   for (const variant of variants) {
     const createdVariant = await prisma.productVariant.create({
@@ -152,6 +185,7 @@ export async function createProduct(formData: FormData) {
 
   revalidatePath("/admin/products");
   revalidatePath("/shop");
+  revalidatePath("/");
 
   redirect("/admin/products");
 }
@@ -170,6 +204,7 @@ export async function updateProduct(productId: string, formData: FormData) {
   );
 
   const variants = parseVariants(formData);
+  const productImages = parseProductImages(formData);
 
   if (!title || !description || !categoryId || !price) {
     throw new Error("Missing required product fields");
@@ -206,6 +241,20 @@ export async function updateProduct(productId: string, formData: FormData) {
     },
   });
 
+  for (let index = 0; index < productImages.length; index++) {
+    const image = productImages[index];
+
+    await prisma.productImage.create({
+      data: {
+        productId,
+        variantId: null,
+        url: image.url,
+        alt: image.alt || `${title} lifestyle image`,
+        order: index,
+      },
+    });
+  }
+
   for (const variant of variants) {
     const createdVariant = await prisma.productVariant.create({
       data: {
@@ -237,6 +286,7 @@ export async function updateProduct(productId: string, formData: FormData) {
   revalidatePath("/admin/products");
   revalidatePath(`/products/${slug}`);
   revalidatePath("/shop");
+  revalidatePath("/");
 
   redirect("/admin/products");
 }
@@ -262,4 +312,5 @@ export async function deleteProduct(productId: string) {
 
   revalidatePath("/admin/products");
   revalidatePath("/shop");
+  revalidatePath("/");
 }

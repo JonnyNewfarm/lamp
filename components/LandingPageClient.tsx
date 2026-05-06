@@ -14,9 +14,9 @@ export default function CaleroHero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="mb-8 text-xs uppercase tracking-[0.34em] text-[#161310]/45"
+            className="mb-4 mt-10 sm:mt-0 text-xs uppercase tracking-[0.34em] text-[#161310]/45"
           >
-            Scandinavian lighting
+            Curated lighting
           </motion.p>
 
           <h1 className="max-w-3xl text-[17vw] font-light leading-[0.88] tracking-[-0.085em] md:text-[7.2vw]">

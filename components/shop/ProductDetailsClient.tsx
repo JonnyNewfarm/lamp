@@ -3,7 +3,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { formatPrice } from "@/lib/formatPrice";
 import { useCart } from "@/components/cart/CartProvider";
 import type {
@@ -19,6 +19,10 @@ type ProductDetailsType = Product & {
   variants: Array<ProductVariant & { images: ProductImage[] }>;
 };
 
+type GalleryImage = ProductImage & {
+  imageType: "variant" | "lifestyle";
+};
+
 export default function ProductDetailsClient({
   product,
 }: {
@@ -32,6 +36,9 @@ export default function ProductDetailsClient({
     string | undefined
   >(initialVariant?.id);
 
+  const [selectedImageId, setSelectedImageId] = useState<string | undefined>();
+  const [descriptionOpen, setDescriptionOpen] = useState(false);
+
   const selectedVariant = useMemo(() => {
     return (
       product.variants.find((variant) => variant.id === selectedVariantId) ||
@@ -39,37 +46,68 @@ export default function ProductDetailsClient({
     );
   }, [product.variants, selectedVariantId]);
 
-  const activeImages =
-    selectedVariant?.images.length > 0
-      ? selectedVariant.images
-      : product.images;
+  const galleryImages = useMemo<GalleryImage[]>(() => {
+    const variantImages =
+      selectedVariant?.images.map((image) => ({
+        ...image,
+        imageType: "variant" as const,
+      })) || [];
 
-  const [selectedImageUrl, setSelectedImageUrl] = useState<string | undefined>(
-    activeImages[0]?.url,
-  );
+    const lifestyleImages = product.images.map((image) => ({
+      ...image,
+      imageType: "lifestyle" as const,
+    }));
+
+    return [...variantImages, ...lifestyleImages];
+  }, [selectedVariant, product.images]);
+
+  useEffect(() => {
+    if (galleryImages.length === 0) return;
+
+    setSelectedImageId((currentId) => {
+      const currentStillExists = galleryImages.some(
+        (image) => image.id === currentId,
+      );
+
+      if (currentId && currentStillExists) {
+        return currentId;
+      }
+
+      return galleryImages[0].id;
+    });
+  }, [galleryImages]);
 
   const selectedImage =
-    activeImages.find((image) => image.url === selectedImageUrl) ||
-    activeImages[0];
+    galleryImages.find((image) => image.id === selectedImageId) ||
+    galleryImages[0];
 
   const price = selectedVariant?.price || product.price;
   const inStock = selectedVariant ? selectedVariant.stock > 0 : false;
+
+  const shouldClampDescription = product.description.length > 220;
+
+  const visibleDescription =
+    shouldClampDescription && !descriptionOpen
+      ? `${product.description.slice(0, 220).trim()}...`
+      : product.description;
 
   function handleVariantChange(variantId: string) {
     const variant = product.variants.find((item) => item.id === variantId);
 
     setSelectedVariantId(variantId);
 
-    const nextImage =
-      variant && variant.images.length > 0
-        ? variant.images[0]
-        : product.images[0];
+    const firstVariantImage = variant?.images[0];
+    const firstLifestyleImage = product.images[0];
 
-    setSelectedImageUrl(nextImage?.url);
+    setSelectedImageId(firstVariantImage?.id || firstLifestyleImage?.id);
+    setDescriptionOpen(false);
   }
 
   function handleAddToCart() {
     if (!selectedVariant || !inStock) return;
+
+    const cartImage =
+      selectedVariant.images[0]?.url || selectedImage?.url || null;
 
     addItem({
       productId: product.id,
@@ -78,7 +116,7 @@ export default function ProductDetailsClient({
       slug: product.slug,
       variantName: selectedVariant.name,
       color: selectedVariant.color,
-      image: selectedImage?.url || null,
+      image: cartImage,
       price,
       currency: product.currency,
       quantity: 1,
@@ -99,8 +137,9 @@ export default function ProductDetailsClient({
       </div>
 
       <div className="grid gap-12 lg:grid-cols-12">
-        <section className="lg:col-span-7">
-          <div className="relative aspect-[4/5] overflow-hidden bg-[#f4f3f0]">
+        {/* Gallery */}
+        <section className="min-w-0 lg:col-span-7">
+          <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#f4f3f0]">
             {selectedImage ? (
               <Image
                 src={selectedImage.url}
@@ -108,41 +147,56 @@ export default function ProductDetailsClient({
                 fill
                 priority
                 sizes="(min-width: 1024px) 58vw, 100vw"
-                className="object-contain p-8 md:p-14"
+                className="object-cover"
               />
             ) : (
-              <div className="flex h-full items-center justify-center text-sm text-[#161310]/40">
-                No image
+              <div className="flex h-full items-center justify-center px-8 text-center text-sm leading-[1.7] text-[#161310]/40">
+                Add product images to this variant in admin.
               </div>
             )}
           </div>
 
-          {activeImages.length > 1 && (
-            <div className="mt-5 grid grid-cols-4 gap-3 md:grid-cols-6">
-              {activeImages.map((image) => (
-                <button
-                  key={image.id}
-                  type="button"
-                  onClick={() => setSelectedImageUrl(image.url)}
-                  className={`relative aspect-square overflow-hidden bg-[#f4f3f0] transition ${
-                    selectedImage?.id === image.id
-                      ? "outline outline-1 outline-[#161310]"
-                      : "opacity-60 hover:opacity-100"
-                  }`}
-                >
-                  <Image
-                    src={image.url}
-                    alt={image.alt || product.title}
-                    fill
-                    sizes="120px"
-                    className="object-contain p-3"
-                  />
-                </button>
-              ))}
+          {galleryImages.length > 1 && (
+            <div className="no-scrollbar mt-5 w-full min-w-0 overflow-x-auto">
+              <div className="flex w-max gap-3 pb-3">
+                {galleryImages.map((image, index) => {
+                  const active = selectedImage?.id === image.id;
+
+                  return (
+                    <button
+                      key={`${image.imageType}-${image.id}`}
+                      type="button"
+                      onClick={() => setSelectedImageId(image.id)}
+                      className={`relative h-24 w-20 shrink-0 overflow-hidden bg-[#f4f3f0] transition md:h-28 md:w-24 ${
+                        active ? "opacity-100" : "opacity-45 hover:opacity-100"
+                      }`}
+                    >
+                      <Image
+                        src={image.url}
+                        alt={image.alt || product.title}
+                        fill
+                        sizes="120px"
+                        className="object-cover"
+                      />
+
+                      <span className="absolute bottom-0 left-0 right-0 bg-[#ecebeb]/85 px-1.5 py-1 text-center text-[10px] uppercase tracking-[0.14em] text-[#161310]/55">
+                        {image.imageType === "lifestyle"
+                          ? "Room"
+                          : String(index + 1).padStart(2, "0")}
+                      </span>
+
+                      {active && (
+                        <span className="absolute bottom-0 left-0 h-px w-full bg-[#161310]" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
         </section>
 
+        {/* Product info */}
         <section className="lg:col-span-5">
           <div className="lg:sticky lg:top-24">
             <p className="text-xs uppercase tracking-[0.34em] text-[#161310]/45">
@@ -165,9 +219,21 @@ export default function ProductDetailsClient({
               )}
             </div>
 
-            <p className="mt-8 max-w-md text-base leading-[1.8] text-[#161310]/60">
-              {product.description}
-            </p>
+            <div className="mt-8 max-w-md">
+              <p className="text-base leading-[1.8] text-[#161310]/60">
+                {visibleDescription}
+              </p>
+
+              {shouldClampDescription && (
+                <button
+                  type="button"
+                  onClick={() => setDescriptionOpen((current) => !current)}
+                  className="mt-4 text-sm underline underline-offset-4"
+                >
+                  {descriptionOpen ? "Show less" : "Read more"}
+                </button>
+              )}
+            </div>
 
             {product.variants.length > 0 && (
               <div className="mt-10 border-t border-[#161310]/15 pt-8">

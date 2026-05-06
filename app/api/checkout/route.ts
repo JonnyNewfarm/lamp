@@ -9,6 +9,49 @@ type CheckoutCartItem = {
   quantity: number;
 };
 
+function getAppUrl(request: Request) {
+  return (
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    request.headers.get("origin") ||
+    "http://localhost:3000"
+  );
+}
+
+function getStripeImageUrl(imageUrl: string | null | undefined, appUrl: string) {
+  if (!imageUrl) return undefined;
+
+  try {
+    // Already absolute URL
+    if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+      const url = new URL(imageUrl);
+
+      // Stripe should not receive localhost image URLs
+      if (url.hostname === "localhost" || url.hostname === "127.0.0.1") {
+        return undefined;
+      }
+
+      return url.toString();
+    }
+
+    // Relative URL like /images/lamp.png
+    if (imageUrl.startsWith("/")) {
+      const baseUrl = new URL(appUrl);
+
+      // Do not send localhost images to Stripe
+      if (baseUrl.hostname === "localhost" || baseUrl.hostname === "127.0.0.1") {
+        return undefined;
+      }
+
+      return new URL(imageUrl, baseUrl.origin).toString();
+    }
+
+    return undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as {
@@ -18,21 +61,10 @@ export async function POST(request: Request) {
     const items = body.items || [];
 
     if (!items.length) {
-      return NextResponse.json(
-        { error: "Cart is empty" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
     }
 
-    const appUrl =
-      process.env.NEXT_PUBLIC_APP_URL || request.headers.get("origin");
-
-    if (!appUrl) {
-      return NextResponse.json(
-        { error: "Missing app URL" },
-        { status: 500 },
-      );
-    }
+    const appUrl = getAppUrl(request);
 
     const variantIds = items.map((item) => item.variantId);
 
@@ -49,6 +81,9 @@ export async function POST(request: Request) {
         product: {
           include: {
             images: {
+              where: {
+                variantId: null,
+              },
               orderBy: {
                 order: "asc",
               },
@@ -76,6 +111,7 @@ export async function POST(request: Request) {
 
       const unitAmount = variant.price || variant.product.price;
       const image = variant.images[0] || variant.product.images[0];
+      const stripeImageUrl = getStripeImageUrl(image?.url, appUrl);
 
       return {
         quantity: cartItem.quantity,
@@ -85,7 +121,11 @@ export async function POST(request: Request) {
           product_data: {
             name: `${variant.product.title} - ${variant.name}`,
             description: variant.color || variant.product.description,
-            images: image?.url ? [image.url] : undefined,
+            ...(stripeImageUrl
+              ? {
+                  images: [stripeImageUrl],
+                }
+              : {}),
             metadata: {
               productId: variant.product.id,
               variantId: variant.id,

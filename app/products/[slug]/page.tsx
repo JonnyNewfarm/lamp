@@ -2,6 +2,8 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import ProductDetailsClient from "@/components/shop/ProductDetailsClient";
+import RelatedProducts from "@/components/shop/RelatedProducts";
+import ScrollSection from "@/components/SmoothScroll";
 
 export default async function ProductPage({
   params,
@@ -17,6 +19,9 @@ export default async function ProductPage({
     include: {
       category: true,
       images: {
+        where: {
+          variantId: null,
+        },
         orderBy: {
           order: "asc",
         },
@@ -40,5 +45,49 @@ export default async function ProductPage({
     notFound();
   }
 
-  return <ProductDetailsClient product={product} />;
+  const relatedProducts = await prisma.product.findMany({
+    where: {
+      status: "ACTIVE",
+      id: {
+        not: product.id,
+      },
+      categoryId: product.categoryId,
+    },
+    include: {
+      category: true,
+      images: {
+        where: {
+          variantId: null,
+        },
+        orderBy: {
+          order: "asc",
+        },
+      },
+      variants: {
+        include: {
+          images: {
+            orderBy: {
+              order: "asc",
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 8,
+  });
+
+  return (
+    <>
+      <ScrollSection>
+        <ProductDetailsClient product={product} />
+        <RelatedProducts products={relatedProducts} />
+      </ScrollSection>
+    </>
+  );
 }

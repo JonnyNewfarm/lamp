@@ -11,7 +11,13 @@ import { useMemo, useState } from "react";
 import { createProduct, updateProduct } from "@/lib/actions/product.actions";
 
 type ProductWithVariants = Product & {
+  images: ProductImage[];
   variants: Array<ProductVariant & { images: ProductImage[] }>;
+};
+
+type ImageState = {
+  url: string;
+  alt: string;
 };
 
 type VariantState = {
@@ -21,10 +27,7 @@ type VariantState = {
   price: string;
   stock: string;
   sku: string;
-  images: {
-    url: string;
-    alt: string;
-  }[];
+  images: ImageState[];
 };
 
 export default function ProductForm({
@@ -34,6 +37,17 @@ export default function ProductForm({
   categories: Category[];
   product?: ProductWithVariants;
 }) {
+  const [productImages, setProductImages] = useState<ImageState[]>(() => {
+    if (product?.images?.length) {
+      return product.images.map((image) => ({
+        url: image.url,
+        alt: image.alt || "",
+      }));
+    }
+
+    return [{ url: "", alt: "" }];
+  });
+
   const [variants, setVariants] = useState<VariantState[]>(() => {
     if (product?.variants?.length) {
       return product.variants.map((variant) => ({
@@ -65,6 +79,12 @@ export default function ProductForm({
     ];
   });
 
+  const serializedProductImages = useMemo(() => {
+    return JSON.stringify(
+      productImages.filter((image) => image.url.trim().length > 0),
+    );
+  }, [productImages]);
+
   const serializedVariants = useMemo(() => {
     return JSON.stringify(
       variants.map((variant) => ({
@@ -82,6 +102,30 @@ export default function ProductForm({
   }, [variants]);
 
   const action = product ? updateProduct.bind(null, product.id) : createProduct;
+
+  function updateProductImage(
+    imageIndex: number,
+    key: "url" | "alt",
+    value: string,
+  ) {
+    setProductImages((current) =>
+      current.map((image, index) =>
+        index === imageIndex ? { ...image, [key]: value } : image,
+      ),
+    );
+  }
+
+  function addProductImage() {
+    setProductImages((current) => [...current, { url: "", alt: "" }]);
+  }
+
+  function removeProductImage(imageIndex: number) {
+    setProductImages((current) =>
+      current.length > 1
+        ? current.filter((_, index) => index !== imageIndex)
+        : current,
+    );
+  }
 
   function updateVariant(
     index: number,
@@ -170,6 +214,11 @@ export default function ProductForm({
   return (
     <form action={action} className="mx-auto max-w-6xl">
       <input type="hidden" name="variants" value={serializedVariants} />
+      <input
+        type="hidden"
+        name="productImages"
+        value={serializedProductImages}
+      />
 
       <div className="mb-12 border-b border-[#161310]/15 pb-8">
         <p className="text-xs uppercase tracking-[0.34em] text-[#161310]/45">
@@ -235,7 +284,7 @@ export default function ProductForm({
             <input
               name="supplierUrl"
               defaultValue={product?.supplierUrl || ""}
-              placeholder="AliExpress / supplier link"
+              placeholder="Supplier link"
               className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
             />
           </Field>
@@ -282,14 +331,73 @@ export default function ProductForm({
 
           <div className="border border-[#161310]/15 p-5 text-sm leading-[1.7] text-[#161310]/55">
             <p>
-              Product price is written as normal dollars, for example{" "}
-              <strong>79.00</strong>.
-            </p>
-            <p className="mt-3">
-              It is stored in the database as cents, for example{" "}
-              <strong>7900</strong>.
+              Variant images should be clean product images. Product-level
+              images should be lifestyle, mood or room images.
             </p>
           </div>
+        </div>
+      </div>
+
+      <div className="mt-16 border-t border-[#161310]/15 pt-10">
+        <div className="mb-8 flex items-end justify-between gap-8">
+          <div>
+            <p className="text-xs uppercase tracking-[0.34em] text-[#161310]/45">
+              Product-level images
+            </p>
+
+            <h2 className="mt-3 text-4xl font-light tracking-[-0.06em]">
+              Lifestyle and mood images
+            </h2>
+
+            <p className="mt-4 max-w-xl text-sm leading-[1.8] text-[#161310]/55">
+              These images are not tied to a variant. Use them for room shots,
+              atmosphere images and lifestyle content shown lower on the product
+              page.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={addProductImage}
+            className="border border-[#161310]/20 px-5 py-3 text-sm"
+          >
+            Add image
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {productImages.map((image, imageIndex) => (
+            <div
+              key={imageIndex}
+              className="grid gap-4 md:grid-cols-[1fr_1fr_auto]"
+            >
+              <input
+                value={image.url}
+                onChange={(event) =>
+                  updateProductImage(imageIndex, "url", event.target.value)
+                }
+                placeholder="Lifestyle image URL"
+                className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
+              />
+
+              <input
+                value={image.alt}
+                onChange={(event) =>
+                  updateProductImage(imageIndex, "alt", event.target.value)
+                }
+                placeholder="Alt text"
+                className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
+              />
+
+              <button
+                type="button"
+                onClick={() => removeProductImage(imageIndex)}
+                className="border border-[#161310]/15 px-4 py-4 text-sm text-[#161310]/45"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -301,8 +409,13 @@ export default function ProductForm({
             </p>
 
             <h2 className="mt-3 text-4xl font-light tracking-[-0.06em]">
-              Colors, stock and images
+              Colors, stock and product images
             </h2>
+
+            <p className="mt-4 max-w-xl text-sm leading-[1.8] text-[#161310]/55">
+              Variant images should be clean product images. The first image of
+              the first variant is used in the shop grid.
+            </p>
           </div>
 
           <button
@@ -409,7 +522,9 @@ export default function ProductForm({
 
               <div className="mt-8 border-t border-[#161310]/15 pt-6">
                 <div className="mb-4 flex items-center justify-between">
-                  <p className="text-sm text-[#161310]/55">Images</p>
+                  <p className="text-sm text-[#161310]/55">
+                    Clean variant product images
+                  </p>
 
                   <button
                     type="button"
@@ -436,7 +551,7 @@ export default function ProductForm({
                             event.target.value,
                           )
                         }
-                        placeholder="Image URL"
+                        placeholder="Clean product image URL"
                         className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
                       />
 
