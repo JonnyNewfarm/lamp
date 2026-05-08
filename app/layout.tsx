@@ -16,6 +16,9 @@ const mont = Montserrat({
 export const metadata: Metadata = {
   title: "Calero Studio",
   description: "Modern lighting for contemporary homes",
+  verification: {
+    google: "_oFTeZRp9Y269p4jGUZ104jXBp_PqTa08pQYbgjv4vk",
+  },
 };
 
 export default function RootLayout({
