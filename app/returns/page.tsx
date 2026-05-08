@@ -14,47 +14,68 @@ export default function ReturnsPage() {
 
         <p className="mt-8 max-w-2xl text-base leading-[1.8] text-[#161310]/60">
           We want you to feel confident when ordering from Calero Studio. This
-          page explains the general return process.
+          return policy applies to orders shipped to the United States.
         </p>
 
         <div className="mt-14 space-y-10 border-t border-[#161310]/15 pt-10">
-          <PolicySection title="Return requests">
+          <PolicySection title="Return window">
             <p>
-              If you would like to request a return, please contact us as soon
-              as possible after receiving your order. Include your order
-              details, email address and reason for the return.
+              We accept return requests within 30 days from the date you receive
+              your order.
             </p>
           </PolicySection>
 
-          <PolicySection title="Condition of items">
+          <PolicySection title="Eligible products">
             <p>
-              Returned items should be unused, in their original condition and
-              with original packaging where possible.
+              We accept returns for both defective and non-defective products.
+              Returned items must be new, unused, in their original condition
+              and, where possible, returned with the original packaging.
             </p>
+          </PolicySection>
+
+          <PolicySection title="Exchanges">
+            <p>
+              We accept exchanges. If you would like to exchange an item, please
+              contact us with your order details so we can help arrange the
+              exchange.
+            </p>
+          </PolicySection>
+
+          <PolicySection title="Return method">
+            <p>
+              Returns are accepted by mail. A return label is included in the
+              package and is provided free of charge.
+            </p>
+          </PolicySection>
+
+          <PolicySection title="Return fees">
+            <p>We do not charge any restocking fees for returned items.</p>
           </PolicySection>
 
           <PolicySection title="Damaged or incorrect items">
             <p>
-              If your item arrives damaged or incorrect, please contact us with
-              photos and your order information so we can review the issue.
+              If your item arrives damaged, defective or incorrect, please
+              contact us with photos and your order information so we can review
+              the issue and help resolve it.
             </p>
           </PolicySection>
 
           <PolicySection title="Refunds">
             <p>
-              Approved refunds are usually processed back to the original
-              payment method. Processing times may vary depending on your
-              payment provider.
+              Once your return has been received and approved, your refund will
+              be processed to your original payment method within 7 days.
+              Processing times may vary depending on your payment provider.
             </p>
           </PolicySection>
 
-          <PolicySection title="Contact">
+          <PolicySection title="How to start a return">
             <p>
-              Start a return request through the{" "}
+              To start a return or exchange request, please contact us through
+              the{" "}
               <Link href="/contact" className="underline underline-offset-4">
                 contact page
-              </Link>
-              .
+              </Link>{" "}
+              with your order number, email address and reason for the return.
             </p>
           </PolicySection>
         </div>
