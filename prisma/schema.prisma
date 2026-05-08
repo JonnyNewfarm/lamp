@@ -96,6 +96,7 @@ model ProductVariant {
   name     String
   color    String?
   colorHex String?
+  plugType String?
 
   price Int?
   stock Int     @default(0)

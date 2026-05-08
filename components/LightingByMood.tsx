@@ -9,25 +9,47 @@ const moods = [
     number: "01",
     title: "For quiet evenings",
     text: "Soft lighting for bedrooms, reading corners and slow nights at home.",
-    href: "/collections/evening-lights",
+    href: "/shop?category=pendant-lighting",
   },
   {
     number: "02",
     title: "For focused work",
     text: "Functional lamps for desks, shelves and calm workspace setups.",
-    href: "/collections/work-lights",
+    href: "/shop?category=table-lamps",
   },
   {
     number: "03",
     title: "For warm corners",
     text: "Small statement lights that bring atmosphere to overlooked spaces.",
-    href: "/collections/ambient-lights",
+    href: "/shop?category=floor-lamps",
+  },
+];
+
+const roomLinks = [
+  {
+    label: "Desk",
+    href: "/shop?category=table-lamps",
+  },
+  {
+    label: "Bedroom",
+    href: "/shop?category=table-lamps",
+  },
+  {
+    label: "Living room",
+    href: "/shop?category=pendant-lighting",
+  },
+  {
+    label: "Dining",
+    href: "/shop?category=pendant-lighting",
   },
 ];
 
 export default function LightingByMood() {
   return (
-    <section className="bg-[#ecebeb] px-6 py-20 text-[#161310] md:px-12 md:py-32">
+    <section
+      id="moods"
+      className="bg-[#ecebeb] px-6 py-20 text-[#161310] md:px-12 md:py-32"
+    >
       <div className="border-t border-[#161310]/15 pt-10">
         <div className="grid gap-14 md:grid-cols-12">
           <div className="md:col-span-4">
@@ -65,7 +87,7 @@ export default function LightingByMood() {
               className="mt-10 max-w-xl text-base leading-[1.8] text-[#161310]/60 md:text-lg"
             >
               Calero Studio curates minimal lighting for calm interiors — from
-              focused desk setups to warm evening corners and soft ambient
+              focused desk setups to warm evening corners and soft everyday
               spaces.
             </motion.p>
           </div>
@@ -114,13 +136,13 @@ export default function LightingByMood() {
 
           <div className="md:col-span-7">
             <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
-              {["Desk", "Bedroom", "Living room", "Dining"].map((item) => (
+              {roomLinks.map((item) => (
                 <Link
-                  key={item}
-                  href={`/collections/${item.toLowerCase().replaceAll(" ", "-")}`}
+                  key={item.label}
+                  href={item.href}
                   className="border border-[#161310]/15 px-4 py-5 text-center transition hover:bg-[#161310] hover:text-[#ecebeb]"
                 >
-                  {item}
+                  {item.label}
                 </Link>
               ))}
             </div>

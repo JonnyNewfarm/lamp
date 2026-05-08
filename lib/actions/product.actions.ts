@@ -16,6 +16,8 @@ type VariantInput = {
   name: string;
   color?: string;
   colorHex?: string;
+    plugType?: string;
+
   price?: number | null;
   stock: number;
   sku?: string;
@@ -162,6 +164,8 @@ export async function createProduct(formData: FormData) {
         name: variant.name,
         color: variant.color || null,
         colorHex: variant.colorHex || null,
+            plugType: variant.plugType || null,
+
         price: variant.price,
         stock: variant.stock || 0,
         sku: variant.sku || null,
@@ -262,6 +266,8 @@ export async function updateProduct(productId: string, formData: FormData) {
         name: variant.name,
         color: variant.color || null,
         colorHex: variant.colorHex || null,
+            plugType: variant.plugType || null,
+
         price: variant.price,
         stock: variant.stock || 0,
         sku: variant.sku || null,

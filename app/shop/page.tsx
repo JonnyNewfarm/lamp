@@ -11,7 +11,29 @@ type ShopSearchParams = {
   color?: string;
   sort?: string;
   availability?: string;
+  page?: string;
 };
+
+const PRODUCTS_PER_PAGE = 9;
+
+function createPageHref(params: ShopSearchParams, page: number) {
+  const searchParams = new URLSearchParams();
+
+  if (params.category) searchParams.set("category", params.category);
+  if (params.color) searchParams.set("color", params.color);
+  if (params.sort) searchParams.set("sort", params.sort);
+  if (params.availability) {
+    searchParams.set("availability", params.availability);
+  }
+
+  if (page > 1) {
+    searchParams.set("page", String(page));
+  }
+
+  const queryString = searchParams.toString();
+
+  return queryString ? `/shop?${queryString}` : "/shop";
+}
 
 export default async function ShopPage({
   searchParams,
@@ -19,6 +41,9 @@ export default async function ShopPage({
   searchParams: Promise<ShopSearchParams>;
 }) {
   const params = await searchParams;
+
+  const currentPage = Math.max(Number(params.page) || 1, 1);
+  const skip = (currentPage - 1) * PRODUCTS_PER_PAGE;
 
   const categories = await prisma.category.findMany({
     orderBy: {
@@ -48,80 +73,99 @@ export default async function ShopPage({
     .map((row) => row.color)
     .filter((color): color is string => Boolean(color));
 
-  const products = await prisma.product.findMany({
-    where: {
-      status: "ACTIVE",
+  const where = {
+    status: "ACTIVE" as const,
 
-      category: params.category
+    category: params.category
+      ? {
+          slug: params.category,
+        }
+      : undefined,
+
+    variants:
+      params.color || params.availability === "in-stock"
         ? {
-            slug: params.category,
-          }
-        : undefined,
+            some: {
+              color: params.color
+                ? {
+                    equals: params.color,
+                    mode: "insensitive" as const,
+                  }
+                : undefined,
 
-      variants:
-        params.color || params.availability === "in-stock"
-          ? {
-              some: {
-                color: params.color
+              stock:
+                params.availability === "in-stock"
                   ? {
-                      equals: params.color,
-                      mode: "insensitive",
+                      gt: 0,
                     }
                   : undefined,
-
-                stock:
-                  params.availability === "in-stock"
-                    ? {
-                        gt: 0,
-                      }
-                    : undefined,
-              },
-            }
-          : undefined,
-    },
-
-    include: {
-      category: true,
-
-      images: {
-        orderBy: {
-          order: "asc",
-        },
-      },
-
-      variants: {
-        include: {
-          images: {
-            orderBy: {
-              order: "asc",
             },
+          }
+        : undefined,
+  };
+
+  const orderBy =
+    params.sort === "price-asc"
+      ? {
+          price: "asc" as const,
+        }
+      : params.sort === "price-desc"
+        ? {
+            price: "desc" as const,
+          }
+        : {
+            createdAt: "desc" as const,
+          };
+
+  const [totalProducts, products] = await Promise.all([
+    prisma.product.count({
+      where,
+    }),
+
+    prisma.product.findMany({
+      where,
+
+      include: {
+        category: true,
+
+        images: {
+          orderBy: {
+            order: "asc",
           },
         },
-        orderBy: {
-          createdAt: "asc",
+
+        variants: {
+          include: {
+            images: {
+              orderBy: {
+                order: "asc",
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
         },
       },
-    },
 
-    orderBy:
-      params.sort === "price-asc"
-        ? {
-            price: "asc",
-          }
-        : params.sort === "price-desc"
-          ? {
-              price: "desc",
-            }
-          : {
-              createdAt: "desc",
-            },
-  });
+      orderBy,
+
+      skip,
+      take: PRODUCTS_PER_PAGE,
+    }),
+  ]);
+
+  const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
   const hasActiveFilters =
     Boolean(params.category) ||
     Boolean(params.color) ||
     Boolean(params.availability) ||
     Boolean(params.sort && params.sort !== "newest");
+
+  const showingFrom = totalProducts === 0 ? 0 : skip + 1;
+
+  const showingTo = Math.min(skip + products.length, totalProducts);
 
   return (
     <main className="min-h-screen bg-[#ecebeb] px-6 py-24 text-[#161310] md:px-12">
@@ -169,11 +213,14 @@ export default async function ShopPage({
           <section>
             <div className="mb-8 flex flex-col gap-4 border-b border-[#161310]/15 pb-5 text-sm md:flex-row md:items-center md:justify-between">
               <p className="text-[#161310]/50">
-                {products.length}{" "}
-                {products.length === 1 ? "product" : "products"}
+                {totalProducts === 0
+                  ? "0 products"
+                  : `Showing ${showingFrom}-${showingTo} of ${totalProducts} ${
+                      totalProducts === 1 ? "product" : "products"
+                    }`}
               </p>
 
-              <div className="flex items-center gap-5">
+              <div className="flex flex-wrap items-center gap-5">
                 {params.category && (
                   <p className="text-[#161310]/50">
                     Category:{" "}
@@ -216,11 +263,68 @@ export default async function ShopPage({
                 </div>
               </div>
             ) : (
-              <div className="grid gap-x-5 gap-y-14 md:grid-cols-2 xl:grid-cols-3">
-                {products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              <>
+                <div className="grid gap-x-5 gap-y-14 md:grid-cols-2 xl:grid-cols-3">
+                  {products.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+
+                {totalPages > 1 && (
+                  <nav className="mt-16 flex flex-col gap-4 border-t border-[#161310]/15 pt-8 md:flex-row md:items-center md:justify-between">
+                    <p className="text-sm text-[#161310]/50">
+                      Page {currentPage} of {totalPages}
+                    </p>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      {currentPage > 1 ? (
+                        <Link
+                          href={createPageHref(params, currentPage - 1)}
+                          className="border border-[#161310]/20 px-4 py-3 text-sm transition hover:bg-[#161310] hover:text-[#ecebeb]"
+                        >
+                          Previous
+                        </Link>
+                      ) : (
+                        <span className="border border-[#161310]/10 px-4 py-3 text-sm text-[#161310]/25">
+                          Previous
+                        </span>
+                      )}
+
+                      {Array.from({ length: totalPages }).map((_, index) => {
+                        const page = index + 1;
+                        const isActive = page === currentPage;
+
+                        return (
+                          <Link
+                            key={page}
+                            href={createPageHref(params, page)}
+                            className={
+                              isActive
+                                ? "bg-[#161310] px-4 py-3 text-sm text-[#ecebeb]"
+                                : "border border-[#161310]/20 px-4 py-3 text-sm transition hover:bg-[#161310] hover:text-[#ecebeb]"
+                            }
+                          >
+                            {page}
+                          </Link>
+                        );
+                      })}
+
+                      {currentPage < totalPages ? (
+                        <Link
+                          href={createPageHref(params, currentPage + 1)}
+                          className="border border-[#161310]/20 px-4 py-3 text-sm transition hover:bg-[#161310] hover:text-[#ecebeb]"
+                        >
+                          Next
+                        </Link>
+                      ) : (
+                        <span className="border border-[#161310]/10 px-4 py-3 text-sm text-[#161310]/25">
+                          Next
+                        </span>
+                      )}
+                    </div>
+                  </nav>
+                )}
+              </>
             )}
           </section>
         </div>

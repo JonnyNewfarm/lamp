@@ -137,8 +137,12 @@ async function handleCartCheckout(session: any) {
 
         supplierUrl: variant.product.supplierUrl ?? null,
         status: "PAID",
-        color: variant.color ?? variant.name,
-      },
+color: [
+  variant.color || variant.name,
+  variant.plugType ? `${variant.plugType} Plug` : null,
+]
+  .filter(Boolean)
+  .join(" / "),      },
     });
 
     await prisma.productVariant.update({

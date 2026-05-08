@@ -10,6 +10,7 @@ export type CartItem = {
   slug: string;
   variantName: string;
   color?: string | null;
+  plugType?: string | null;
   image?: string | null;
   price: number;
   currency: string;

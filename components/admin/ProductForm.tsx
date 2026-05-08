@@ -25,6 +25,7 @@ type VariantState = {
   name: string;
   color: string;
   colorHex: string;
+  plugType: string;
   price: string;
   stock: string;
   sku: string;
@@ -55,6 +56,7 @@ export default function ProductForm({
         name: variant.name,
         color: variant.color || "",
         colorHex: variant.colorHex || "",
+        plugType: variant.plugType || "",
         price: variant.price ? String(variant.price / 100) : "",
         stock: String(variant.stock),
         sku: variant.sku || "",
@@ -72,6 +74,7 @@ export default function ProductForm({
         name: "Default",
         color: "",
         colorHex: "",
+        plugType: "",
         price: "",
         stock: "0",
         sku: "",
@@ -92,6 +95,7 @@ export default function ProductForm({
         name: variant.name,
         color: variant.color,
         colorHex: variant.colorHex,
+        plugType: variant.plugType,
         price: variant.price
           ? Math.round(Number(variant.price.replace(",", ".")) * 100)
           : null,
@@ -169,6 +173,7 @@ export default function ProductForm({
         name: "",
         color: "",
         colorHex: "",
+        plugType: "",
         price: "",
         stock: "0",
         sku: "",
@@ -249,7 +254,7 @@ export default function ProductForm({
               defaultValue={product?.description || ""}
               required
               rows={8}
-              placeholder="Minimal pendant lamp for calm interiors..."
+              placeholder="Minimal lamp for calm interiors..."
               className="w-full resize-none border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
             />
           </Field>
@@ -334,6 +339,11 @@ export default function ProductForm({
             <p>
               Variant images should be clean product images. Product-level
               images should be lifestyle, mood or room images.
+            </p>
+
+            <p className="mt-3">
+              Plug type is optional. Use it only for lamps that have EU, US, UK
+              or AU plug variants.
             </p>
 
             <p className="mt-3">
@@ -430,12 +440,12 @@ export default function ProductForm({
             </p>
 
             <h2 className="mt-3 text-4xl font-light tracking-[-0.06em]">
-              Colors, stock and product images
+              Colors, plug types, stock and images
             </h2>
 
             <p className="mt-4 max-w-xl text-sm leading-[1.8] text-[#161310]/55">
-              Variant images should be clean product images. The first image of
-              the first variant is used in the shop grid.
+              Use plug type only when needed. For lamps without plug variants,
+              leave it as “No plug type”.
             </p>
           </div>
 
@@ -467,14 +477,14 @@ export default function ProductForm({
                 )}
               </div>
 
-              <div className="grid gap-5 md:grid-cols-3">
+              <div className="grid gap-5 md:grid-cols-4">
                 <Field label="Variant name">
                   <input
                     value={variant.name}
                     onChange={(event) =>
                       updateVariant(variantIndex, "name", event.target.value)
                     }
-                    placeholder="Black / White / Beige"
+                    placeholder="Black EU / Black / Default"
                     className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
                   />
                 </Field>
@@ -503,6 +513,26 @@ export default function ProductForm({
                     placeholder="#161310"
                     className="w-full border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
                   />
+                </Field>
+
+                <Field label="Plug type">
+                  <select
+                    value={variant.plugType}
+                    onChange={(event) =>
+                      updateVariant(
+                        variantIndex,
+                        "plugType",
+                        event.target.value,
+                      )
+                    }
+                    className="w-full border border-[#161310]/15 bg-[#ecebeb] px-4 py-4 outline-none"
+                  >
+                    <option value="">No plug type</option>
+                    <option value="EU">EU Plug</option>
+                    <option value="US">US Plug</option>
+                    <option value="UK">UK Plug</option>
+                    <option value="AU">AU Plug</option>
+                  </select>
                 </Field>
 
                 <Field label="Variant price">

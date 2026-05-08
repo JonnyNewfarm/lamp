@@ -882,6 +882,7 @@ export const ProductVariantScalarFieldEnum = {
   name: 'name',
   color: 'color',
   colorHex: 'colorHex',
+  plugType: 'plugType',
   price: 'price',
   stock: 'stock',
   sku: 'sku'

@@ -111,6 +111,12 @@ export async function POST(request: Request) {
 
       const unitAmount = variant.price || variant.product.price;
       const image = variant.images[0] || variant.product.images[0];
+      const variantLabel = [
+  variant.color || variant.name,
+  variant.plugType ? `${variant.plugType} Plug` : null,
+]
+  .filter(Boolean)
+  .join(" / ");
       const stripeImageUrl = getStripeImageUrl(image?.url, appUrl);
 
       return {
@@ -119,8 +125,8 @@ export async function POST(request: Request) {
           currency: variant.product.currency,
           unit_amount: unitAmount,
           product_data: {
-            name: `${variant.product.title} - ${variant.name}`,
-            description: variant.color || variant.product.description,
+           name: `${variant.product.title} - ${variantLabel || variant.name}`,
+description: variantLabel || variant.product.description,
             ...(stripeImageUrl
               ? {
                   images: [stripeImageUrl],

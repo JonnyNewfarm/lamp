@@ -23,6 +23,23 @@ type GalleryImage = ProductImage & {
   imageType: "variant" | "lifestyle";
 };
 
+function uniqueValues(values: Array<string | null | undefined>) {
+  return Array.from(
+    new Set(
+      values
+        .map((value) => value?.trim())
+        .filter((value): value is string => Boolean(value)),
+    ),
+  );
+}
+
+function formatDescription(description: string) {
+  return description
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+}
+
 export default function ProductDetailsClient({
   product,
 }: {
@@ -30,21 +47,67 @@ export default function ProductDetailsClient({
 }) {
   const { addItem } = useCart();
 
-  const initialVariant = product.variants[0];
+  const description = product.description?.trim() || "";
 
-  const [selectedVariantId, setSelectedVariantId] = useState<
-    string | undefined
-  >(initialVariant?.id);
+  const hasPlugTypes = product.variants.some((variant) => variant.plugType);
+
+  const colors = useMemo(() => {
+    return uniqueValues(product.variants.map((variant) => variant.color));
+  }, [product.variants]);
+
+  const plugTypes = useMemo(() => {
+    return uniqueValues(product.variants.map((variant) => variant.plugType));
+  }, [product.variants]);
+
+  const firstVariant = product.variants[0];
+
+  const [selectedColor, setSelectedColor] = useState<string | undefined>(
+    firstVariant?.color || undefined,
+  );
+
+  const [selectedPlugType, setSelectedPlugType] = useState<string | undefined>(
+    firstVariant?.plugType || undefined,
+  );
 
   const [selectedImageId, setSelectedImageId] = useState<string | undefined>();
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   const selectedVariant = useMemo(() => {
+    if (!product.variants.length) return undefined;
+
+    if (hasPlugTypes) {
+      return (
+        product.variants.find((variant) => {
+          const colorMatches = selectedColor
+            ? variant.color === selectedColor
+            : true;
+
+          const plugMatches = selectedPlugType
+            ? variant.plugType === selectedPlugType
+            : !variant.plugType;
+
+          return colorMatches && plugMatches;
+        }) || product.variants[0]
+      );
+    }
+
     return (
-      product.variants.find((variant) => variant.id === selectedVariantId) ||
-      product.variants[0]
+      product.variants.find((variant) => {
+        if (colors.length > 0) {
+          return variant.color === selectedColor;
+        }
+
+        return variant.id === firstVariant?.id;
+      }) || product.variants[0]
     );
-  }, [product.variants, selectedVariantId]);
+  }, [
+    product.variants,
+    hasPlugTypes,
+    selectedColor,
+    selectedPlugType,
+    colors.length,
+    firstVariant?.id,
+  ]);
 
   const galleryImages = useMemo<GalleryImage[]>(() => {
     const variantImages =
@@ -84,23 +147,80 @@ export default function ProductDetailsClient({
   const price = selectedVariant?.price || product.price;
   const inStock = selectedVariant ? selectedVariant.stock > 0 : false;
 
-  const shouldClampDescription = product.description.length > 220;
+  function colorIsAvailable(color: string) {
+    return product.variants.some((variant) => {
+      const colorMatches = variant.color === color;
+      const plugMatches = hasPlugTypes
+        ? selectedPlugType
+          ? variant.plugType === selectedPlugType
+          : true
+        : true;
 
-  const visibleDescription =
-    shouldClampDescription && !descriptionOpen
-      ? `${product.description.slice(0, 220).trim()}...`
-      : product.description;
+      return colorMatches && plugMatches && variant.stock > 0;
+    });
+  }
 
-  function handleVariantChange(variantId: string) {
-    const variant = product.variants.find((item) => item.id === variantId);
+  function plugIsAvailable(plugType: string) {
+    return product.variants.some((variant) => {
+      const plugMatches = variant.plugType === plugType;
+      const colorMatches = selectedColor
+        ? variant.color === selectedColor
+        : true;
 
-    setSelectedVariantId(variantId);
+      return plugMatches && colorMatches && variant.stock > 0;
+    });
+  }
 
-    const firstVariantImage = variant?.images[0];
-    const firstLifestyleImage = product.images[0];
+  function handleColorChange(color: string) {
+    setSelectedColor(color);
 
-    setSelectedImageId(firstVariantImage?.id || firstLifestyleImage?.id);
-    setDescriptionOpen(false);
+    if (hasPlugTypes) {
+      const matchingVariant =
+        product.variants.find(
+          (variant) =>
+            variant.color === color && variant.plugType === selectedPlugType,
+        ) ||
+        product.variants.find(
+          (variant) => variant.color === color && variant.stock > 0,
+        ) ||
+        product.variants.find((variant) => variant.color === color);
+
+      setSelectedPlugType(matchingVariant?.plugType || undefined);
+      setSelectedImageId(
+        matchingVariant?.images[0]?.id || product.images[0]?.id,
+      );
+      return;
+    }
+
+    const matchingVariant =
+      product.variants.find(
+        (variant) => variant.color === color && variant.stock > 0,
+      ) || product.variants.find((variant) => variant.color === color);
+
+    setSelectedImageId(matchingVariant?.images[0]?.id || product.images[0]?.id);
+  }
+
+  function handlePlugChange(plugType: string) {
+    setSelectedPlugType(plugType);
+
+    const matchingVariant =
+      product.variants.find(
+        (variant) =>
+          variant.plugType === plugType &&
+          (!selectedColor || variant.color === selectedColor) &&
+          variant.stock > 0,
+      ) ||
+      product.variants.find(
+        (variant) =>
+          variant.plugType === plugType &&
+          (!selectedColor || variant.color === selectedColor),
+      );
+
+    if (matchingVariant?.color) {
+      setSelectedColor(matchingVariant.color);
+    }
+
+    setSelectedImageId(matchingVariant?.images[0]?.id || product.images[0]?.id);
   }
 
   function handleAddToCart() {
@@ -137,7 +257,6 @@ export default function ProductDetailsClient({
       </div>
 
       <div className="grid gap-12 lg:grid-cols-12">
-        {/* Gallery */}
         <section className="min-w-0 lg:col-span-7">
           <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#f4f3f0]">
             {selectedImage ? (
@@ -196,7 +315,6 @@ export default function ProductDetailsClient({
           )}
         </section>
 
-        {/* Product info */}
         <section className="lg:col-span-5">
           <div className="lg:sticky lg:top-24">
             <p className="text-xs uppercase tracking-[0.34em] text-[#161310]/45">
@@ -207,69 +325,93 @@ export default function ProductDetailsClient({
               {product.title}
             </h1>
 
-            <div className="mt-8 flex items-center gap-4">
-              <p className="text-3xl font-light tracking-[-0.04em]">
+            <div className="mt-8 flex items-baseline gap-4">
+              <p className="text-4xl font-light tracking-[-0.05em] md:text-5xl">
                 {formatPrice(price, product.currency)}
               </p>
 
               {product.compareAtPrice && (
-                <p className="text-xl text-[#161310]/35 line-through">
+                <p className="text-xl text-[#161310]/35 line-through md:text-2xl">
                   {formatPrice(product.compareAtPrice, product.currency)}
                 </p>
               )}
             </div>
 
-            <div className="mt-8 max-w-md">
-              <p className="text-lg leading-[1.8] text-[#161310]/80">
-                {visibleDescription}
-              </p>
+            <ProductDescription
+              description={description}
+              open={descriptionOpen}
+              onToggle={() => setDescriptionOpen((current) => !current)}
+            />
 
-              {shouldClampDescription && (
-                <button
-                  type="button"
-                  onClick={() => setDescriptionOpen((current) => !current)}
-                  className="mt-4 text-sm underline underline-offset-4"
-                >
-                  {descriptionOpen ? "Show less" : "Read more"}
-                </button>
-              )}
-            </div>
-
-            {product.variants.length > 0 && (
+            {colors.length > 0 && (
               <div className="mt-10 border-t border-[#161310]/15 pt-8">
                 <div className="mb-5 flex items-center justify-between">
-                  <p className="text-sm text-[#161310]/45">Variant</p>
-
-                  {selectedVariant?.color && (
-                    <p className="text-sm">{selectedVariant.color}</p>
-                  )}
+                  <p className="text-sm text-[#161310]/45">Color</p>
+                  {selectedColor && <p className="text-sm">{selectedColor}</p>}
                 </div>
 
                 <div className="flex flex-wrap gap-3">
-                  {product.variants.map((variant) => {
-                    const selected = selectedVariant?.id === variant.id;
-                    const disabled = variant.stock <= 0;
+                  {colors.map((color) => {
+                    const active = selectedColor === color;
+                    const available = colorIsAvailable(color);
+
+                    const colorHex =
+                      product.variants.find(
+                        (variant) =>
+                          variant.color === color && variant.colorHex,
+                      )?.colorHex || "#d8d1c7";
 
                     return (
                       <button
-                        key={variant.id}
+                        key={color}
                         type="button"
-                        onClick={() => handleVariantChange(variant.id)}
-                        disabled={disabled}
+                        onClick={() => handleColorChange(color)}
+                        disabled={!available}
                         className={`flex items-center gap-3 border px-4 py-3 text-sm transition disabled:cursor-not-allowed disabled:opacity-35 ${
-                          selected
+                          active
                             ? "border-[#161310]"
                             : "border-[#161310]/15 hover:border-[#161310]/40"
                         }`}
                       >
-                        {variant.colorHex && (
-                          <span
-                            className="h-4 w-4 border border-[#161310]/20"
-                            style={{ backgroundColor: variant.colorHex }}
-                          />
-                        )}
+                        <span
+                          className="h-4 w-4 border border-[#161310]/20"
+                          style={{ backgroundColor: colorHex }}
+                        />
+                        <span>{color}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
-                        <span>{variant.name}</span>
+            {hasPlugTypes && plugTypes.length > 0 && (
+              <div className="mt-8 border-t border-[#161310]/15 pt-8">
+                <div className="mb-5 flex items-center justify-between">
+                  <p className="text-sm text-[#161310]/45">Plug type</p>
+                  {selectedPlugType && (
+                    <p className="text-sm">{selectedPlugType} Plug</p>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  {plugTypes.map((plugType) => {
+                    const active = selectedPlugType === plugType;
+                    const available = plugIsAvailable(plugType);
+
+                    return (
+                      <button
+                        key={plugType}
+                        type="button"
+                        onClick={() => handlePlugChange(plugType)}
+                        disabled={!available}
+                        className={`border px-4 py-3 text-sm transition disabled:cursor-not-allowed disabled:opacity-35 ${
+                          active
+                            ? "border-[#161310]"
+                            : "border-[#161310]/15 hover:border-[#161310]/40"
+                        }`}
+                      >
+                        {plugType} Plug
                       </button>
                     );
                   })}
@@ -343,13 +485,82 @@ export default function ProductDetailsClient({
 
             <p className="mt-8 max-w-2xl leading-[1.8] text-[#161310]/60">
               Selected by Calero Studio for soft interiors, calm lighting and
-              everyday use. Each available variant may differ in finish, color
-              and supplier details.
+              everyday use. Each available variant may differ in finish, color,
+              plug type and supplier details.
             </p>
           </div>
         </div>
       </section>
     </main>
+  );
+}
+
+function ProductDescription({
+  description,
+  open,
+  onToggle,
+}: {
+  description: string;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  const paragraphs = useMemo(() => {
+    return formatDescription(description);
+  }, [description]);
+
+  const hasDescription = paragraphs.length > 0;
+  const shouldCollapse = description.length > 280 || paragraphs.length > 2;
+
+  if (!hasDescription) {
+    return (
+      <div className="mt-10 max-w-md border-t border-[#161310]/15 pt-8">
+        <p className="text-sm text-[#161310]/45">Description</p>
+        <p className="mt-4 text-sm leading-[1.8] text-[#161310]/45">
+          No product description available yet.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-10 max-w-md border-t border-[#161310]/15 pt-8">
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <p className="text-sm text-[#161310]/45">Description</p>
+      </div>
+
+      <div
+        className={`relative overflow-hidden transition-[max-height] duration-500 ease-in-out ${
+          shouldCollapse && !open ? "max-h-44" : "max-h-[900px]"
+        }`}
+      >
+        <div className="space-y-4">
+          {paragraphs.map((paragraph, index) => (
+            <p
+              key={`${paragraph.slice(0, 20)}-${index}`}
+              className="whitespace-pre-line text-base leading-[1.85] text-[#161310]/60"
+            >
+              {paragraph}
+            </p>
+          ))}
+        </div>
+
+        {shouldCollapse && !open && (
+          <div className="pointer-events-none absolute bottom-0 left-0 h-16 w-full bg-gradient-to-t from-[#ecebeb] to-transparent" />
+        )}
+      </div>
+
+      {shouldCollapse && (
+        <button
+          type="button"
+          onClick={onToggle}
+          className="mt-5 inline-flex items-center gap-3 text-sm text-[#161310] transition hover:opacity-60"
+          aria-expanded={open}
+        >
+          <span>{open ? "Hide description" : "View full description"}</span>
+          <span className="h-px w-8 bg-[#161310]/40" />
+        </button>
+      )}
+    </div>
   );
 }
 
