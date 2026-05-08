@@ -258,6 +258,21 @@ export default function ProductForm({
               className="w-full resize-none border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
             />
           </Field>
+          <Field label="Product specs">
+            <textarea
+              name="specs"
+              defaultValue={product?.specs || ""}
+              rows={8}
+              placeholder={`Bulb included: No
+Bulb type: E27
+Voltage: 220V
+Max wattage: 40W
+Dimmable: No
+Dimensions: 28 × 16 cm
+Cable length: 150 cm`}
+              className="w-full resize-none border border-[#161310]/15 bg-transparent px-4 py-4 outline-none"
+            />
+          </Field>
 
           <div className="grid gap-6 md:grid-cols-2">
             <Field label="Price">

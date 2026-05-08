@@ -110,6 +110,7 @@ async function createUniqueSlug(title: string, productId?: string) {
 export async function createProduct(formData: FormData) {
   const title = String(formData.get("title") || "").trim();
   const description = String(formData.get("description") || "").trim();
+  const specs = String(formData.get("specs") || "").trim();
   const categoryId = String(formData.get("categoryId") || "");
   const status = String(formData.get("status") || "DRAFT") as ProductStatus;
   const featured = formData.get("featured") === "on";
@@ -134,6 +135,7 @@ export async function createProduct(formData: FormData) {
       title,
       slug,
       description,
+      specs: specs || null,
       categoryId,
       status,
       featured,
@@ -197,6 +199,7 @@ export async function createProduct(formData: FormData) {
 export async function updateProduct(productId: string, formData: FormData) {
   const title = String(formData.get("title") || "").trim();
   const description = String(formData.get("description") || "").trim();
+  const specs = String(formData.get("specs") || "").trim();
   const categoryId = String(formData.get("categoryId") || "");
   const status = String(formData.get("status") || "DRAFT") as ProductStatus;
   const featured = formData.get("featured") === "on";
@@ -224,6 +227,7 @@ export async function updateProduct(productId: string, formData: FormData) {
       title,
       slug,
       description,
+      specs: specs || null,
       categoryId,
       status,
       featured,

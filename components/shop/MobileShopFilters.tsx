@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import ShopFilters from "@/components/shop/ShopFilters";
 import type { Category } from "@/prisma/generated/prisma/client";
 
@@ -56,10 +57,18 @@ export default function MobileShopFilters({
       {open && (
         <div className="fixed inset-0 z-[90] h-dvh bg-[#ecebeb] text-[#161310]">
           <div className="flex h-dvh flex-col">
-            <div className="sticky top-0 z-10 flex h-20 shrink-0 items-center justify-between border-b border-[#161310]/15 bg-[#ecebeb] px-6">
-              <p className="text-sm uppercase tracking-[0.24em] text-[#161310]/50">
-                Filter
-              </p>
+            <div className="flex h-20 shrink-0 items-center justify-between border-b border-[#161310]/15 bg-[#ecebeb] px-6">
+              <div>
+                <p className="text-sm uppercase tracking-[0.24em] text-[#161310]/50">
+                  Filter
+                </p>
+
+                {activeFilterCount > 0 && (
+                  <p className="mt-1 text-xs text-[#161310]/40">
+                    {activeFilterCount} active
+                  </p>
+                )}
+              </div>
 
               <button
                 type="button"
@@ -70,7 +79,7 @@ export default function MobileShopFilters({
               </button>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-8 pb-28">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-8 pb-32">
               <ShopFilters
                 categories={categories}
                 colors={colors}
@@ -79,6 +88,26 @@ export default function MobileShopFilters({
                 currentSort={currentSort}
                 currentAvailability={currentAvailability}
               />
+            </div>
+
+            <div className="shrink-0 border-t border-[#161310]/15 bg-[#ecebeb] p-6">
+              <div className="grid grid-cols-2 gap-3">
+                <Link
+                  href="/shop"
+                  onClick={() => setOpen(false)}
+                  className="border border-[#161310]/20 px-5 py-4 text-center text-sm"
+                >
+                  Clear
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="bg-[#161310] px-5 py-4 text-sm text-[#ecebeb]"
+                >
+                  View products
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -71,6 +71,7 @@ export default function ProductDetailsClient({
 
   const [selectedImageId, setSelectedImageId] = useState<string | undefined>();
   const [descriptionOpen, setDescriptionOpen] = useState(false);
+  const [specsOpen, setSpecsOpen] = useState(false);
 
   const selectedVariant = useMemo(() => {
     if (!product.variants.length) return undefined;
@@ -343,6 +344,12 @@ export default function ProductDetailsClient({
               onToggle={() => setDescriptionOpen((current) => !current)}
             />
 
+            <ProductSpecs
+              specs={product.specs}
+              open={specsOpen}
+              onToggle={() => setSpecsOpen((current) => !current)}
+            />
+
             {colors.length > 0 && (
               <div className="mt-10 border-t border-[#161310]/15 pt-8">
                 <div className="mb-5 flex items-center justify-between">
@@ -569,6 +576,86 @@ function InfoBlock({ title, text }: { title: string; text: string }) {
     <div className="bg-[#ecebeb] p-5">
       <p>{title}</p>
       <p className="mt-2 text-[#161310]/45">{text}</p>
+    </div>
+  );
+}
+
+function parseSpecs(specs?: string | null) {
+  if (!specs) return [];
+
+  return specs
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [label, ...rest] = line.split(":");
+
+      if (!rest.length) {
+        return {
+          label: line,
+          value: "",
+        };
+      }
+
+      return {
+        label: label.trim(),
+        value: rest.join(":").trim(),
+      };
+    });
+}
+
+function ProductSpecs({
+  specs,
+  open,
+  onToggle,
+}: {
+  specs?: string | null;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  const items = parseSpecs(specs);
+
+  if (items.length === 0) return null;
+
+  const shouldCollapse = items.length > 5;
+
+  return (
+    <div className="mt-10 border-t border-[#161310]/15 pt-8">
+      <p className="mb-5 text-sm text-[#161310]/45">Product specs</p>
+
+      <div
+        className={`relative overflow-hidden transition-[max-height] duration-500 ease-in-out ${
+          shouldCollapse && !open ? "max-h-[150px]" : "max-h-[1200px]"
+        }`}
+      >
+        <div className="divide-y divide-[#161310]/10 border-y border-[#161310]/10">
+          {items.map((item, index) => (
+            <div
+              key={`${item.label}-${index}`}
+              className="grid grid-cols-[1fr_1.3fr] gap-6 py-4 text-sm"
+            >
+              <p className="text-[#161310]/45">{item.label}</p>
+              <p className="break-words">{item.value || "—"}</p>
+            </div>
+          ))}
+        </div>
+
+        {shouldCollapse && !open && (
+          <div className="pointer-events-none absolute bottom-0 left-0 h-20 w-full bg-gradient-to-t from-[#ecebeb] to-transparent" />
+        )}
+      </div>
+
+      {shouldCollapse && (
+        <button
+          type="button"
+          onClick={onToggle}
+          className="mt-5 inline-flex items-center gap-3 text-sm text-[#161310] transition hover:opacity-60"
+          aria-expanded={open}
+        >
+          <span>{open ? "Hide specs" : "View full specs"}</span>
+          <span className="h-px w-8 bg-[#161310]/40" />
+        </button>
+      )}
     </div>
   );
 }

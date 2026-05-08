@@ -69,6 +69,7 @@ model Product {
   title       String
   slug        String        @unique
   description String
+  specs       String?
   status      ProductStatus @default(DRAFT)
   featured    Boolean       @default(false)
 

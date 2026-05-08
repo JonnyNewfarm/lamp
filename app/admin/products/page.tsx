@@ -72,6 +72,8 @@ export default async function AdminProductsPage() {
                 <p className="mt-1 text-sm text-[#161310]/50">
                   {product.category.name} · {product.variants.length} variants
                 </p>
+                <p className="mt-4">supplier:</p>
+                <p className="text-[6px]">{product.supplierUrl}</p>
               </div>
 
               <div>

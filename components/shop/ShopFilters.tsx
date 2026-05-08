@@ -1,4 +1,7 @@
 // components/shop/ShopFilters.tsx
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import type { Category } from "@/prisma/generated/prisma/client";
 
@@ -11,6 +14,8 @@ type ShopFiltersProps = {
   currentAvailability?: string;
 };
 
+const VISIBLE_COLOR_COUNT = 6;
+
 export default function ShopFilters({
   categories,
   colors,
@@ -19,10 +24,25 @@ export default function ShopFilters({
   currentSort,
   currentAvailability,
 }: ShopFiltersProps) {
+  const [showAllColors, setShowAllColors] = useState(false);
+
+  const visibleColors = showAllColors
+    ? colors
+    : colors.slice(0, VISIBLE_COLOR_COUNT);
+
+  const hiddenColorCount = Math.max(colors.length - VISIBLE_COLOR_COUNT, 0);
+
   return (
     <aside className="space-y-12 text-[#161310]">
       <FilterGroup title="Categories">
-        <FilterLink href="/shop" active={!currentCategory}>
+        <FilterLink
+          href={createHref({
+            color: currentColor,
+            sort: currentSort,
+            availability: currentAvailability,
+          })}
+          active={!currentCategory}
+        >
           All
         </FilterLink>
 
@@ -55,7 +75,7 @@ export default function ShopFilters({
             All colors
           </FilterLink>
 
-          {colors.map((color) => (
+          {visibleColors.map((color) => (
             <FilterLink
               key={color}
               href={createHref({
@@ -66,9 +86,21 @@ export default function ShopFilters({
               })}
               active={currentColor?.toLowerCase() === color.toLowerCase()}
             >
-              {color}
+              {formatColorName(color)}
             </FilterLink>
           ))}
+
+          {hiddenColorCount > 0 && (
+            <button
+              type="button"
+              onClick={() => setShowAllColors((current) => !current)}
+              className="mt-4 text-sm text-[#161310]/45 underline underline-offset-4 transition hover:text-[#161310]"
+            >
+              {showAllColors
+                ? "Show fewer colors"
+                : `Show all colors (${colors.length})`}
+            </button>
+          )}
         </FilterGroup>
       )}
 
@@ -157,6 +189,14 @@ function createHref(params: {
   return query ? `/shop?${query}` : "/shop";
 }
 
+function formatColorName(color: string) {
+  return color
+    .split(/[-_\s]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(" ");
+}
+
 function FilterGroup({
   title,
   children,
@@ -167,7 +207,6 @@ function FilterGroup({
   return (
     <div className="border-t border-[#161310]/12 pt-5 first:border-t-0 first:pt-0">
       <h2 className="mb-5 text-sm font-medium text-[#161310]/65">{title}</h2>
-
       <div className="space-y-3">{children}</div>
     </div>
   );
