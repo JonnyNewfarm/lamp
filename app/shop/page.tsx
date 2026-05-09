@@ -5,6 +5,52 @@ import ShopFilters from "@/components/shop/ShopFilters";
 import MobileShopFilters from "@/components/shop/MobileShopFilters";
 import Link from "next/link";
 import ScrollSection from "@/components/SmoothScroll";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Shop lamps — Modern lighting for calm interiors | Calm by Design",
+  description:
+    "Shop modern lamps and curated lighting for calm interiors. Explore table lamps, floor lamps, tripod lamps and warm mood lighting for focused work and everyday spaces.",
+  keywords: [
+    "shop lamps",
+    "buy lamps online",
+    "modern lamps",
+    "designer lamps",
+    "table lamps",
+    "floor lamps",
+    "tripod lamps",
+    "mood lighting",
+    "warm lighting",
+    "interior lighting",
+    "home lighting",
+    "minimal lighting",
+    "calm interiors",
+  ],
+  openGraph: {
+    title: "Shop lamps — Modern lighting for calm interiors",
+    description:
+      "Explore modern lamps, table lamps, floor lamps and warm mood lighting curated for calm interiors and everyday spaces.",
+    url: "https://calero.studio/shop",
+    siteName: "Calm by Design",
+    images: [
+      {
+        url: "/lamp.jpeg",
+        width: 1200,
+        height: 630,
+        alt: "Modern lamps from Calm by Design",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shop lamps — Modern lighting for calm interiors",
+    description:
+      "Shop modern lamps, table lamps, floor lamps and mood lighting for calm interiors.",
+    images: ["/lamp.jpeg"],
+  },
+};
 
 type ShopSearchParams = {
   category?: string;
