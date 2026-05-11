@@ -69,12 +69,13 @@ export default function AboutPage() {
           <PolicySection title="Shipping and support">
             <p>
               Orders are typically processed within 1–5 business days. Estimated
-              transit time is typically 5–12 business days after the order has
+              transit time is typically 7–15 business days after the order has
               been handed to the carrier.
             </p>
             <p>
-              Every order ships with tracking. When your order has shipped, you
-              will receive tracking information by email.
+              The total estimated delivery time is typically 8–20 business days.
+              Every order ships with tracking, and when your order has shipped,
+              you will receive tracking information by email.
             </p>
           </PolicySection>
 

@@ -80,11 +80,11 @@ export default function TermsPage() {
           <PolicySection title="Shipping and delivery">
             <p>
               Orders are typically processed within 1–5 business days. Estimated
-              transit time is typically 5–12 business days after the order has
+              transit time is typically 7–15 business days after the order has
               been handed to the carrier.
             </p>
             <p>
-              The total estimated delivery time is typically 6–17 business days.
+              The total estimated delivery time is typically 8–20 business days.
               Delivery times may vary depending on the delivery location,
               carrier performance, customs processing, weather, local delivery
               disruptions, public holidays and other external factors.
