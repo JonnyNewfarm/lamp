@@ -14,7 +14,7 @@ export default function ShippingPage() {
             payment confirmation.
           </p>
           <p>
-            Orders are processed Monday–Saturday, excluding public holidays and
+            Orders are processed Monday–Friday, excluding public holidays and
             other days when carriers or fulfillment partners are unavailable.
           </p>
         </PolicySection>
@@ -29,7 +29,7 @@ export default function ShippingPage() {
 
         <PolicySection title="Estimated transit time">
           <p>
-            Estimated transit time is typically 5–12 business days after your
+            Estimated transit time is typically 7–15 business days after your
             order has been handed to the carrier.
           </p>
           <p>
@@ -41,7 +41,7 @@ export default function ShippingPage() {
 
         <PolicySection title="Total estimated delivery time">
           <p>
-            The total estimated delivery time is typically 6–17 business days.
+            The total estimated delivery time is typically 8–20 business days.
             This includes both order processing time and carrier transit time.
           </p>
           <p>
