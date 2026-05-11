@@ -72,6 +72,8 @@ export default function ProductDetailsClient({
   const [selectedImageId, setSelectedImageId] = useState<string | undefined>();
   const [descriptionOpen, setDescriptionOpen] = useState(false);
   const [specsOpen, setSpecsOpen] = useState(false);
+  const [fullscreenOpen, setFullscreenOpen] = useState(false);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   const selectedVariant = useMemo(() => {
     if (!product.variants.length) return undefined;
@@ -144,6 +146,85 @@ export default function ProductDetailsClient({
   const selectedImage =
     galleryImages.find((image) => image.id === selectedImageId) ||
     galleryImages[0];
+
+  function showPreviousImage() {
+    if (galleryImages.length <= 1 || !selectedImage) return;
+
+    const currentIndex = galleryImages.findIndex(
+      (image) => image.id === selectedImage.id,
+    );
+
+    const previousImage =
+      galleryImages[
+        (currentIndex - 1 + galleryImages.length) % galleryImages.length
+      ];
+
+    if (previousImage) {
+      setSelectedImageId(previousImage.id);
+    }
+  }
+
+  function showNextImage() {
+    if (galleryImages.length <= 1 || !selectedImage) return;
+
+    const currentIndex = galleryImages.findIndex(
+      (image) => image.id === selectedImage.id,
+    );
+
+    const nextImage = galleryImages[(currentIndex + 1) % galleryImages.length];
+
+    if (nextImage) {
+      setSelectedImageId(nextImage.id);
+    }
+  }
+
+  function handleTouchStart(event: React.TouchEvent<HTMLDivElement>) {
+    setTouchStartX(event.touches[0].clientX);
+  }
+
+  function handleTouchEnd(event: React.TouchEvent<HTMLDivElement>) {
+    if (touchStartX === null) return;
+
+    const touchEndX = event.changedTouches[0].clientX;
+    const distance = touchStartX - touchEndX;
+    const minSwipeDistance = 50;
+
+    if (distance > minSwipeDistance) {
+      showNextImage();
+    }
+
+    if (distance < -minSwipeDistance) {
+      showPreviousImage();
+    }
+
+    setTouchStartX(null);
+  }
+
+  useEffect(() => {
+    if (!fullscreenOpen) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setFullscreenOpen(false);
+      }
+
+      if (event.key === "ArrowRight") {
+        showNextImage();
+      }
+
+      if (event.key === "ArrowLeft") {
+        showPreviousImage();
+      }
+    }
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [fullscreenOpen, galleryImages, selectedImage]);
 
   const price = selectedVariant?.price || product.price;
   const inStock = selectedVariant ? selectedVariant.stock > 0 : false;
@@ -259,22 +340,34 @@ export default function ProductDetailsClient({
 
       <div className="grid gap-12 lg:grid-cols-12">
         <section className="min-w-0 lg:col-span-7">
-          <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#f4f3f0]">
+          <button
+            type="button"
+            onClick={() => selectedImage && setFullscreenOpen(true)}
+            disabled={!selectedImage}
+            className="relative aspect-[4/5] w-full overflow-hidden bg-[#f4f3f0] text-left disabled:cursor-default"
+            aria-label="Open product image fullscreen"
+          >
             {selectedImage ? (
-              <Image
-                src={selectedImage.url}
-                alt={selectedImage.alt || product.title}
-                fill
-                priority
-                sizes="(min-width: 1024px) 58vw, 100vw"
-                className="object-cover"
-              />
+              <>
+                <Image
+                  src={selectedImage.url}
+                  alt={selectedImage.alt || product.title}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 58vw, 100vw"
+                  className="object-cover transition duration-500 hover:scale-[1.02]"
+                />
+
+                <span className="absolute bottom-4 right-4 bg-[#ecebeb]/90 px-4 py-2 text-xs uppercase tracking-[0.18em] text-[#161310]/60">
+                  View fullscreen
+                </span>
+              </>
             ) : (
               <div className="flex h-full items-center justify-center px-8 text-center text-sm leading-[1.7] text-[#161310]/40">
                 Add product images to this variant in admin.
               </div>
             )}
-          </div>
+          </button>
 
           {galleryImages.length > 1 && (
             <div className="no-scrollbar mt-5 w-full min-w-0 overflow-x-auto">
@@ -498,6 +591,100 @@ export default function ProductDetailsClient({
           </div>
         </div>
       </section>
+
+      {fullscreenOpen && selectedImage && (
+        <div
+          className="fixed inset-0 z-50 bg-[#161310]/95 text-[#ecebeb]"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Product image fullscreen view"
+        >
+          <button
+            type="button"
+            onClick={() => setFullscreenOpen(false)}
+            className="absolute right-5 top-5 z-20 px-4 py-3 text-sm uppercase tracking-[0.18em] text-[#ecebeb]/70 transition hover:text-[#ecebeb]"
+          >
+            Close
+          </button>
+
+          {galleryImages.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={showPreviousImage}
+                className="absolute left-4 top-1/2 z-20 hidden -translate-y-1/2 px-5 py-5 text-4xl font-light text-[#ecebeb]/60 transition hover:text-[#ecebeb] md:block"
+                aria-label="Previous image"
+              >
+                ‹
+              </button>
+
+              <button
+                type="button"
+                onClick={showNextImage}
+                className="absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 px-5 py-5 text-4xl font-light text-[#ecebeb]/60 transition hover:text-[#ecebeb] md:block"
+                aria-label="Next image"
+              >
+                ›
+              </button>
+            </>
+          )}
+
+          <div
+            className="flex h-full w-full touch-pan-y items-center justify-center px-6 py-20 md:px-16"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div className="relative h-full w-full">
+              <Image
+                src={selectedImage.url}
+                alt={selectedImage.alt || product.title}
+                fill
+                sizes="100vw"
+                className="object-contain"
+                priority
+              />
+            </div>
+          </div>
+
+          {galleryImages.length > 1 && (
+            <div className="absolute bottom-5 left-1/2 z-20 w-full max-w-4xl -translate-x-1/2 px-6">
+              <div className="no-scrollbar overflow-x-auto">
+                <div className="mx-auto flex w-max gap-3">
+                  {galleryImages.map((image, index) => {
+                    const active = selectedImage.id === image.id;
+
+                    return (
+                      <button
+                        key={`fullscreen-${image.imageType}-${image.id}`}
+                        type="button"
+                        onClick={() => setSelectedImageId(image.id)}
+                        className={`relative h-16 w-14 shrink-0 overflow-hidden bg-[#f4f3f0] transition md:h-20 md:w-16 ${
+                          active
+                            ? "opacity-100"
+                            : "opacity-40 hover:opacity-100"
+                        }`}
+                        aria-label={`View image ${index + 1}`}
+                      >
+                        <Image
+                          src={image.url}
+                          alt={image.alt || product.title}
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                        />
+
+                        {active && (
+                          <span className="absolute bottom-0 left-0 h-px w-full bg-[#ecebeb]" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </main>
   );
 }
