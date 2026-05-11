@@ -74,10 +74,10 @@ export default function ContactClient() {
               <div>
                 <div className="text-xs tracking-wide text-black/60">Email</div>
                 <a
-                  href="mailto:calero.studio@gmail.com"
+                  href="mailto:support@calero.studio"
                   className="mt-2 block text-lg hover:underline underline-offset-4"
                 >
-                  calero.studio@gmail.com{" "}
+                  support@calero.studio
                 </a>
               </div>
 
