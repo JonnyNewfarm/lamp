@@ -561,10 +561,10 @@ export default function ProductDetailsClient({
             </button>
 
             <div className="mt-10 grid grid-cols-2 gap-px bg-[#161310]/15 text-sm">
-              <InfoBlock title="Shipping" text="Calculated at checkout" />
+              <InfoBlock title="Shipping" text="Free tracked shipping" />
               <InfoBlock title="Payment" text="Secure checkout" />
-              <InfoBlock title="Returns" text="Simple return flow" />
-              <InfoBlock title="Support" text="Order help available" />
+              <InfoBlock title="Returns" text="30-day returns" />
+              <InfoBlock title="Support" text="Email support" />
             </div>
           </div>
         </section>

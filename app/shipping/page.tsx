@@ -6,36 +6,105 @@ export default function ShippingPage() {
       <PolicyLayout
         label="Shipping"
         title="Shipping Policy"
-        intro="This page explains how shipping works when ordering from Calero Studio."
+        intro="This page explains how shipping works when ordering from Calero Studio, including processing time, estimated delivery time, tracking and shipping support."
       >
         <PolicySection title="Processing time">
           <p>
-            Orders are processed as quickly as possible after payment has been
-            received. Processing times may vary depending on product
-            availability, supplier handling and order volume.
+            Orders are typically processed within 1–5 business days after
+            payment confirmation.
+          </p>
+          <p>
+            Orders are processed Monday–Saturday, excluding public holidays and
+            other days when carriers or fulfillment partners are unavailable.
           </p>
         </PolicySection>
 
-        <PolicySection title="Estimated delivery">
+        <PolicySection title="Order cutoff time">
           <p>
-            Delivery times may vary depending on destination, carrier and the
-            specific product ordered. Estimated delivery information may be
-            provided during checkout or after your order has been processed.
+            Our daily order cutoff time is 2:00 PM Pacific Standard Time. Orders
+            placed after the cutoff time may begin processing on the next
+            business day.
+          </p>
+        </PolicySection>
+
+        <PolicySection title="Estimated transit time">
+          <p>
+            Estimated transit time is typically 5–12 business days after your
+            order has been handed to the carrier.
+          </p>
+          <p>
+            Transit time may vary depending on your delivery location, carrier
+            performance, customs processing, weather, local delivery disruptions
+            and other external factors outside our control.
+          </p>
+        </PolicySection>
+
+        <PolicySection title="Total estimated delivery time">
+          <p>
+            The total estimated delivery time is typically 6–17 business days.
+            This includes both order processing time and carrier transit time.
+          </p>
+          <p>
+            Delivery estimates are not guaranteed and may vary during busy
+            periods, holidays or unexpected carrier delays.
+          </p>
+        </PolicySection>
+
+        <PolicySection title="Shipping cost">
+          <p>
+            We currently offer free shipping on all orders placed through our
+            website.
+          </p>
+          <p>
+            Any available shipping options and costs will be shown at checkout
+            before you complete your order.
+          </p>
+        </PolicySection>
+
+        <PolicySection title="Tracking">
+          <p>
+            Every order ships with tracking. When your order has shipped, you
+            will receive tracking information by email.
+          </p>
+          <p>
+            Tracking information may take some time to update after the carrier
+            receives the package.
+          </p>
+        </PolicySection>
+
+        <PolicySection title="Fulfillment and delivery">
+          <p>
+            Calero Studio works with trusted fulfillment and shipping partners
+            to help process, pack and deliver customer orders.
+          </p>
+          <p>
+            We remain your point of contact for customer support, order
+            questions, shipping updates, returns and refund requests.
           </p>
         </PolicySection>
 
         <PolicySection title="Shipping address">
           <p>
             Customers are responsible for providing a complete and accurate
-            shipping address. If an incorrect address is provided, delivery may
-            be delayed or the order may not be deliverable.
+            shipping address at checkout.
+          </p>
+          <p>
+            If you notice that your shipping information is incorrect, contact
+            us as soon as possible. We will do our best to help, but we cannot
+            guarantee changes after an order has been processed or shipped.
           </p>
         </PolicySection>
 
-        <PolicySection title="Tracking">
+        <PolicySection title="Delayed or missing orders">
           <p>
-            When tracking information is available, it may be sent to the email
-            address used at checkout.
+            If your order has not arrived within the estimated delivery window,
+            please contact us with your order number so we can help check the
+            shipment status.
+          </p>
+          <p>
+            Some delays may be caused by customs, carriers, weather, local
+            delivery disruptions, public holidays or other circumstances outside
+            our reasonable control.
           </p>
         </PolicySection>
 
@@ -95,7 +164,7 @@ function PolicySection({
   return (
     <section>
       <h2 className="text-2xl font-light tracking-[-0.04em]">{title}</h2>
-      <div className="mt-4 max-w-2xl text-sm leading-[1.9] text-[#161310]/60">
+      <div className="mt-4 max-w-2xl space-y-4 text-sm leading-[1.9] text-[#161310]/60">
         {children}
       </div>
     </section>

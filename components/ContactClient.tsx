@@ -37,7 +37,7 @@ export default function ContactClient() {
   return (
     <section className="px-6 pt-20 pb-10 mt-10">
       <motion.div
-        className="mx-auto max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-12"
+        className="mx-auto grid max-w-5xl grid-cols-1 gap-12 lg:grid-cols-12"
         variants={parent}
         initial="hidden"
         animate="show"
@@ -51,7 +51,7 @@ export default function ContactClient() {
           </motion.div>
 
           <motion.h1
-            className="mt-6 text-6xl leading-[0.95] font-semibold"
+            className="mt-6 text-6xl font-semibold leading-[0.95]"
             variants={item}
           >
             Let’s keep it
@@ -60,11 +60,11 @@ export default function ContactClient() {
           </motion.h1>
 
           <motion.p
-            className="mt-6 text-base leading-relaxed text-black/70 max-w-md"
+            className="mt-6 max-w-md text-base leading-relaxed text-black/70"
             variants={item}
           >
-            Questions about the product, shipping, or collaborations — send a
-            message and we’ll get back to you.
+            Questions about products, shipping, returns, or an existing order —
+            contact us and we’ll get back to you.
           </motion.p>
         </motion.div>
 
@@ -74,11 +74,27 @@ export default function ContactClient() {
               <div>
                 <div className="text-xs tracking-wide text-black/60">Email</div>
                 <a
-                  href="mailto:hello@calero.studio"
+                  href="mailto:calero.studio@gmail.com"
                   className="mt-2 block text-lg hover:underline underline-offset-4"
                 >
-                  calero.studio@gmail.com
+                  calero.studio@gmail.com{" "}
                 </a>
+              </div>
+
+              <div>
+                <div className="text-xs tracking-wide text-black/60">
+                  Support hours
+                </div>
+                <div className="mt-2 text-black/80">Monday–Friday</div>
+              </div>
+
+              <div>
+                <div className="text-xs tracking-wide text-black/60">
+                  Response time
+                </div>
+                <div className="mt-2 text-black/80">
+                  We typically reply within 24–48 hours.
+                </div>
               </div>
 
               <div>
@@ -90,19 +106,33 @@ export default function ContactClient() {
 
               <div>
                 <div className="text-xs tracking-wide text-black/60">
-                  Business
+                  Customer support
                 </div>
-                <div className="mt-2 text-black/80">
-                  Wholesale, press & collaborations
+                <div className="mt-2 max-w-md text-black/80">
+                  For order questions, shipping updates, returns, refunds,
+                  product questions, or general support, please contact us by
+                  email.
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-black/15 flex items-center gap-6 text-sm">
+              <div className="flex flex-wrap items-center gap-6 border-t border-black/15 pt-6 text-sm">
                 <Link
                   href="/shop"
                   className="hover:underline underline-offset-4"
                 >
                   Shop
+                </Link>
+                <Link
+                  href="/shipping"
+                  className="hover:underline underline-offset-4"
+                >
+                  Shipping
+                </Link>
+                <Link
+                  href="/returns"
+                  className="hover:underline underline-offset-4"
+                >
+                  Returns
                 </Link>
                 <Link href="/" className="hover:underline underline-offset-4">
                   Home
@@ -112,7 +142,7 @@ export default function ContactClient() {
           </motion.div>
 
           <motion.div
-            className="hidden lg:block fixed right-6 top-1/2 -translate-y-1/2 pointer-events-none"
+            className="pointer-events-none fixed right-6 top-1/2 hidden -translate-y-1/2 lg:block"
             initial={{ opacity: 0, y: 6, filter: "blur(3px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.9, ease, delay: 0.25 }}
