@@ -99,9 +99,11 @@ export default function ContactClient() {
 
               <div>
                 <div className="text-xs tracking-wide text-black/60">
-                  Location
+                  Business location
                 </div>
-                <div className="mt-2 text-black/80">Europe</div>
+                <div className="mt-2 text-black/80">
+                  Based in Norway, serving selected international markets.
+                </div>
               </div>
 
               <div>
