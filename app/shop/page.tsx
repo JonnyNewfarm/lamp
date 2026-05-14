@@ -175,6 +175,9 @@ export default async function ShopPage({
         category: true,
 
         images: {
+          where: {
+            variantId: null,
+          },
           orderBy: {
             order: "asc",
           },
