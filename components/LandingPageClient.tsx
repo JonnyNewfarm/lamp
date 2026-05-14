@@ -236,7 +236,7 @@ export default function CaleroHero() {
               className="col-span-8"
               label="03"
               title="Pendant focus"
-              onHover={() => setCursorText("View mood")}
+              onHover={() => setCursorText("Pendant focus")}
               large
             />
           </motion.div>
