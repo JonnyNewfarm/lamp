@@ -17,10 +17,19 @@ type ProductCardType = Product & {
 
 export default function ProductCard({ product }: { product: ProductCardType }) {
   const firstVariant = product.variants[0];
-  const firstVariantImage = firstVariant?.images[0];
-  const fallbackImage = product.images[0];
 
-  const image = firstVariantImage || fallbackImage;
+  // Finn første variant-bilde fra ALLE variants, ikke bare første variant
+  const firstVariantImage = product.variants
+    .flatMap((variant) => variant.images)
+    .find(Boolean);
+
+  // Første lifestyle image
+  const lifestyleImage = product.images[0];
+
+  // Bruk variant image som main image.
+  // Hvis produktet ikke har variant image, brukes første lifestyle image som fallback.
+  const image = firstVariantImage || lifestyleImage;
+
   const price = firstVariant?.price || product.price;
 
   const totalStock = product.variants.reduce(
@@ -32,16 +41,19 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
     .filter((variant) => variant.color || variant.colorHex)
     .slice(0, 4);
 
+  const hasDifferentLifestyleImage =
+    lifestyleImage && image && lifestyleImage.id !== image.id;
+
   return (
     <Link href={`/products/${product.slug}`} className="group block">
       <article className="relative">
         <div className="relative aspect-[4/5] overflow-hidden bg-[#f4f3f0]">
-          <div className="absolute left-4 top-4 z-10 text-xs uppercase tracking-[0.2em] text-[#161310]/35">
+          <div className="absolute left-4 top-4 z-20 text-xs uppercase tracking-[0.2em] text-[#161310]/35">
             {product.category.name}
           </div>
 
           {product.featured && (
-            <div className="absolute right-4 top-4 z-10 text-xs uppercase tracking-[0.2em] text-[#161310]/35">
+            <div className="absolute right-4 top-4 z-20 text-xs uppercase tracking-[0.2em] text-[#161310]/35">
               Featured
             </div>
           )}
@@ -52,7 +64,7 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
               alt={image.alt || product.title}
               fill
               sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
-              className="object-contain p-10 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+              className="z-0 object-contain p-10 transition-transform duration-700 ease-out lg:group-hover:scale-[1.03]"
             />
           ) : (
             <div className="flex h-full items-center justify-center text-sm text-[#161310]/35">
@@ -60,7 +72,17 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
             </div>
           )}
 
-          <div className="absolute inset-x-4 bottom-4 translate-y-4 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+          {hasDifferentLifestyleImage && (
+            <Image
+              src={lifestyleImage.url}
+              alt={lifestyleImage.alt || product.title}
+              fill
+              sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
+              className="z-10 hidden object-cover opacity-0 transition-opacity duration-500 ease-out lg:block lg:group-hover:opacity-100"
+            />
+          )}
+
+          <div className="absolute inset-x-4 bottom-4 z-20 translate-y-4 opacity-0 transition-all duration-500 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
             <div className="flex items-center justify-between border border-[#161310]/15 bg-[#ecebeb]/90 px-4 py-3 text-sm backdrop-blur">
               <span>{totalStock > 0 ? "View product" : "Out of stock"}</span>
               <span className="h-px w-10 bg-[#161310]" />

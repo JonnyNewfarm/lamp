@@ -81,34 +81,43 @@ export default function CaleroHero() {
       <div className="grid min-h-screen grid-cols-1 items-center gap-14 px-6 pb-20 pt-28 md:grid-cols-12 md:px-12 md:py-24">
         <motion.div
           style={{ y: textY }}
-          className="relative z-20 md:col-span-5"
+          className="relative z-20 md:col-span-5 md:w-[125%] "
         >
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mb-4 text-xs uppercase tracking-[0.34em] text-[#161310]/45"
+          <motion.div
+            style={{ y: textY }}
+            className="relative z-20 md:col-span-5 md:-translate-y-7  "
           >
-            Curated lighting
-          </motion.p>
+            <h1 className="relative   z-20 font-black uppercase leading-[0.78] tracking-[-0.085em] md:leading-[0.76] md:tracking-[-0.095em]">
+              <div className="inline-block">
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.45, ease }}
+                  className="text-right mb-1 mr-2 text-[clamp(0.7rem,2.4vw,1rem)] font-black uppercase leading-none tracking-[-0.035em] text-[#161310] md:mb-1 md:text-[clamp(0.8rem,1vw,1rem)]"
+                >
+                  MADE FOR LIGHT. BUILT FOR CALM.
+                </motion.p>
 
-          <h1 className="max-w-3xl font-light leading-[0.88] tracking-[-0.085em] md:text-[7.2vw]">
-            <Reveal delay={0.1}>
-              <p className="text-[17vw] md:text-[7vw]">Lighting</p>
-            </Reveal>
-            <Reveal delay={0.22}>
-              <p className="text-[20vw] md:text-[8vw]">for calm</p>
-            </Reveal>
-            <Reveal delay={0.34}>
-              <p className="text-[23vw] md:text-[9vw]">interiors</p>
-            </Reveal>
-          </h1>
+                <Reveal delay={0.1}>
+                  <p className="whitespace-nowrap text-[21vw] md:text-[10.7vw]">
+                    Calero
+                  </p>
+                </Reveal>
+              </div>
+
+              <Reveal delay={0.22}>
+                <p className="whitespace-nowrap text-[18vw] md:text-[7.5vw] lg:text-[8.6vw] 2xl:text-[9.2vw]">
+                  Studio
+                </p>
+              </Reveal>
+            </h1>
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.65 }}
-            className="mt-8 max-w-sm text-base leading-[1.7] text-[#161310]/60 md:text-lg"
+            className="mt-8 max-w-sm  text-base sm:hidden xl:hidden  leading-[1.7] text-[#161310]/60 md:text-lg"
           >
             Minimal lighting selected for soft contrast, quiet atmosphere and
             everyday calm.
@@ -118,24 +127,24 @@ export default function CaleroHero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="mt-10 flex flex-wrap items-center gap-8"
+            className="mt-8 flex flex-wrap items-center gap-8"
           >
             <Link
               href="/shop"
-              className="group relative inline-flex h-[56px] overflow-hidden bg-[#161310] px-7 text-sm text-[#ecebeb] transition hover:bg-[#2a261f]"
+              className="group relative inline-flex h-[56px] overflow-hidden border-[#161310] border-2 font-semibold px-7 text-sm text-[#161310] transition "
             >
               <span className="flex h-full items-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full">
                 Shop collection
               </span>
 
-              <span className="absolute left-10.5 top-0 flex h-full items-center translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
+              <span className="absolute left-10 top-0 flex h-full items-center translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
                 Enter shop
               </span>
             </Link>
 
             <Link
               href="#new-products"
-              className="group flex items-center gap-4 text-sm"
+              className="group flex sm:hidden lg:flex items-center gap-4 text-sm"
             >
               <span className="relative overflow-hidden">
                 <span className="block transition-transform duration-500 group-hover:-translate-y-full">
@@ -166,7 +175,7 @@ export default function CaleroHero() {
             }}
             className="grid h-[62vh] min-h-[540px] cursor-none grid-cols-12 gap-3 md:h-[74vh] md:gap-4"
           >
-            <div className="col-span-4 grid grid-rows-2 gap-3 md:gap-4">
+            <div className="col-span-4 grid grid-rows-2 gap-3 overflow-visible md:gap-4">
               <ImagePanel
                 src={heroImages.smallTop.light}
                 darkSrc={heroImages.smallTop.dark}
@@ -179,19 +188,21 @@ export default function CaleroHero() {
                 label="01"
                 title="Soft evenings"
                 onHover={() => setCursorText("Soft evening")}
+                className="w-full md:ml-8 md:w-[calc(100%-2rem)]"
               />
 
               <ImagePanel
                 src={heroImages.smallBottom.light}
                 darkSrc={heroImages.smallBottom.dark}
                 alt="Warm interior atmosphere"
-                sizes="(min-width: 768px) 18vw, 45vw"
+                sizes="(min-width: 768px) 24vw, 45vw"
                 y={smallBottomY}
                 delay={0.54}
                 imageDelay={0.54}
                 label="02"
                 title="Warm corner"
                 onHover={() => setCursorText("Warm corner")}
+                className="w-full md:-ml-20 md:w-[calc(100%+5rem)]"
               />
             </div>
 
@@ -219,22 +230,11 @@ export default function CaleroHero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
-            className="mt-6 grid grid-cols-3 border-t border-[#161310]/15 pt-5 text-sm"
+            className="mt-6 border-t border-[#161310]/20 pt-5"
           >
-            <div>
-              <p className="text-[#161310]/40">01</p>
-              <p className="mt-1">Soft evenings</p>
-            </div>
-
-            <div>
-              <p className="text-[#161310]/40">02</p>
-              <p className="mt-1">Focused work</p>
-            </div>
-
-            <div>
-              <p className="text-[#161310]/40">03</p>
-              <p className="mt-1">Warm corners</p>
-            </div>
+            <p className="ml-auto max-w-[38rem] text-lg font-black uppercase leading-tight tracking-[-0.04em] text-[#161310] md:text-2xl">
+              Lighting, objects and interior atmosphere.
+            </p>
           </motion.div>
         </div>
       </div>
