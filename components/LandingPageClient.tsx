@@ -9,7 +9,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const heroImages = {
   smallTop: {
@@ -32,6 +32,7 @@ export default function CaleroHero() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [cursorText, setCursorText] = useState("View mood");
   const [isHoveringImages, setIsHoveringImages] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -47,6 +48,20 @@ export default function CaleroHero() {
     damping: 32,
     mass: 0.4,
   });
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
+    checkScreen();
+
+    window.addEventListener("resize", checkScreen);
+
+    return () => {
+      window.removeEventListener("resize", checkScreen);
+    };
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -67,6 +82,7 @@ export default function CaleroHero() {
   const largeScale = useTransform(smoothProgress, [0, 1], [1, 1.03]);
 
   const infoRowY = useTransform(smoothProgress, [0, 1], [0, 72]);
+  const infoRowX = useTransform(smoothProgress, [0, 1], [0, -90]);
 
   function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
     mouseX.set(event.clientX + 18);
@@ -81,19 +97,19 @@ export default function CaleroHero() {
       <div className="grid min-h-screen grid-cols-1 items-center gap-14 px-6 pb-20 pt-28 md:grid-cols-12 md:px-12 md:py-24">
         <motion.div
           style={{ y: textY }}
-          className="relative z-20 md:col-span-5 md:w-[125%] "
+          className="pointer-events-none relative z-20 md:col-span-5 md:w-[125%]"
         >
           <motion.div
             style={{ y: textY }}
-            className="relative z-20 md:col-span-5 md:-translate-y-7  "
+            className="relative z-20 md:col-span-5 md:-translate-y-7"
           >
-            <h1 className="relative   z-20 font-black uppercase leading-[0.78] tracking-[-0.085em] md:leading-[0.76] md:tracking-[-0.095em]">
+            <h1 className="relative z-20 font-black uppercase leading-[0.78] tracking-[-0.085em] md:leading-[0.76] md:tracking-[-0.095em]">
               <div className="inline-block">
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.45, ease }}
-                  className="text-right mb-1 mr-2 text-[clamp(0.7rem,2.4vw,1rem)] font-black uppercase leading-none tracking-[-0.035em] text-[#161310] md:mb-1 md:text-[clamp(0.8rem,1vw,1rem)]"
+                  className="mb-1 mr-2 text-right text-[clamp(0.7rem,2.4vw,1rem)] font-black uppercase leading-none tracking-[-0.035em] text-[#161310] md:mb-1 md:text-[clamp(0.8rem,1vw,1rem)]"
                 >
                   MADE FOR LIGHT. BUILT FOR CALM.
                 </motion.p>
@@ -117,7 +133,7 @@ export default function CaleroHero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.65 }}
-            className="mt-8 max-w-sm  text-base sm:hidden xl:hidden  leading-[1.7] text-[#161310]/60 md:text-lg"
+            className="mt-8 max-w-sm text-base leading-[1.7] text-[#161310]/60 sm:hidden md:text-lg xl:hidden"
           >
             Minimal lighting selected for soft contrast, quiet atmosphere and
             everyday calm.
@@ -127,24 +143,24 @@ export default function CaleroHero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="mt-8 flex flex-wrap items-center gap-8"
+            className="pointer-events-auto mt-8 flex flex-wrap items-center gap-8"
           >
             <Link
               href="/shop"
-              className="group relative inline-flex h-[56px] overflow-hidden border-[#161310] border-2 font-semibold px-7 text-sm text-[#161310] transition "
+              className="group relative inline-flex h-[56px] overflow-hidden border-2 border-[#161310] px-7 text-sm font-semibold text-[#161310] transition"
             >
               <span className="flex h-full items-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full">
                 Shop collection
               </span>
 
-              <span className="absolute left-10 top-0 flex h-full items-center translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
+              <span className="absolute left-10 top-0 flex h-full translate-y-full items-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
                 Enter shop
               </span>
             </Link>
 
             <Link
               href="#new-products"
-              className="group flex sm:hidden lg:flex items-center gap-4 text-sm"
+              className="group flex items-center gap-4 text-sm sm:hidden lg:flex"
             >
               <span className="relative overflow-hidden">
                 <span className="block transition-transform duration-500 group-hover:-translate-y-full">
@@ -226,13 +242,13 @@ export default function CaleroHero() {
           </motion.div>
 
           <motion.div
-            style={{ y: infoRowY }}
+            style={isDesktop ? { y: infoRowY, x: infoRowX } : { y: infoRowY }}
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
             className="mt-6 border-t border-[#161310]/20 pt-5"
           >
-            <p className="ml-auto max-w-[38rem] text-lg font-black uppercase leading-tight tracking-[-0.04em] text-[#161310] md:text-2xl">
+            <p className="ml-auto max-w-[38rem] text-lg  uppercase leading-tight tracking-[-0.04em] text-[#161310] md:text-2xl">
               Lighting, objects and interior atmosphere.
             </p>
           </motion.div>
@@ -306,7 +322,7 @@ function ImagePanel({
         delay,
         ease,
       }}
-      className={`group relative overflow-hidden ${className}`}
+      className={`group relative h-full overflow-hidden ${className}`}
     >
       <motion.div
         initial={{ scale: imageScale }}
@@ -365,7 +381,7 @@ function Reveal({
   delay: number;
 }) {
   return (
-    <span className="block overflow-hidden">
+    <span className="block overflow-hidden py-[0.08em]">
       <motion.span
         initial={{ y: "110%" }}
         animate={{ y: "0%" }}
