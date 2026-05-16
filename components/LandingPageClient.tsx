@@ -87,6 +87,7 @@ export default function CaleroHero() {
   const titleY = useTransform(smoothProgress, [0, 1], [0, 34]);
   const centerTextY = useTransform(smoothProgress, [0, 1], [0, -28]);
   const bottomTextY = useTransform(smoothProgress, [0, 1], [0, 48]);
+  const noteY = useTransform(smoothProgress, [0, 1], [0, -18]);
 
   function handleMouseMove(event: React.MouseEvent<HTMLElement>) {
     if (!isDesktop) return;
@@ -177,6 +178,19 @@ export default function CaleroHero() {
               className="text-[14vw] md:text-[7.4vw]"
             />
           </h1>
+        </motion.div>
+
+        <motion.div
+          style={{ y: noteY }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.95, ease }}
+          className="pointer-events-none absolute right-10 top-[28vh] z-30 hidden max-w-[18rem] text-right md:block"
+        >
+          <p className="text-sm font-medium leading-[1.45] tracking-[-0.025em] text-[#161310]/55">
+            A slower way to light a room — selected pieces with soft presence,
+            warm contrast and quiet everyday function.
+          </p>
         </motion.div>
 
         <motion.div
