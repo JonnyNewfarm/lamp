@@ -1,7 +1,6 @@
-// components/NewProducts.tsx
 import { prisma } from "@/lib/prisma";
-import ProductCard from "@/components/shop/ProductCard";
 import NewProductsIntro from "@/components/NewProductsIntro";
+import NewProductsScroll from "@/components/NewProductsScroll";
 
 export default async function NewProducts() {
   const products = await prisma.product.findMany({
@@ -50,18 +49,7 @@ export default async function NewProducts() {
         <NewProductsIntro />
       </div>
 
-      <div className="no-scrollbar overflow-x-auto px-6 md:px-12">
-        <div className="flex w-max gap-5 pb-4">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="w-[78vw] shrink-0 sm:w-[420px] md:w-[360px] xl:w-[390px]"
-            >
-              <ProductCard product={product} />
-            </div>
-          ))}
-        </div>
-      </div>
+      <NewProductsScroll products={products} />
     </section>
   );
 }

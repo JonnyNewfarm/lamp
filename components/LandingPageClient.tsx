@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+  AnimatePresence,
   motion,
-  useMotionValue,
+  useAnimationControls,
   useScroll,
   useSpring,
   useTransform,
@@ -14,40 +15,50 @@ import { useEffect, useRef, useState } from "react";
 const heroImages = {
   smallTop: {
     light: "/images/lamp-1.jpg",
-    dark: "/images/lamp-1-dark.jpg",
   },
   smallBottom: {
     light: "/images/lamp-2.jpg",
-    dark: "/images/lamp-2-dark.jpg",
   },
   large: {
     light: "/images/lamp-3.jpg",
-    dark: "/images/lamp-3-dark.jpg",
   },
 };
 
+const collageImages = [
+  "/images/lamp-1.jpg",
+  "/images/lamp-2.jpg",
+  "/images/lamp-3.jpg",
+  "/images/lamp-4.jpg",
+  "/images/lamp-5.jpg",
+  "/images/lamp-6.jpg",
+  "/images/lamp-7.jpg",
+];
+
 const ease = [0.16, 1, 0.3, 1] as const;
+
+type CollageImage = {
+  id: number;
+  src: string;
+  x: number;
+  y: number;
+  velocityX: number;
+  velocityY: number;
+  width: number;
+  height: number;
+  rotate: number;
+  zIndex: number;
+};
 
 export default function CaleroHero() {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const [cursorText, setCursorText] = useState("View mood");
-  const [isHoveringImages, setIsHoveringImages] = useState(false);
+
+  const lastMouse = useRef({ x: 0, y: 0 });
+  const lastSpawnTime = useRef(0);
+  const imageIndex = useRef(0);
+  const zIndex = useRef(30);
+
   const [isDesktop, setIsDesktop] = useState(false);
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const cursorX = useSpring(mouseX, {
-    stiffness: 280,
-    damping: 32,
-    mass: 0.4,
-  });
-
-  const cursorY = useSpring(mouseY, {
-    stiffness: 280,
-    damping: 32,
-    mass: 0.4,
-  });
+  const [collage, setCollage] = useState<CollageImage[]>([]);
 
   useEffect(() => {
     const checkScreen = () => {
@@ -55,7 +66,6 @@ export default function CaleroHero() {
     };
 
     checkScreen();
-
     window.addEventListener("resize", checkScreen);
 
     return () => {
@@ -74,314 +84,274 @@ export default function CaleroHero() {
     mass: 0.7,
   });
 
-  const textY = useTransform(smoothProgress, [0, 1], [0, 38]);
+  const titleY = useTransform(smoothProgress, [0, 1], [0, 34]);
+  const centerTextY = useTransform(smoothProgress, [0, 1], [0, -28]);
+  const bottomTextY = useTransform(smoothProgress, [0, 1], [0, 48]);
 
-  const smallTopY = useTransform(smoothProgress, [0, 1], [0, -45]);
-  const smallBottomY = useTransform(smoothProgress, [0, 1], [0, 78]);
-  const largeY = useTransform(smoothProgress, [0, 1], [0, -30]);
-  const largeScale = useTransform(smoothProgress, [0, 1], [1, 1.03]);
+  function handleMouseMove(event: React.MouseEvent<HTMLElement>) {
+    if (!isDesktop) return;
 
-  const infoRowY = useTransform(smoothProgress, [0, 1], [0, 72]);
-  const infoRowX = useTransform(smoothProgress, [0, 1], [0, -90]);
+    const section = sectionRef.current;
+    if (!section) return;
 
-  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
-    mouseX.set(event.clientX + 18);
-    mouseY.set(event.clientY + 18);
+    const rect = section.getBoundingClientRect();
+
+    const localX = event.clientX - rect.left;
+    const localY = event.clientY - rect.top;
+
+    const now = Date.now();
+    const deltaTime = now - lastSpawnTime.current;
+
+    const velocityX = localX - lastMouse.current.x;
+    const velocityY = localY - lastMouse.current.y;
+    const distance = Math.hypot(velocityX, velocityY);
+
+    lastMouse.current = {
+      x: localX,
+      y: localY,
+    };
+
+    if (deltaTime < 115 || distance < 20) return;
+
+    lastSpawnTime.current = now;
+
+    const src = collageImages[imageIndex.current % collageImages.length];
+
+    imageIndex.current += 1;
+    zIndex.current += 1;
+
+    const id = now + Math.random();
+
+    const width = 140 + Math.random() * 58;
+    const height = width * (1 + Math.random() * 0.12);
+
+    const newImage: CollageImage = {
+      id,
+      src,
+      x: localX,
+      y: localY,
+      velocityX,
+      velocityY,
+      width,
+      height,
+      rotate: -3.5 + Math.random() * 7,
+      zIndex: zIndex.current,
+    };
+
+    setCollage((prev) => [...prev.slice(-11), newImage]);
+
+    window.setTimeout(() => {
+      setCollage((prev) => prev.filter((image) => image.id !== id));
+    }, 3200);
   }
 
   return (
     <section
       ref={sectionRef}
+      onMouseMove={handleMouseMove}
       className="relative min-h-screen overflow-hidden bg-[#ecebeb] text-[#161310]"
     >
-      <div className="grid min-h-screen grid-cols-1 items-center gap-14 px-6 pb-20 pt-28 md:grid-cols-12 md:px-12 md:py-24">
-        <motion.div
-          style={{ y: textY }}
-          className="pointer-events-none relative z-20 md:col-span-5 md:w-[125%]"
-        >
-          <motion.div
-            style={{ y: textY }}
-            className="relative z-20 md:col-span-5 md:-translate-y-7"
-          >
-            <h1 className="relative z-20 font-black uppercase leading-[0.78] tracking-[-0.085em] md:leading-[0.76] md:tracking-[-0.095em]">
-              <div className="inline-block">
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.45, ease }}
-                  className="mb-1 mr-2 text-right text-[clamp(0.7rem,2.4vw,1rem)] font-black uppercase leading-none tracking-[-0.035em] text-[#161310] md:mb-1 md:text-[clamp(0.8rem,1vw,1rem)]"
-                >
-                  MADE FOR LIGHT. BUILT FOR CALM.
-                </motion.p>
+      <MouseCollage images={collage} />
 
-                <Reveal delay={0.1}>
-                  <p className="whitespace-nowrap text-[21vw] md:text-[10.7vw]">
-                    Calero
-                  </p>
-                </Reveal>
-              </div>
-
-              <Reveal delay={0.22}>
-                <p className="whitespace-nowrap text-[18vw] md:text-[7.5vw] lg:text-[8.6vw] 2xl:text-[9.2vw]">
-                  Studio
-                </p>
-              </Reveal>
-            </h1>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.65 }}
-            className="mt-8 max-w-sm text-base leading-[1.7] text-[#161310]/60 sm:hidden md:text-lg xl:hidden"
-          >
-            Minimal lighting selected for soft contrast, quiet atmosphere and
-            everyday calm.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="pointer-events-auto mt-8 flex flex-wrap items-center gap-8"
-          >
-            <Link
-              href="/shop"
-              className="group relative inline-flex h-[56px] overflow-hidden border-2 border-[#161310] px-7 text-sm font-semibold text-[#161310] transition"
+      <div className="relative z-30 flex min-h-screen flex-col px-6 pb-8 pt-24 md:px-10 md:pb-10 md:pt-24">
+        <motion.div style={{ y: titleY }} className="relative z-30 w-fit">
+          <h1 className="font-black uppercase leading-[0.78] tracking-[-0.09em] md:leading-[0.74] md:tracking-[-0.105em]">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.45, ease }}
+              className="mb-2 text-right text-[clamp(0.7rem,1vw,1rem)] font-black uppercase leading-none tracking-[-0.035em] text-[#161310]"
             >
-              <span className="flex h-full items-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full">
-                Shop collection
-              </span>
+              MADE FOR LIGHT. BUILT FOR CALM.
+            </motion.p>
 
-              <span className="absolute left-10 top-0 flex h-full translate-y-full items-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
-                Enter shop
-              </span>
-            </Link>
+            <HoverSlideWord
+              text="Calero"
+              delay={0.1}
+              className="text-[16vw] md:text-[8.6vw]"
+            />
 
-            <Link
-              href="#new-products"
-              className="group flex items-center gap-4 text-sm sm:hidden lg:flex"
-            >
-              <span className="relative overflow-hidden">
-                <span className="block transition-transform duration-500 group-hover:-translate-y-full">
-                  New products
-                </span>
-
-                <span className="absolute left-0 top-full block transition-transform duration-500 group-hover:-translate-y-full">
-                  Explore now
-                </span>
-              </span>
-
-              <span className="h-px w-12 bg-[#161310] transition-all duration-500 group-hover:w-20" />
-            </Link>
-          </motion.div>
+            <HoverSlideWord
+              text="Studio"
+              delay={0.22}
+              className="text-[14vw] md:text-[7.4vw]"
+            />
+          </h1>
         </motion.div>
 
-        <div className="relative z-10 md:col-span-7">
+        <motion.div
+          style={{ y: centerTextY }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.5, ease }}
+          className="relative z-20 mt-[11vh] max-w-[48rem] md:ml-[38vw] md:mt-[6vh]"
+        >
+          <p className="text-[clamp(2.35rem,5.6vw,7.6rem)] font-black uppercase leading-[0.82] tracking-[-0.09em] text-[#161310]">
+            Soft light for quiet interiors.
+          </p>
+        </motion.div>
+
+        <div className="relative z-40 mt-auto grid grid-cols-1 gap-8 md:grid-cols-12 md:items-end">
           <motion.div
-            onMouseMove={handleMouseMove}
-            onMouseEnter={() => setIsHoveringImages(true)}
-            onMouseLeave={() => setIsHoveringImages(false)}
-            initial={{ opacity: 0, y: 34 }}
+            style={{ y: bottomTextY }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 1,
-              delay: 0.25,
-              ease,
-            }}
-            className="grid h-[62vh] min-h-[540px] cursor-none grid-cols-12 gap-3 md:h-[74vh] md:gap-4"
+            transition={{ duration: 0.8, delay: 0.8, ease }}
+            className="md:col-span-4"
           >
-            <div className="col-span-4 grid grid-rows-2 gap-3 overflow-visible md:gap-4">
-              <ImagePanel
-                src={heroImages.smallTop.light}
-                darkSrc={heroImages.smallTop.dark}
-                alt="Calero interior detail"
-                sizes="(min-width: 768px) 18vw, 45vw"
-                priority
-                y={smallTopY}
-                delay={0.42}
-                imageDelay={0.42}
-                label="01"
-                title="Soft evenings"
-                onHover={() => setCursorText("Soft evening")}
-                className="w-full md:ml-8 md:w-[calc(100%-2rem)]"
-              />
+            <p className="max-w-sm text-base leading-[1.7] text-[#161310]/60 md:text-lg">
+              Minimal lighting selected for soft contrast, quiet atmosphere and
+              everyday calm.
+            </p>
 
-              <ImagePanel
-                src={heroImages.smallBottom.light}
-                darkSrc={heroImages.smallBottom.dark}
-                alt="Warm interior atmosphere"
-                sizes="(min-width: 768px) 24vw, 45vw"
-                y={smallBottomY}
-                delay={0.54}
-                imageDelay={0.54}
-                label="02"
-                title="Warm corner"
-                onHover={() => setCursorText("Warm corner")}
-                className="w-full md:-ml-20 md:w-[calc(100%+5rem)]"
-              />
+            <div className="pointer-events-auto mt-8 flex flex-wrap items-center gap-8">
+              <Link
+                href="/shop"
+                className="group relative inline-flex h-[56px] overflow-hidden border-2 border-[#161310] px-7 text-sm font-semibold text-[#161310] transition hover:bg-[#161310] hover:text-[#ecebeb]"
+              >
+                <span className="flex h-full items-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full">
+                  Shop collection
+                </span>
+
+                <span className="absolute left-10 top-0 flex h-full translate-y-full items-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0">
+                  Enter shop
+                </span>
+              </Link>
+
+              <Link
+                href="#new-products"
+                className="group flex items-center gap-4 text-sm"
+              >
+                <span className="relative overflow-hidden">
+                  <span className="block transition-transform duration-500 group-hover:-translate-y-full">
+                    New products
+                  </span>
+
+                  <span className="absolute left-0 top-full block transition-transform duration-500 group-hover:-translate-y-full">
+                    Explore now
+                  </span>
+                </span>
+
+                <span className="h-px w-12 bg-[#161310] transition-all duration-500 group-hover:w-20" />
+              </Link>
             </div>
-
-            <ImagePanel
-              src={heroImages.large.light}
-              darkSrc={heroImages.large.dark}
-              alt="Calero Studio calm interior lighting"
-              sizes="(min-width: 768px) 44vw, 100vw"
-              priority
-              y={largeY}
-              scale={largeScale}
-              delay={0.3}
-              imageDelay={0.3}
-              imageScale={1.08}
-              className="col-span-8"
-              label="03"
-              title="Pendant focus"
-              onHover={() => setCursorText("Pendant focus")}
-              large
-            />
           </motion.div>
 
           <motion.div
-            style={isDesktop ? { y: infoRowY, x: infoRowX } : { y: infoRowY }}
+            style={{ y: bottomTextY }}
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="mt-6 border-t border-[#161310]/20 pt-5"
+            transition={{ duration: 0.8, delay: 1, ease }}
+            className="md:col-span-4 md:col-start-9"
           >
-            <p className="ml-auto max-w-[38rem] text-lg  uppercase leading-tight tracking-[-0.04em] text-[#161310] md:text-2xl">
+            <p className="ml-auto max-w-[28rem] text-right text-lg uppercase leading-tight tracking-[-0.04em] text-[#161310] md:text-2xl">
               Lighting, objects and interior atmosphere.
             </p>
           </motion.div>
         </div>
       </div>
-
-      <motion.div
-        style={{
-          x: cursorX,
-          y: cursorY,
-        }}
-        animate={{
-          opacity: isHoveringImages ? 1 : 0,
-          scale: isHoveringImages ? 1 : 0.92,
-        }}
-        transition={{ duration: 0.22 }}
-        className="pointer-events-none fixed left-0 top-0 z-50 hidden border border-[#ecebeb]/40 bg-[#161310] px-4 py-3 text-xs uppercase tracking-[0.22em] text-[#ecebeb] md:block"
-      >
-        {cursorText}
-      </motion.div>
-
-      <div className="pointer-events-none absolute bottom-6 left-6 right-6 z-20 hidden items-center justify-between text-xs uppercase tracking-[0.22em] text-[#161310]/35 md:flex">
-        <span>Calero Studio</span>
-        <span>Scroll to explore</span>
-      </div>
     </section>
   );
 }
 
-function ImagePanel({
-  src,
-  darkSrc,
-  alt,
-  sizes,
-  priority = false,
-  y,
-  scale,
-  delay,
-  imageDelay,
-  imageScale = 1.1,
-  className = "",
-  label,
-  title,
-  large = false,
-  onHover,
-}: {
-  src: string;
-  darkSrc: string;
-  alt: string;
-  sizes: string;
-  priority?: boolean;
-  y: any;
-  scale?: any;
-  delay: number;
-  imageDelay: number;
-  imageScale?: number;
-  className?: string;
-  label: string;
-  title: string;
-  large?: boolean;
-  onHover: () => void;
-}) {
+function MouseCollage({ images }: { images: CollageImage[] }) {
+  return (
+    <div className="pointer-events-none absolute inset-0 z-10 hidden overflow-hidden md:block">
+      <AnimatePresence initial={false}>
+        {images.map((image) => (
+          <CollageItem key={image.id} image={image} />
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function CollageItem({ image }: { image: CollageImage }) {
+  const moveX = image.velocityX * 0.68;
+  const moveY = image.velocityY * 0.68;
+
+  const startX = image.x - image.width / 2;
+  const startY = image.y - image.height / 2;
+
   return (
     <motion.div
-      style={{ y, scale }}
-      onMouseEnter={onHover}
-      initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
-      animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
-      transition={{
-        duration: 1.15,
-        delay,
-        ease,
+      initial={{
+        x: startX,
+        y: startY,
+        rotate: image.rotate,
       }}
-      className={`group relative h-full overflow-hidden ${className}`}
+      animate={{
+        x: startX + moveX,
+        y: startY + moveY,
+        rotate: image.rotate + (image.velocityX > 0 ? 1.6 : -1.6),
+      }}
+      exit={{
+        x: startX + moveX * 1.04,
+        y: startY + moveY * 1.04,
+        rotate: image.rotate + (image.velocityX > 0 ? 2.5 : -2.5),
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 92,
+        damping: 24,
+        mass: 0.7,
+      }}
+      className="absolute transform-gpu"
+      style={{
+        width: image.width,
+        height: image.height,
+        zIndex: image.zIndex,
+        willChange: "transform",
+      }}
     >
       <motion.div
-        initial={{ scale: imageScale }}
-        animate={{ scale: 1 }}
-        transition={{
-          duration: 1.45,
-          delay: imageDelay,
-          ease,
+        initial={{
+          scale: 0.001,
         }}
-        className="absolute inset-0"
+        animate={{
+          scale: 1,
+        }}
+        exit={{
+          scale: [1, 1.045, 0.96, 0.001],
+        }}
+        transition={{
+          scale: {
+            duration: 0.9,
+            ease: [0.22, 1, 0.36, 1],
+            times: [0, 0.28, 0.5, 1],
+          },
+        }}
+        className="relative h-full w-full origin-center transform-gpu overflow-hidden bg-[#161310]"
+        style={{
+          willChange: "transform",
+        }}
       >
         <Image
-          src={src}
-          alt={alt}
-          fill
-          priority={priority}
-          sizes={sizes}
-          className="object-cover transition duration-700 group-hover:scale-[1.035]"
-        />
-
-        <Image
-          src={darkSrc}
+          src={image.src}
           alt=""
           fill
-          sizes={sizes}
-          aria-hidden="true"
-          className="object-cover opacity-0 transition duration-700 group-hover:scale-[1.035] group-hover:opacity-100"
+          sizes="220px"
+          className="object-cover"
+          draggable={false}
         />
       </motion.div>
-
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#161310]/25 via-transparent to-transparent opacity-0 transition duration-700 group-hover:opacity-100" />
-
-      <div className="pointer-events-none absolute bottom-4 left-4 right-4 flex items-end justify-between text-[#ecebeb] opacity-0 transition duration-500 group-hover:opacity-100">
-        <div>
-          <p className="text-xs text-[#ecebeb]/60">{label}</p>
-          <p className="mt-1 text-sm">{title}</p>
-        </div>
-
-        <span className="h-px w-10 bg-[#ecebeb]/70 transition-all duration-500 group-hover:w-16" />
-      </div>
-
-      {large && (
-        <div className="pointer-events-none absolute right-4 top-4 hidden text-xs uppercase tracking-[0.22em] text-[#ecebeb]/70 opacity-0 transition duration-500 group-hover:opacity-100 md:block">
-          Calm interior
-        </div>
-      )}
     </motion.div>
   );
 }
 
-function Reveal({
-  children,
+function HoverSlideWord({
+  text,
   delay,
+  className = "",
 }: {
-  children: React.ReactNode;
+  text: string;
   delay: number;
+  className?: string;
 }) {
   return (
-    <span className="block overflow-hidden py-[0.08em]">
+    <span
+      className={`block overflow-hidden py-[0.08em] whitespace-nowrap ${className}`}
+    >
       <motion.span
         initial={{ y: "110%" }}
         animate={{ y: "0%" }}
@@ -390,9 +360,68 @@ function Reveal({
           delay,
           ease,
         }}
-        className="block"
+        className="inline-flex"
       >
-        {children}
+        {text.split("").map((letter, index) => (
+          <HoverSlideLetter
+            key={`${letter}-${index}`}
+            letter={letter}
+            index={index}
+          />
+        ))}
+      </motion.span>
+    </span>
+  );
+}
+
+function HoverSlideLetter({
+  letter,
+  index,
+}: {
+  letter: string;
+  index: number;
+}) {
+  const controls = useAnimationControls();
+  const isAnimating = useRef(false);
+
+  async function handleMouseEnter() {
+    if (isAnimating.current) return;
+
+    isAnimating.current = true;
+
+    await controls.start({
+      x: "-50%",
+      transition: {
+        duration: 0.75,
+        delay: index * 0.01,
+        ease,
+      },
+    });
+
+    controls.set({
+      x: "0%",
+    });
+
+    isAnimating.current = false;
+  }
+
+  return (
+    <span
+      onMouseEnter={handleMouseEnter}
+      className="relative inline-block overflow-hidden"
+      style={{
+        lineHeight: "0.78em",
+      }}
+    >
+      <span className="invisible inline-block">{letter}</span>
+
+      <motion.span
+        initial={{ x: "0%" }}
+        animate={controls}
+        className="absolute left-0 top-0 inline-flex"
+      >
+        <span className="inline-block">{letter}</span>
+        <span className="inline-block">{letter}</span>
       </motion.span>
     </span>
   );

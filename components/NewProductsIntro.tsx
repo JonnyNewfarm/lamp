@@ -1,12 +1,26 @@
-// components/NewProductsIntro.tsx
 "use client";
 
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function NewProductsIntro() {
   const introRef = useRef<HTMLDivElement | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth < 780);
+    };
+
+    checkScreen();
+
+    window.addEventListener("resize", checkScreen);
+
+    return () => {
+      window.removeEventListener("resize", checkScreen);
+    };
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: introRef,
@@ -19,8 +33,12 @@ export default function NewProductsIntro() {
     mass: 0.6,
   });
 
-  // Starter høyere, stopper på original plassering
-  const headingY = useTransform(smoothProgress, [0, 1], [-70, 0]);
+  const headingY = useTransform(
+    smoothProgress,
+    [0, 1],
+    [-60, isMobile ? 0 : 60],
+  );
+
   const textY = useTransform(smoothProgress, [0, 1], [-30, 0]);
 
   return (
@@ -30,7 +48,7 @@ export default function NewProductsIntro() {
           New products
         </p>
 
-        <h2 className="max-w-xl text-5xl font-light leading-[0.95] tracking-[-0.06em] md:text-7xl">
+        <h2 className="max-w-xl text-5xl leading-[0.95] tracking-[-0.06em] md:whitespace-nowrap md:text-7xl">
           Recently added lights.
         </h2>
       </motion.div>
@@ -47,7 +65,7 @@ export default function NewProductsIntro() {
 
           <Link
             href="/shop"
-            className="group mt-8 inline-flex items-center gap-4 text-sm"
+            className="group mt-8 inline-flex items-center gap-4 text-lg font-semibold"
           >
             View all products
             <span className="h-px w-12 bg-[#161310] transition-all duration-500 group-hover:w-20" />
