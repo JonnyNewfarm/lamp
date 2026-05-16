@@ -55,9 +55,11 @@ const Footer = () => {
               <Link href="/" className="hover:text-[#161310]/55">
                 Home
               </Link>
+
               <Link href="/shop" className="hover:text-[#161310]/55">
                 Shop
               </Link>
+
               {footerLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -70,7 +72,7 @@ const Footer = () => {
             </nav>
           </div>
 
-          <div className="md:col-span-2">
+          <div className="md:col-span-3">
             <p className="mb-5 text-xs uppercase tracking-[0.28em] text-[#161310]/40">
               Studio
             </p>
@@ -78,7 +80,30 @@ const Footer = () => {
             <div className="space-y-3 text-sm text-[#161310]/55">
               <p>Curated for calm interiors.</p>
               <p>Secure checkout.</p>
-              <p>Support available by email.</p>
+
+              <p>
+                Email:{" "}
+                <a
+                  href="mailto:support@calero.studio"
+                  className="underline decoration-[#161310]/20 underline-offset-4 hover:text-[#161310]"
+                >
+                  support@calero.studio
+                </a>
+              </p>
+
+              <p>
+                Phone:{" "}
+                <a
+                  href="tel:+4748263011"
+                  className="underline decoration-[#161310]/20 underline-offset-4 hover:text-[#161310]"
+                >
+                  +47 48 26 30 11
+                </a>
+              </p>
+
+              <p>Business: Calero Studio</p>
+              <p>Location: Oslo, Norway</p>
+              <p>Orders fulfilled through trusted shipping partners.</p>
             </div>
           </div>
         </div>
