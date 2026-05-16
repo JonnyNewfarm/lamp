@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "Calero Studio",
   description: "Modern lighting for contemporary homes",
   verification: {
-    google: "_oFTeZRp9Y269p4jGUZ104jXBp_PqTa08pQYbgjv4vk",
+    google: "UUIlGkSeMEKR8f-6zMMig7EIdwl3ytoLA3g5v7wd9uI",
   },
 };
 
