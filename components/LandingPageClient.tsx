@@ -41,8 +41,9 @@ type CollageImage = {
   src: string;
   x: number;
   y: number;
-  velocityX: number;
-  velocityY: number;
+  directionX: number;
+  directionY: number;
+  speed: number;
   width: number;
   height: number;
   rotate: number;
@@ -52,7 +53,9 @@ type CollageImage = {
 export default function CaleroHero() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
+  const hasMousePosition = useRef(false);
   const lastMouse = useRef({ x: 0, y: 0 });
+  const lastImagePoint = useRef({ x: 0, y: 0 });
   const lastSpawnTime = useRef(0);
   const imageIndex = useRef(0);
   const zIndex = useRef(30);
@@ -100,21 +103,57 @@ export default function CaleroHero() {
     const localX = event.clientX - rect.left;
     const localY = event.clientY - rect.top;
 
-    const now = Date.now();
-    const deltaTime = now - lastSpawnTime.current;
+    if (!hasMousePosition.current) {
+      hasMousePosition.current = true;
 
-    const velocityX = localX - lastMouse.current.x;
-    const velocityY = localY - lastMouse.current.y;
-    const distance = Math.hypot(velocityX, velocityY);
+      lastMouse.current = {
+        x: localX,
+        y: localY,
+      };
+
+      lastImagePoint.current = {
+        x: localX,
+        y: localY,
+      };
+
+      return;
+    }
+
+    const mouseDeltaX = localX - lastMouse.current.x;
+    const mouseDeltaY = localY - lastMouse.current.y;
+    const speed = Math.hypot(mouseDeltaX, mouseDeltaY);
 
     lastMouse.current = {
       x: localX,
       y: localY,
     };
 
-    if (deltaTime < 115 || distance < 20) return;
+    if (speed < 1) return;
+
+    const distanceFromLastImage = Math.hypot(
+      localX - lastImagePoint.current.x,
+      localY - lastImagePoint.current.y,
+    );
+
+    const now = Date.now();
+    const deltaTime = now - lastSpawnTime.current;
+
+    /**
+     * Dette er det viktigste for Ashley Brooke-ish trail:
+     * Bildene kommer ikke på hver mousemove.
+     * De kommer først når musa har flyttet seg et visst stykke.
+     */
+    if (distanceFromLastImage < 82 || deltaTime < 42) return;
+
+    lastImagePoint.current = {
+      x: localX,
+      y: localY,
+    };
 
     lastSpawnTime.current = now;
+
+    const directionX = mouseDeltaX / speed;
+    const directionY = mouseDeltaY / speed;
 
     const src = collageImages[imageIndex.current % collageImages.length];
 
@@ -123,33 +162,39 @@ export default function CaleroHero() {
 
     const id = now + Math.random();
 
-    const width = 140 + Math.random() * 58;
-    const height = width * (1 + Math.random() * 0.12);
+    const width = 145 + Math.random() * 70;
+    const height = width * (1.02 + Math.random() * 0.18);
 
     const newImage: CollageImage = {
       id,
       src,
       x: localX,
       y: localY,
-      velocityX,
-      velocityY,
+      directionX,
+      directionY,
+      speed,
       width,
       height,
-      rotate: -3.5 + Math.random() * 7,
+      rotate: -5 + Math.random() * 10,
       zIndex: zIndex.current,
     };
 
-    setCollage((prev) => [...prev.slice(-11), newImage]);
+    setCollage((prev) => [...prev.slice(-10), newImage]);
 
     window.setTimeout(() => {
       setCollage((prev) => prev.filter((image) => image.id !== id));
-    }, 3200);
+    }, 1450);
+  }
+
+  function handleMouseLeave() {
+    hasMousePosition.current = false;
   }
 
   return (
     <section
       ref={sectionRef}
       onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       className="relative min-h-screen overflow-hidden bg-[#ecebeb] text-[#161310]"
     >
       <MouseCollage images={collage} />
@@ -281,74 +326,92 @@ function MouseCollage({ images }: { images: CollageImage[] }) {
 }
 
 function CollageItem({ image }: { image: CollageImage }) {
-  const moveX = image.velocityX * 0.68;
-  const moveY = image.velocityY * 0.68;
-
   const startX = image.x - image.width / 2;
   const startY = image.y - image.height / 2;
+
+  const drift = Math.min(Math.max(image.speed * 7.5, 140), 360);
+
+  const midX = startX + image.directionX * drift * 0.58;
+  const midY = startY + image.directionY * drift * 0.58;
+
+  const endX = startX + image.directionX * drift;
+  const endY = startY + image.directionY * drift;
+
+  const rotateStart = image.rotate - image.directionX * 7;
+  const rotateMid = image.rotate + image.directionX * 3;
+  const rotateEnd = image.rotate + image.directionX * 12;
 
   return (
     <motion.div
       initial={{
         x: startX,
         y: startY,
-        rotate: image.rotate,
+        rotate: rotateStart,
+        scale: 0.92,
+        opacity: 0,
       }}
       animate={{
-        x: startX + moveX,
-        y: startY + moveY,
-        rotate: image.rotate + (image.velocityX > 0 ? 1.6 : -1.6),
+        x: [startX, midX, endX],
+        y: [startY, midY, endY],
+        rotate: [rotateStart, rotateMid, rotateEnd],
+        scale: [0.92, 1, 1, 1.12],
+        opacity: [0, 1, 1, 1],
       }}
       exit={{
-        x: startX + moveX * 1.04,
-        y: startY + moveY * 1.04,
-        rotate: image.rotate + (image.velocityX > 0 ? 2.5 : -2.5),
+        x: endX + image.directionX * 24,
+        y: endY + image.directionY * 24,
+        rotate: rotateEnd + image.directionX * 4,
+        scale: 0.72,
+        opacity: 0,
       }}
       transition={{
-        type: "spring",
-        stiffness: 92,
-        damping: 24,
-        mass: 0.7,
+        x: {
+          duration: 1.45,
+          ease: [0.16, 1, 0.3, 1],
+          times: [0, 0.55, 1],
+        },
+        y: {
+          duration: 1.45,
+          ease: [0.16, 1, 0.3, 1],
+          times: [0, 0.55, 1],
+        },
+        rotate: {
+          duration: 1.45,
+          ease: [0.16, 1, 0.3, 1],
+          times: [0, 0.55, 1],
+        },
+        scale: {
+          duration: 1.45,
+          ease: [0.16, 1, 0.3, 1],
+          times: [0, 0.12, 0.72, 1],
+        },
+        opacity: {
+          duration: 0.12,
+          ease: "linear",
+        },
+        default: {
+          duration: 0.18,
+          ease: [0.16, 1, 0.3, 1],
+        },
       }}
       className="absolute transform-gpu"
       style={{
         width: image.width,
         height: image.height,
         zIndex: image.zIndex,
-        willChange: "transform",
+        willChange: "transform, opacity",
       }}
     >
-      <motion.div
-        initial={{
-          scale: 0.001,
-        }}
-        animate={{
-          scale: 1,
-        }}
-        exit={{
-          scale: [1, 1.045, 0.96, 0.001],
-        }}
-        transition={{
-          scale: {
-            duration: 0.9,
-            ease: [0.22, 1, 0.36, 1],
-            times: [0, 0.28, 0.5, 1],
-          },
-        }}
-        className="relative h-full w-full origin-center transform-gpu overflow-hidden bg-[#161310]"
-        style={{
-          willChange: "transform",
-        }}
-      >
+      <div className="relative h-full w-full overflow-hidden bg-[#161310]">
         <Image
           src={image.src}
           alt=""
           fill
-          sizes="220px"
+          sizes="240px"
           className="object-cover"
           draggable={false}
         />
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
