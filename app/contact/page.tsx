@@ -111,22 +111,17 @@ export default function ContactPage() {
             <div className="mt-5 space-y-4 text-sm leading-[1.9] text-[#161310]/60">
               <p>Store name: Calero Studio</p>
 
-              <p>Location: Oslo, Norway</p>
+              <p>Operated from: Oslo, Norway</p>
 
               <p>
-                Calero Studio is based in Oslo, Norway and serves selected
-                international markets.
+                Calero Studio is an online store operated from Oslo, Norway and
+                serves selected international markets.
               </p>
 
               <p>
                 Orders are processed by Calero Studio and fulfilled through
                 selected third-party fulfillment and shipping partners. Calero
-                Studio remains responsible for customer support, returns,
-                refunds and order-related questions.
-              </p>
-
-              <p>
-                We remain your point of contact for customer support, order
+                Studio remains responsible for customer support, order
                 questions, shipping updates, returns, exchanges and refund
                 requests.
               </p>
