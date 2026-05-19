@@ -119,8 +119,10 @@ export default function ContactPage() {
               </p>
 
               <p>
-                Orders are fulfilled and shipped through trusted fulfillment and
-                shipping partners.
+                Orders are processed by Calero Studio and fulfilled through
+                selected third-party fulfillment and shipping partners. Calero
+                Studio remains responsible for customer support, returns,
+                refunds and order-related questions.
               </p>
 
               <p>

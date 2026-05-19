@@ -74,12 +74,12 @@ export default function ShippingPage() {
 
         <PolicySection title="Fulfillment and delivery">
           <p>
-            Calero Studio works with trusted fulfillment and shipping partners
-            to help process, pack and deliver customer orders.
+            Orders are processed by Calero Studio and fulfilled through selected
+            third-party fulfillment and shipping partners.
           </p>
           <p>
-            We remain your point of contact for customer support, order
-            questions, shipping updates, returns and refund requests.
+            Calero Studio remains responsible for customer support, order
+            questions, shipping updates, returns, exchanges and refund requests.
           </p>
         </PolicySection>
 
