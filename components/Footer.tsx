@@ -101,7 +101,7 @@ const Footer = () => {
                 </a>
               </p>
 
-              <p>Business: Calero Studio</p>
+              <p>Store: Calero Studio</p>
               <p>Location: Oslo, Norway</p>
               <p>Orders fulfilled through trusted shipping partners.</p>
             </div>

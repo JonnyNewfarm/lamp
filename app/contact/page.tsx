@@ -105,13 +105,13 @@ export default function ContactPage() {
 
           <section className="md:col-span-6">
             <h2 className="text-2xl font-light tracking-[-0.04em]">
-              Business information
+              Store information
             </h2>
 
             <div className="mt-5 space-y-4 text-sm leading-[1.9] text-[#161310]/60">
-              <p>Business name: Calero Studio</p>
+              <p>Store name: Calero Studio</p>
 
-              <p>Business location: Oslo, Norway</p>
+              <p>Location: Oslo, Norway</p>
 
               <p>
                 Calero Studio is based in Oslo, Norway and serves selected
