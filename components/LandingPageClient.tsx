@@ -426,11 +426,9 @@ function HoverSlideWord({
   className?: string;
 }) {
   return (
-    <span
-      className={`block overflow-hidden py-[0.08em] whitespace-nowrap ${className}`}
-    >
+    <span className={`block overflow-hidden whitespace-nowrap ${className}`}>
       <motion.span
-        initial={{ y: "110%" }}
+        initial={{ y: "100%" }}
         animate={{ y: "0%" }}
         transition={{
           duration: 1,
@@ -487,7 +485,7 @@ function HoverSlideLetter({
       onMouseEnter={handleMouseEnter}
       className="relative inline-block overflow-hidden"
       style={{
-        lineHeight: "0.78em",
+        lineHeight: "0.9em",
       }}
     >
       <span className="invisible inline-block">{letter}</span>

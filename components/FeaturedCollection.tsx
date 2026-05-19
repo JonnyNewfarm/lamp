@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import NewProductsIntro from "@/components/NewProductsIntro";
 import NewProductsScroll from "@/components/NewProductsScroll";
 
 export default async function NewProducts() {
@@ -40,16 +39,24 @@ export default async function NewProducts() {
     return null;
   }
 
-  return (
-    <section
-      id="new-products"
-      className="overflow-hidden bg-[#ecebeb] py-20 text-[#161310] md:py-28"
-    >
-      <div className="px-6 md:px-12">
-        <NewProductsIntro />
-      </div>
+  const productItems = products.map((product) => {
+    const image =
+      product.images[0]?.url ??
+      product.variants[0]?.images[0]?.url ??
+      "/images/placeholder.jpg";
 
-      <NewProductsScroll products={products} />
+    return {
+      id: product.id,
+      title: product.title,
+      slug: product.slug,
+      category: product.category?.name ?? "Product",
+      image,
+    };
+  });
+
+  return (
+    <section id="new-products" className=" bg-[#ecebeb] text-[#161310]">
+      <NewProductsScroll products={productItems} />
     </section>
   );
 }
