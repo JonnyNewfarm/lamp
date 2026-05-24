@@ -354,8 +354,9 @@ export default function ProductDetailsClient({
                   alt={selectedImage.alt || product.title}
                   fill
                   priority
+                  quality={75}
                   sizes="(min-width: 1024px) 58vw, 100vw"
-                  className="object-cover transition duration-500 hover:scale-[1.02]"
+                  className="object-cover"
                 />
 
                 <span className="absolute bottom-4 right-4 bg-[#ecebeb]/90 px-4 py-2 text-xs uppercase tracking-[0.18em] text-[#161310]/60">
@@ -388,6 +389,7 @@ export default function ProductDetailsClient({
                         src={image.url}
                         alt={image.alt || product.title}
                         fill
+                        quality={60}
                         sizes="120px"
                         className="object-cover"
                       />
@@ -639,6 +641,7 @@ export default function ProductDetailsClient({
                 src={selectedImage.url}
                 alt={selectedImage.alt || product.title}
                 fill
+                quality={85}
                 sizes="100vw"
                 className="object-contain"
                 priority
@@ -669,6 +672,7 @@ export default function ProductDetailsClient({
                           src={image.url}
                           alt={image.alt || product.title}
                           fill
+                          quality={60}
                           sizes="80px"
                           className="object-cover"
                         />
@@ -703,7 +707,7 @@ function ProductDescription({
   }, [description]);
 
   const hasDescription = paragraphs.length > 0;
-  const shouldCollapse = description.length > 280 || paragraphs.length > 2;
+  const shouldCollapse = description.length > 220 || paragraphs.length > 1;
 
   if (!hasDescription) {
     return (
@@ -724,14 +728,14 @@ function ProductDescription({
 
       <div
         className={`relative overflow-hidden transition-[max-height] duration-500 ease-in-out ${
-          shouldCollapse && !open ? "max-h-44" : "max-h-[900px]"
+          shouldCollapse && !open ? "max-h-28" : "max-h-[900px]"
         }`}
       >
-        <div className="space-y-4">
+        <div className="space-y-3">
           {paragraphs.map((paragraph, index) => (
             <p
               key={`${paragraph.slice(0, 20)}-${index}`}
-              className="whitespace-pre-line text-base leading-[1.85] text-[#161310]/60"
+              className="whitespace-pre-line text-sm leading-[1.75] text-[#161310]/60 md:text-base md:leading-[1.85]"
             >
               {paragraph}
             </p>
@@ -739,7 +743,7 @@ function ProductDescription({
         </div>
 
         {shouldCollapse && !open && (
-          <div className="pointer-events-none absolute bottom-0 left-0 h-16 w-full bg-gradient-to-t from-[#ecebeb] to-transparent" />
+          <div className="pointer-events-none absolute bottom-0 left-0 h-10 w-full bg-gradient-to-t from-[#ecebeb] to-transparent" />
         )}
       </div>
 
@@ -747,7 +751,7 @@ function ProductDescription({
         <button
           type="button"
           onClick={onToggle}
-          className="mt-5 inline-flex items-center gap-3 text-sm text-[#161310] transition hover:opacity-60"
+          className="mt-4 inline-flex items-center gap-3 text-sm text-[#161310] transition hover:opacity-60"
           aria-expanded={open}
         >
           <span>{open ? "Hide description" : "View full description"}</span>
@@ -804,7 +808,7 @@ function ProductSpecs({
 
   if (items.length === 0) return null;
 
-  const shouldCollapse = items.length > 5;
+  const shouldCollapse = items.length > 3;
 
   return (
     <div className="mt-10 border-t border-[#161310]/15 pt-8">
@@ -812,14 +816,14 @@ function ProductSpecs({
 
       <div
         className={`relative overflow-hidden transition-[max-height] duration-500 ease-in-out ${
-          shouldCollapse && !open ? "max-h-[150px]" : "max-h-[1200px]"
+          shouldCollapse && !open ? "max-h-[92px]" : "max-h-[1200px]"
         }`}
       >
         <div className="divide-y divide-[#161310]/10 border-y border-[#161310]/10">
           {items.map((item, index) => (
             <div
               key={`${item.label}-${index}`}
-              className="grid grid-cols-[1fr_1.3fr] gap-6 py-4 text-sm"
+              className="grid grid-cols-[1fr_1.3fr] gap-6 py-3 text-sm"
             >
               <p className="text-[#161310]/45">{item.label}</p>
               <p className="break-words">{item.value || "—"}</p>
@@ -828,7 +832,7 @@ function ProductSpecs({
         </div>
 
         {shouldCollapse && !open && (
-          <div className="pointer-events-none absolute bottom-0 left-0 h-20 w-full bg-gradient-to-t from-[#ecebeb] to-transparent" />
+          <div className="pointer-events-none absolute bottom-0 left-0 h-10 w-full bg-gradient-to-t from-[#ecebeb] to-transparent" />
         )}
       </div>
 
@@ -836,7 +840,7 @@ function ProductSpecs({
         <button
           type="button"
           onClick={onToggle}
-          className="mt-5 inline-flex items-center gap-3 text-sm text-[#161310] transition hover:opacity-60"
+          className="mt-4 inline-flex items-center gap-3 text-sm text-[#161310] transition hover:opacity-60"
           aria-expanded={open}
         >
           <span>{open ? "Hide specs" : "View full specs"}</span>
