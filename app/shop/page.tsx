@@ -81,6 +81,35 @@ function createPageHref(params: ShopSearchParams, page: number) {
   return queryString ? `/shop?${queryString}` : "/shop";
 }
 
+function getVisiblePages(currentPage: number, totalPages: number) {
+  const pages: Array<number | "..."> = [];
+
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+
+  pages.push(1);
+
+  if (currentPage > 4) {
+    pages.push("...");
+  }
+
+  const start = Math.max(2, currentPage - 1);
+  const end = Math.min(totalPages - 1, currentPage + 1);
+
+  for (let page = start; page <= end; page++) {
+    pages.push(page);
+  }
+
+  if (currentPage < totalPages - 3) {
+    pages.push("...");
+  }
+
+  pages.push(totalPages);
+
+  return pages;
+}
+
 export default async function ShopPage({
   searchParams,
 }: {
@@ -205,6 +234,7 @@ export default async function ShopPage({
   ]);
 
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
+  const visiblePages = getVisiblePages(currentPage, totalPages);
 
   const hasActiveFilters =
     Boolean(params.category) ||
@@ -213,7 +243,6 @@ export default async function ShopPage({
     Boolean(params.sort && params.sort !== "newest");
 
   const showingFrom = totalProducts === 0 ? 0 : skip + 1;
-
   const showingTo = Math.min(skip + products.length, totalProducts);
 
   return (
@@ -320,56 +349,110 @@ export default async function ShopPage({
                 </div>
 
                 {totalPages > 1 && (
-                  <nav className="mt-16 flex flex-col gap-4 border-t border-[#161310]/15 pt-8 md:flex-row md:items-center md:justify-between">
-                    <p className="text-sm text-[#161310]/50">
-                      Page {currentPage} of {totalPages}
-                    </p>
+                  <nav
+                    aria-label="Shop pagination"
+                    className="mt-20 border-t border-[#161310]/15 pt-10"
+                  >
+                    <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.34em] text-[#161310]/40">
+                          Page
+                        </p>
 
-                    <div className="flex flex-wrap items-center gap-2">
-                      {currentPage > 1 ? (
-                        <Link
-                          href={createPageHref(params, currentPage - 1)}
-                          className="border border-[#161310]/20 px-4 py-3 text-sm transition hover:bg-[#161310] hover:text-[#ecebeb]"
-                        >
-                          Previous
-                        </Link>
-                      ) : (
-                        <span className="border border-[#161310]/10 px-4 py-3 text-sm text-[#161310]/25">
-                          Previous
-                        </span>
-                      )}
+                        <div className="mt-3 flex items-end gap-3">
+                          <span className="text-[4.5rem] font-light leading-[0.8] tracking-[-0.08em] text-[#161310] md:text-[6rem]">
+                            {String(currentPage).padStart(2, "0")}
+                          </span>
 
-                      {Array.from({ length: totalPages }).map((_, index) => {
-                        const page = index + 1;
-                        const isActive = page === currentPage;
+                          <span className="pb-2 text-sm tracking-[0.24em] text-[#161310]/35">
+                            / {String(totalPages).padStart(2, "0")}
+                          </span>
+                        </div>
 
-                        return (
-                          <Link
-                            key={page}
-                            href={createPageHref(params, page)}
-                            className={
-                              isActive
-                                ? "bg-[#161310] px-4 py-3 text-sm text-[#ecebeb]"
-                                : "border border-[#161310]/20 px-4 py-3 text-sm transition hover:bg-[#161310] hover:text-[#ecebeb]"
-                            }
-                          >
-                            {page}
-                          </Link>
-                        );
-                      })}
+                        <p className="mt-5 max-w-xs text-sm leading-relaxed text-[#161310]/45">
+                          Browsing {showingFrom}-{showingTo} of {totalProducts}{" "}
+                          selected pieces.
+                        </p>
+                      </div>
 
-                      {currentPage < totalPages ? (
-                        <Link
-                          href={createPageHref(params, currentPage + 1)}
-                          className="border border-[#161310]/20 px-4 py-3 text-sm transition hover:bg-[#161310] hover:text-[#ecebeb]"
-                        >
-                          Next
-                        </Link>
-                      ) : (
-                        <span className="border border-[#161310]/10 px-4 py-3 text-sm text-[#161310]/25">
-                          Next
-                        </span>
-                      )}
+                      <div className="flex flex-col gap-6 md:items-end">
+                        <div className="h-px w-full overflow-hidden bg-[#161310]/15 md:w-[360px]">
+                          <div
+                            className="h-px bg-[#161310] transition-all duration-500"
+                            style={{
+                              width: `${(currentPage / totalPages) * 100}%`,
+                            }}
+                          />
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-2">
+                          {currentPage > 1 ? (
+                            <Link
+                              href={createPageHref(params, currentPage - 1)}
+                              className="group flex h-12 items-center gap-3 border border-[#161310]/20 px-5 text-sm text-[#161310]/70 transition hover:border-[#161310] hover:bg-[#161310] hover:text-[#ecebeb]"
+                            >
+                              <span className="transition group-hover:-translate-x-1">
+                                ←
+                              </span>
+                              <span>Prev</span>
+                            </Link>
+                          ) : (
+                            <span className="flex h-12 items-center gap-3 border border-[#161310]/10 px-5 text-sm text-[#161310]/25">
+                              <span>←</span>
+                              <span>Prev</span>
+                            </span>
+                          )}
+
+                          <div className="flex items-center gap-1">
+                            {visiblePages.map((page, index) => {
+                              if (page === "...") {
+                                return (
+                                  <span
+                                    key={`ellipsis-${index}`}
+                                    className="flex h-12 min-w-10 items-center justify-center text-sm text-[#161310]/30"
+                                  >
+                                    …
+                                  </span>
+                                );
+                              }
+
+                              const isActive = page === currentPage;
+
+                              return (
+                                <Link
+                                  key={page}
+                                  href={createPageHref(params, page)}
+                                  aria-current={isActive ? "page" : undefined}
+                                  className={
+                                    isActive
+                                      ? "flex h-12 min-w-12 items-center justify-center bg-[#161310] px-4 text-sm text-[#ecebeb]"
+                                      : "flex h-12 min-w-12 items-center justify-center border border-[#161310]/15 px-4 text-sm text-[#161310]/50 transition hover:border-[#161310] hover:text-[#161310]"
+                                  }
+                                >
+                                  {String(page).padStart(2, "0")}
+                                </Link>
+                              );
+                            })}
+                          </div>
+
+                          {currentPage < totalPages ? (
+                            <Link
+                              href={createPageHref(params, currentPage + 1)}
+                              className="group flex h-12 items-center gap-3 border border-[#161310]/20 px-5 text-sm text-[#161310]/70 transition hover:border-[#161310] hover:bg-[#161310] hover:text-[#ecebeb]"
+                            >
+                              <span>Next</span>
+                              <span className="transition group-hover:translate-x-1">
+                                →
+                              </span>
+                            </Link>
+                          ) : (
+                            <span className="flex h-12 items-center gap-3 border border-[#161310]/10 px-5 text-sm text-[#161310]/25">
+                              <span>Next</span>
+                              <span>→</span>
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </nav>
                 )}
