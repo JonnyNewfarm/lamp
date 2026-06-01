@@ -86,7 +86,7 @@ export default function EditorialTextAssembleSection() {
             className="flex items-center gap-5"
           >
             <Link
-              href="/products"
+              href="/shop"
               className="inline-flex h-11 items-center justify-center border border-[#161310] px-6 text-xs font-black uppercase tracking-[-0.045em] text-[#161310] transition-colors duration-200 hover:bg-[#161310] hover:text-[#ecebeb]"
             >
               View products
