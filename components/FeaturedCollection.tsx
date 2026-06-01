@@ -39,7 +39,7 @@ export default async function NewProducts() {
     return null;
   }
 
-  const productItems = products.map((product) => {
+  const productItems = products.map((product, index) => {
     const image =
       product.images[0]?.url ??
       product.variants[0]?.images[0]?.url ??
@@ -47,6 +47,7 @@ export default async function NewProducts() {
 
     return {
       id: product.id,
+      number: String(index + 1).padStart(2, "0"),
       title: product.title,
       slug: product.slug,
       category: product.category?.name ?? "Product",
@@ -55,7 +56,7 @@ export default async function NewProducts() {
   });
 
   return (
-    <section id="new-products" className=" bg-[#ecebeb] text-[#161310]">
+    <section id="new-products" className="bg-[#ecebeb] text-[#161310]">
       <NewProductsScroll products={productItems} />
     </section>
   );

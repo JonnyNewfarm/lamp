@@ -1,3 +1,4 @@
+import EditorialIntroSection from "@/components/EditorialIntroSection";
 import FeaturedCollection from "@/components/FeaturedCollection";
 import LandingPageClient from "@/components/LandingPageClient";
 import LightingByMood from "@/components/LightingByMood";
@@ -54,6 +55,7 @@ const page = () => {
     <>
       <ScrollSection>
         <LandingPageClient />
+        <EditorialIntroSection />
         <FeaturedCollection />
         <LightingByMood />
       </ScrollSection>
