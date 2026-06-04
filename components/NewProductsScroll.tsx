@@ -68,17 +68,20 @@ export default function NewProductsScroll({
   const progress = rawIndex - currentIndex;
 
   const activeIndex = Math.min(maxIndex, Math.max(0, Math.round(rawIndex)));
+  const activeProduct = products[activeIndex];
 
   const frontProduct = products[currentIndex];
   const backProduct = products[nextIndex];
-  const activeProduct = products[activeIndex];
 
   return (
     <section
       ref={sectionRef}
       className="relative bg-[#ecebeb] text-[#161310]"
       style={{
-        height: `calc(${Math.max(products.length * 74, 290)}vh + ${NAV_OFFSET})`,
+        height: `calc(${Math.max(
+          products.length * 74,
+          290,
+        )}vh + ${NAV_OFFSET})`,
       }}
     >
       <div
@@ -105,7 +108,7 @@ export default function NewProductsScroll({
 
           {/* LEFT EDITORIAL TEXT - DESKTOP ONLY */}
           <div className="pointer-events-none absolute left-5 top-[25%] z-40 hidden max-w-[290px] md:left-12 md:block">
-            <p className="text-[clamp(1.55rem,2.25vw,3rem)] font-black uppercase leading-[0.88] tracking-[-0.08em]">
+            <p className="text-[clamp(1.55rem,2.25vw,3rem)] font-black grain-hero-text uppercase leading-[0.88] tracking-[-0.08em]">
               Recently selected for quiet interiors.
             </p>
 
@@ -122,7 +125,7 @@ export default function NewProductsScroll({
             </p>
           </div>
 
-          {/* ORBIT IMAGES */}
+          {/* ORBIT PRODUCT CARDS */}
           <div
             className="absolute inset-0 z-10 flex items-center justify-center pt-10 md:pt-0"
             style={{
@@ -130,12 +133,12 @@ export default function NewProductsScroll({
             }}
           >
             <div
-              className="relative h-[46vh] w-[94vw] md:mt-4 md:h-[60vh] md:w-[52vw]"
+              className="relative h-[62vh] w-[94vw] md:mt-4 md:h-[68vh] md:w-[52vw]"
               style={{
                 transformStyle: "preserve-3d",
               }}
             >
-              <OrbitProductImage
+              <OrbitProductCard
                 product={backProduct}
                 angle={-180 + progress * 180}
                 isFront={progress > 0.5}
@@ -143,7 +146,7 @@ export default function NewProductsScroll({
                 isDesktop={isDesktop}
               />
 
-              <OrbitProductImage
+              <OrbitProductCard
                 product={frontProduct}
                 angle={progress * 180}
                 isFront={progress <= 0.5}
@@ -153,30 +156,12 @@ export default function NewProductsScroll({
             </div>
           </div>
 
-          {/* BOTTOM PRODUCT TEXT */}
-          <div className="pointer-events-none absolute bottom-5 left-5 right-5 z-[200] md:bottom-7 md:left-12 md:right-12">
-            <Link
-              href={`/products/${activeProduct.slug}`}
-              className="pointer-events-auto grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 md:gap-8"
-            >
-              <div className="min-w-0">
-                <p className="mb-2 truncate text-xs font-black uppercase leading-none tracking-[-0.04em] text-[#161310]/45">
-                  {activeProduct.category}
-                </p>
-
-                <h2
-                  title={activeProduct.title}
-                  className="truncate text-[clamp(1.2rem,3vw,3.45rem)]  uppercase leading-[0.85] tracking-[-0.08em]"
-                >
-                  {activeProduct.title}
-                </h2>
-              </div>
-
-              <p className="pb-1 text-sm md:text-lg font-black uppercase leading-none tracking-[-0.04em] text-[#161310]/45">
-                {String(activeIndex + 1).padStart(2, "0")} /{" "}
-                {String(products.length).padStart(2, "0")}
-              </p>
-            </Link>
+          {/* SCREEN COUNTER - FAST HØYRE NEDRE HJØRNE */}
+          <div className="pointer-events-none absolute bottom-5 right-5 z-[200] md:bottom-7 md:right-12">
+            <p className="text-sm font-black uppercase leading-none tracking-[-0.04em] text-[#161310]/45 md:text-lg">
+              {String(activeIndex + 1).padStart(2, "0")} /{" "}
+              {String(products.length).padStart(2, "0")}
+            </p>
           </div>
         </div>
       </div>
@@ -184,7 +169,7 @@ export default function NewProductsScroll({
   );
 }
 
-function OrbitProductImage({
+function OrbitProductCard({
   product,
   angle,
   isFront,
@@ -214,7 +199,7 @@ function OrbitProductImage({
 
   return (
     <div
-      className="absolute left-1/2 top-1/2 h-[40vh] w-[56vw] max-w-[290px] overflow-hidden bg-[#d8d2c8] md:h-[53vh] md:w-[23vw] md:max-w-[370px]"
+      className="absolute left-1/2 top-1/2 w-[56vw] max-w-[290px] md:w-[23vw] md:max-w-[370px]"
       style={{
         zIndex: isFront ? 30 : 10,
         opacity,
@@ -229,16 +214,31 @@ function OrbitProductImage({
         willChange: "transform, opacity",
       }}
     >
-      <Link href={`/products/${product.slug}`} className="block h-full w-full">
-        <div className="relative h-full w-full">
-          <Image
-            src={product.image}
-            alt={product.title}
-            fill
-            priority={isPriority}
-            sizes="(min-width: 768px) 23vw, 56vw"
-            className="object-cover"
-          />
+      <Link href={`/products/${product.slug}`} className="block w-full">
+        <div className="h-[40vh] overflow-hidden bg-[#d8d2c8] md:h-[53vh]">
+          <div className="relative h-full w-full ">
+            <Image
+              src={product.image}
+              alt={product.title}
+              fill
+              priority={isPriority}
+              sizes="(min-width: 768px) 23vw, 56vw"
+              className="object-cover"
+            />
+          </div>
+        </div>
+
+        <div className="mt-3 text-[#161310] md:mt-4">
+          <p className="mb-1 truncate text-[10px] font-black uppercase leading-none tracking-[-0.035em] text-[#161310]/80 md:text-xs">
+            {product.category}
+          </p>
+
+          <h2
+            title={product.title}
+            className="line-clamp-2 text-sm font-black uppercase leading-[0.95] tracking-[-0.055em] md:text-base"
+          >
+            {product.title}
+          </h2>
         </div>
       </Link>
     </div>

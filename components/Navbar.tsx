@@ -28,17 +28,17 @@ const Navbar = () => {
 
             <div className="m-0 flex gap-x-1 leading-tight">
               <Link
-                className="transition-transform ease-in-out hover:scale-103"
+                className="transition-transform ease-in-out hover:scale-103 hover:grain-accent-text"
                 href="/"
               >
-                Home,
+                <span className="nav-grain-link">Home,</span>
               </Link>
 
               <Link
                 className="transition-transform ease-in-out hover:scale-103"
                 href="/shop"
               >
-                Shop,
+                <span className="nav-grain-link">Shop,</span>
               </Link>
 
               <CartButton />

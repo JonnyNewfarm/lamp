@@ -25,13 +25,13 @@ const heroImages = {
 };
 
 const collageImages = [
-  "/images/lamp-1.jpg",
-  "/images/lamp-2.jpg",
-  "/images/lamp-3.jpg",
-  "/images/lamp-4.jpg",
-  "/images/lamp-5.jpg",
-  "/images/lamp-6.jpg",
-  "/images/lamp-7.jpg",
+  "/images/lamp-grain-1.jpg",
+  "/images/lamp-grain-2.jpg",
+  "/images/lamp-grain-3.jpg",
+  "/images/lamp-grain-4.jpg",
+  "/images/lamp-grain-5.jpg",
+  "/images/lamp-grain-6.jpg",
+  "/images/lamp-grain-7.jpg",
 ];
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -138,11 +138,6 @@ export default function CaleroHero() {
     const now = Date.now();
     const deltaTime = now - lastSpawnTime.current;
 
-    /**
-     * Dette er det viktigste for Ashley Brooke-ish trail:
-     * Bildene kommer ikke på hver mousemove.
-     * De kommer først når musa har flyttet seg et visst stykke.
-     */
     if (distanceFromLastImage < 82 || deltaTime < 42) return;
 
     lastImagePoint.current = {
@@ -206,7 +201,7 @@ export default function CaleroHero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.45, ease }}
-              className="mb-2 text-right text-[clamp(0.7rem,1vw,1rem)] font-black uppercase leading-none tracking-[-0.035em] text-[#161310]"
+              className="mb-2 text-right grain-black-text text-[clamp(0.7rem,1vw,1rem)] font-black uppercase leading-none tracking-[-0.035em] text-[#161310]"
             >
               MADE FOR LIGHT. BUILT FOR CALM.
             </motion.p>
@@ -214,12 +209,14 @@ export default function CaleroHero() {
             <HoverSlideWord
               text="Calero"
               delay={0.1}
+              grain
               className="text-[16vw] md:text-[8.6vw]"
             />
 
             <HoverSlideWord
               text="Studio"
               delay={0.22}
+              grain
               className="text-[14vw] md:text-[7.4vw]"
             />
           </h1>
@@ -245,7 +242,7 @@ export default function CaleroHero() {
           transition={{ duration: 0.9, delay: 0.5, ease }}
           className="relative z-20 mt-[11vh] max-w-[48rem] md:ml-[38vw] md:mt-[6vh]"
         >
-          <p className="text-[clamp(2.35rem,5.6vw,7.6rem)] font-black uppercase leading-[0.82] tracking-[-0.09em] text-[#161310]">
+          <p className="text-[#28311f] text-[clamp(2.35rem,5.6vw,7.6rem)] font-black uppercase leading-[0.82] tracking-[-0.09em]">
             Soft light for quiet interiors.
           </p>
         </motion.div>
@@ -266,9 +263,9 @@ export default function CaleroHero() {
             <div className="pointer-events-auto mt-8 flex flex-wrap items-center gap-8">
               <Link
                 href="/shop"
-                className="group relative inline-flex h-[56px] overflow-hidden border-2 border-[#161310] px-7 text-sm font-semibold text-[#161310] transition hover:bg-[#161310] hover:text-[#ecebeb]"
+                className="group relative inline-flex h-[56px] overflow-hidden border-2  border-[#161310] px-7 text-sm font-semibold text-[#161310] transition hover:bg-[#161310] hover:text-[#ecebeb]"
               >
-                <span className="flex h-full items-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full">
+                <span className="flex h-full items-center transition-transform duration-500  ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full">
                   Shop collection
                 </span>
 
@@ -303,7 +300,7 @@ export default function CaleroHero() {
             transition={{ duration: 0.8, delay: 1, ease }}
             className="md:col-span-4 md:col-start-9"
           >
-            <p className="ml-auto max-w-[28rem] text-right text-lg uppercase leading-tight tracking-[-0.04em] text-[#161310] md:text-2xl">
+            <p className="ml-auto max-w-[28rem] text-right  text-lg uppercase leading-tight tracking-[-0.04em] text-[#161310] md:text-2xl">
               Lighting, objects and interior atmosphere.
             </p>
           </motion.div>
@@ -420,10 +417,12 @@ function HoverSlideWord({
   text,
   delay,
   className = "",
+  grain = false,
 }: {
   text: string;
   delay: number;
   className?: string;
+  grain?: boolean;
 }) {
   return (
     <span className={`block overflow-hidden whitespace-nowrap ${className}`}>
@@ -442,6 +441,7 @@ function HoverSlideWord({
             key={`${letter}-${index}`}
             letter={letter}
             index={index}
+            grain={grain}
           />
         ))}
       </motion.span>
@@ -452,9 +452,11 @@ function HoverSlideWord({
 function HoverSlideLetter({
   letter,
   index,
+  grain = false,
 }: {
   letter: string;
   index: number;
+  grain?: boolean;
 }) {
   const controls = useAnimationControls();
   const isAnimating = useRef(false);
@@ -495,8 +497,13 @@ function HoverSlideLetter({
         animate={controls}
         className="absolute left-0 top-0 inline-flex"
       >
-        <span className="inline-block">{letter}</span>
-        <span className="inline-block">{letter}</span>
+        <span className={`inline-block ${grain ? "grain-hero-text" : ""}`}>
+          {letter}
+        </span>
+
+        <span className={`inline-block ${grain ? "grain-hero-text" : ""}`}>
+          {letter}
+        </span>
       </motion.span>
     </span>
   );
