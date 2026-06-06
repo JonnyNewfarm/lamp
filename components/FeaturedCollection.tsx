@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import NewProductsScroll from "@/components/NewProductsScroll";
+import NewProductsGallery from "./NewProductsGallery";
 
 export default async function NewProducts() {
   const products = await prisma.product.findMany({
@@ -56,8 +56,8 @@ export default async function NewProducts() {
   });
 
   return (
-    <section id="new-products" className="bg-[#ecebeb] text-[#161310]">
-      <NewProductsScroll products={productItems} />
+    <section id="new-products" className="bg-[#ecebeb] noise-bg text-[#161310]">
+      <NewProductsGallery products={productItems} />
     </section>
   );
 }

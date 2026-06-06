@@ -190,7 +190,7 @@ export default function CaleroHero() {
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative min-h-screen overflow-hidden bg-[#ecebeb] text-[#161310]"
+      className="relative noise-bg min-h-screen overflow-hidden bg-[#ecebeb] text-[#161310]"
     >
       <MouseCollage images={collage} />
 

@@ -5,7 +5,7 @@ import CartButton from "./cart/CartButton";
 
 const Navbar = () => {
   return (
-    <div className="hidden fixed left-0 top-0 z-50 w-full md:block">
+    <div className="hidden fixed noise-bg left-0 top-0 z-50 w-full md:block">
       <div className="w-full px-20 py-3 text-[16px] font-extrabold text-[#161310]">
         <div className="flex items-center justify-between">
           <div className="tracking-tighter">

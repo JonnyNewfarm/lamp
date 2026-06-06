@@ -48,7 +48,7 @@ export default function LightingByMood() {
   return (
     <section
       id="moods"
-      className="bg-[#ecebeb] px-6 py-20 text-[#161310] md:px-12 md:py-32"
+      className="bg-[#ecebeb] z-[9999999]  px-6 py-20 text-[#161310] md:px-12 md:py-32"
     >
       <div className="border-t border-[#161310]/15 pt-10">
         <div className="grid gap-14 md:grid-cols-12">

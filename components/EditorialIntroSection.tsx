@@ -17,7 +17,7 @@ export default function EditorialTextAssembleSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-[#ecebeb] px-5 py-20 text-[#161310] md:px-12 md:py-28"
+      className="relative noise-bg overflow-hidden bg-[#ecebeb] px-5 py-20 text-[#161310] md:px-12 md:py-28"
     >
       <div className="relative flex min-h-[72vh] flex-col justify-between">
         <div className="relative z-20 flex items-start justify-between gap-8">
