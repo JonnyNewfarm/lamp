@@ -25,9 +25,9 @@ export default function EditorialTextAssembleSection() {
             initial={{ y: 24, opacity: 0 }}
             animate={isInView ? { y: 0, opacity: 1 } : { y: 24, opacity: 0 }}
             transition={{
-              duration: 0.75,
+              duration: 0.9,
               delay: 0.15,
-              ease: [0.16, 1, 0.3, 1],
+              ease: [0.22, 1, 0.36, 1],
             }}
             className="max-w-[230px] text-sm font-black uppercase leading-[0.95] tracking-[-0.055em] text-[#161310]/55 md:text-base"
           >
@@ -38,9 +38,9 @@ export default function EditorialTextAssembleSection() {
             initial={{ y: 24, opacity: 0 }}
             animate={isInView ? { y: 0, opacity: 1 } : { y: 24, opacity: 0 }}
             transition={{
-              duration: 0.75,
+              duration: 0.9,
               delay: 0.25,
-              ease: [0.16, 1, 0.3, 1],
+              ease: [0.22, 1, 0.36, 1],
             }}
             className="hidden max-w-[280px] text-right text-sm font-medium leading-[1.25] tracking-[-0.04em] text-[#161310]/45 md:block"
           >
@@ -65,9 +65,9 @@ export default function EditorialTextAssembleSection() {
             initial={{ y: 30, opacity: 0 }}
             animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
             transition={{
-              duration: 0.85,
-              delay: 1.25,
-              ease: [0.16, 1, 0.3, 1],
+              duration: 1,
+              delay: 1.35,
+              ease: [0.22, 1, 0.36, 1],
             }}
             className="max-w-[430px] text-base font-medium leading-[1.22] tracking-[-0.045em] text-[#161310]/55 md:text-lg"
           >
@@ -79,9 +79,9 @@ export default function EditorialTextAssembleSection() {
             initial={{ y: 30, opacity: 0 }}
             animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
             transition={{
-              duration: 0.85,
-              delay: 1.38,
-              ease: [0.16, 1, 0.3, 1],
+              duration: 1,
+              delay: 1.48,
+              ease: [0.22, 1, 0.36, 1],
             }}
             className="flex items-center gap-5"
           >
@@ -122,7 +122,7 @@ function AssembleLine({
 
   return (
     <div className="-mb-[0.04em] overflow-hidden md:-mb-[0.06em]">
-      <h2 className="flex text-[#28311f] justify-center whitespace-nowrap text-[clamp(2.8rem,9vw,10.5rem)] font-black uppercase leading-[0.86] tracking-[-0.095em] md:justify-start">
+      <h2 className="flex justify-center whitespace-nowrap text-[clamp(2.8rem,9vw,10.5rem)] font-black uppercase leading-[0.86] tracking-[-0.095em] text-[#28311f] md:justify-start">
         {characters.map((char, charIndex) => {
           const isSpace = char === " ";
 
@@ -155,7 +155,7 @@ function AssembleLine({
                 ? 7 + distanceFromCenter * 1
                 : 0;
 
-          const delay = 0.16 + lineIndex * 0.24 + distanceFromCenter * 0.04;
+          const delay = 0.12 + lineIndex * 0.28 + distanceFromCenter * 0.025;
 
           return (
             <motion.span
@@ -164,8 +164,8 @@ function AssembleLine({
                 x: startX,
                 y: startY,
                 rotate: startRotate,
-                opacity: isSpace ? 1 : 0,
-                filter: isSpace ? "blur(0px)" : "blur(9px)",
+                opacity: isSpace ? 1 : 0.18,
+                filter: isSpace ? "blur(0px)" : "blur(3px)",
               }}
               animate={
                 active
@@ -180,16 +180,18 @@ function AssembleLine({
                       x: startX,
                       y: startY,
                       rotate: startRotate,
-                      opacity: isSpace ? 1 : 0,
-                      filter: isSpace ? "blur(0px)" : "blur(9px)",
+                      opacity: isSpace ? 1 : 0.18,
+                      filter: isSpace ? "blur(0px)" : "blur(3px)",
                     }
               }
               transition={{
-                duration: 0.95,
+                duration: 1.45,
                 delay,
-                ease: [0.16, 1, 0.3, 1],
+                ease: [0.22, 1, 0.36, 1],
               }}
-              className={isSpace ? "w-[0.24em]" : "inline-block"}
+              className={
+                isSpace ? "w-[0.24em]" : "inline-block will-change-transform"
+              }
             >
               {isSpace ? "\u00A0" : char}
             </motion.span>
