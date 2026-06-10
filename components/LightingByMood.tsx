@@ -50,7 +50,7 @@ export default function LightingByMood() {
       id="moods"
       className="bg-[#ecebeb] z-[9999999]  px-6 py-20 text-[#161310] md:px-12 md:py-32"
     >
-      <div className="border-t border-[#161310]/15 pt-10">
+      <div className=" pt-10">
         <div className="grid gap-14 md:grid-cols-12">
           <div className="md:col-span-4">
             <motion.p
@@ -70,9 +70,9 @@ export default function LightingByMood() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-5xl text-[14vw] font-light leading-[0.9] tracking-[-0.085em] md:text-[7vw]"
+              className="max-w-5xl text-[14vw] text-[#28311f] uppercase font-black leading-[0.9] tracking-[-0.085em] md:text-[7vw]"
             >
-              Find the right light for the way you live.
+              Find the right light for you.
             </motion.h2>
 
             <motion.p
@@ -93,7 +93,7 @@ export default function LightingByMood() {
           </div>
         </div>
 
-        <div className="mt-20 grid border-t border-[#161310]/15 md:grid-cols-3">
+        <div className="mt-20 grid md:grid-cols-3">
           {moods.map((item, index) => (
             <motion.article
               key={item.title}
@@ -105,7 +105,7 @@ export default function LightingByMood() {
                 delay: index * 0.1,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="group border-b border-[#161310]/15 py-8 md:border-b-0 md:border-r md:px-8 md:last:border-r-0"
+              className="group  py-8   md:px-8 "
             >
               <Link href={item.href} className="block">
                 <p className="text-sm text-[#161310]/40">{item.number}</p>

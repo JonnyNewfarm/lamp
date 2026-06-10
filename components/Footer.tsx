@@ -35,7 +35,7 @@ const Footer = () => {
           <div className="md:col-span-5">
             <Link
               href="/"
-              className="text-5xl font-light leading-none tracking-[-0.08em] md:text-7xl"
+              className="text-5xl text-[#28311f] font-black leading-none tracking-[-0.08em] md:text-7xl"
             >
               Calero Studio
             </Link>

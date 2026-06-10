@@ -135,7 +135,7 @@ export default function HeroPreloader({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: isExiting ? 0 : 1, y: isExiting ? -12 : 0 }}
             transition={{ duration: 0.8, delay: 0.58, ease }}
-            className="absolute left-10 top-[22vh] max-w-[34rem] text-[clamp(1.3rem,1.7vw,2rem)] font-black uppercase leading-[1.08] tracking-[0.16em] text-[#161310]/64"
+            className="absolute left-10 top-[22vh] max-w-[25rem] text-[clamp(0.8rem,1.2vw,1.5rem)] font-black uppercase leading-[1.08] tracking-[0.16em] text-[#161310]/64"
           >
             Selected essentials for soft interiors, slower evenings and warm
             atmosphere.
