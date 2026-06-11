@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import CartButton from "./cart/CartButton";
+import WaveLinkText from "./WaveLinkText";
 
 const Navbar = () => {
   return (
@@ -27,18 +28,12 @@ const Navbar = () => {
             <h1 className="m-0 leading-none opacity-70">Navigation:</h1>
 
             <div className="m-0 flex gap-x-1 leading-tight">
-              <Link
-                className="transition-transform ease-in-out hover:scale-103 hover:grain-accent-text"
-                href="/"
-              >
-                <span className="nav-grain-link">Home,</span>
+              <Link className="" href="/">
+                <WaveLinkText text="Home," />
               </Link>
 
-              <Link
-                className="transition-transform ease-in-out hover:scale-103"
-                href="/shop"
-              >
-                <span className="nav-grain-link">Shop,</span>
+              <Link className="" href="/shop">
+                <WaveLinkText text="Shop," />
               </Link>
 
               <CartButton />

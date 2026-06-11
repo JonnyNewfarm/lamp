@@ -253,7 +253,7 @@ export default async function ShopPage({
             Calero Studio
           </p>
 
-          <h1 className="mt-4 max-w-5xl text-[17vw] font-light leading-[0.85] tracking-[-0.085em] md:text-[8vw]">
+          <h1 className="mt-4 max-w-5xl font-black text-[17vw] uppercase leading-[0.85] tracking-[-0.04em] md:text-[6vw]">
             Shop lighting
           </h1>
 

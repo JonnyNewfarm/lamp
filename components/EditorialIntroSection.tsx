@@ -122,7 +122,7 @@ function AssembleLine({
 
   return (
     <div className="-mb-[0.04em] overflow-hidden md:-mb-[0.06em]">
-      <h2 className="flex justify-center whitespace-nowrap text-[clamp(2.8rem,9vw,10.5rem)] font-black uppercase leading-[0.86] tracking-[-0.095em] text-[#28311f] md:justify-start">
+      <h2 className="flex justify-center whitespace-nowrap text-[clamp(2.8rem,9vw,10.5rem)] font-black uppercase leading-[0.86] tracking-[-0.04em] text-[#28311f] md:justify-start">
         {characters.map((char, charIndex) => {
           const isSpace = char === " ";
 

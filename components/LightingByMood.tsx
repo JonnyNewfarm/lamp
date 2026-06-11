@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import WaveLinkText from "./WaveLinkText";
 
 const moods = [
   {
@@ -135,14 +136,14 @@ export default function LightingByMood() {
           </div>
 
           <div className="md:col-span-7">
-            <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 text-sm lg:grid-cols-4">
               {roomLinks.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="border border-[#161310]/15 px-4 py-5 text-center transition hover:bg-[#161310] hover:text-[#ecebeb]"
+                  className="text-lg lg:text-center font-black "
                 >
-                  {item.label}
+                  <WaveLinkText text={`For ${item.label}`} />
                 </Link>
               ))}
             </div>
