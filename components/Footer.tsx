@@ -29,13 +29,13 @@ const footerLinks = [
 
 const Footer = () => {
   return (
-    <footer className="bg-[#ecebeb] px-6 pb-10 pt-20 text-[#161310] md:px-12">
+    <footer className="bg-[#ecebeb] grain-hero-text px-6 pb-10 pt-20 text-[#161310] md:px-12">
       <div className="border-t border-[#161310]/15 pt-8">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
             <Link
               href="/"
-              className="text-5xl text-[#28311f] font-black leading-none tracking-[-0.08em] md:text-7xl"
+              className="text-5xl font-migha  font-black leading-none  md:text-7xl"
             >
               Calero Studio
             </Link>

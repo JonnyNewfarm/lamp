@@ -212,7 +212,7 @@ export default function HeroPreloader({
                   duration: 0.8,
                   ease,
                 }}
-                className="grain-hero-text select-none text-center text-[21vw] font-black uppercase leading-[1.02] text-[#87917d] md:text-[14vw] md:leading-[0.96]"
+                className="grain-hero-text font-migha block select-none overflow-visible pt-[0.12em] text-center text-[21vw] font-black uppercase leading-[1.04] text-[#87917d] md:text-[14vw] md:leading-[1.08]"
               >
                 Calero
               </motion.h2>

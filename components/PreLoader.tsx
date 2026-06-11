@@ -77,7 +77,7 @@ export default function PreLoader({ onDone, holdMs = 2400 }: PreloaderProps) {
               y: 0,
               transition: { duration: 0.7, delay: 0.45, ease },
             }}
-            className="absolute left-6 top-9 text-[10px] uppercase tracking-[0.22em] text-white/70"
+            className="absolute font-migha left-6 top-9 text-[10px] uppercase tracking-[0.22em] text-white/70"
           >
             Calero Studio
           </motion.div>

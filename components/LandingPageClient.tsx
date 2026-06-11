@@ -244,12 +244,12 @@ export default function CaleroHero() {
 
             <div className="relative z-30 flex min-h-screen flex-col px-6 pb-8 pt-24 md:px-10 md:pb-10 md:pt-24">
               <motion.div style={{ y: titleY }} className="relative z-30 w-fit">
-                <h1 className="font-black uppercase leading-[0.78] tracking-[-0.09em] md:leading-[0.74] md:tracking-[-0.105em]">
+                <h1 className="font-black uppercase leading-[0.9] tracking-[-0.09em] md:leading-[0.86] md:tracking-[-0.105em]">
                   <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.45, ease }}
-                    className="mb-2 text-right grain-black-text text-[clamp(0.7rem,1vw,1rem)] font-black uppercase leading-none tracking-[-0.035em] text-[#161310]"
+                    className="mb-2 text-right grain-black-text text-[clamp(0.4rem,0.8vw,0.8rem)] font-black uppercase leading-none tracking-[-0.035em] text-[#161310]"
                   >
                     MADE FOR LIGHT. BUILT FOR CALM.
                   </motion.p>
@@ -258,14 +258,14 @@ export default function CaleroHero() {
                     text="Calero"
                     delay={0.1}
                     grain
-                    className="text-[16vw] md:text-[8.6vw]"
+                    className="font-migha text-[16vw] md:text-[7.6vw] -mt-[0.27em] "
                   />
 
                   <HoverSlideWord
                     text="Studio"
                     delay={0.22}
                     grain
-                    className="text-[14vw] md:text-[7.4vw]"
+                    className="font-migha  text-[14vw] md:text-[5.6vw] -mt-[0.40em]"
                   />
                 </h1>
               </motion.div>
@@ -290,7 +290,7 @@ export default function CaleroHero() {
                 transition={{ duration: 0.9, delay: 0.5, ease }}
                 className="relative z-20 mt-[11vh] max-w-[48rem] md:ml-[38vw] md:mt-[6vh]"
               >
-                <p className="text-[#28311f] text-[clamp(2.35rem,5.6vw,7.6rem)] font-black uppercase leading-[0.82] tracking-[-0.09em]">
+                <p className="text-[#28311f]  text-[clamp(2.35rem,5.6vw,7.6rem)] font-black uppercase leading-[0.82] tracking-[-0.09em]">
                   Soft light for quiet interiors.
                 </p>
               </motion.div>
@@ -476,7 +476,9 @@ function HoverSlideWord({
   grain?: boolean;
 }) {
   return (
-    <span className={`block overflow-hidden whitespace-nowrap ${className}`}>
+    <span
+      className={`block overflow-visable whitespace-nowrap pt-[0.24em] pb-[0.14em]  ${className}`}
+    >
       <motion.span
         initial={{ y: "100%" }}
         animate={{ y: "0%" }}
@@ -485,7 +487,10 @@ function HoverSlideWord({
           delay,
           ease,
         }}
-        className="inline-flex"
+        className="inline-flex overflow-visible"
+        style={{
+          lineHeight: "1em",
+        }}
       >
         {text.split("").map((letter, index) => (
           <HoverSlideLetter
@@ -536,9 +541,13 @@ function HoverSlideLetter({
   return (
     <span
       onMouseEnter={handleMouseEnter}
-      className="relative inline-block overflow-hidden"
+      className="relative inline-block overflow-hidden align-top"
       style={{
-        lineHeight: "0.9em",
+        lineHeight: "1.07em",
+        paddingTop: "0.12em",
+        paddingBottom: "0.12em",
+        marginTop: "-0.12em",
+        marginBottom: "-0.12em",
       }}
     >
       <span className="invisible inline-block">{letter}</span>
@@ -546,7 +555,10 @@ function HoverSlideLetter({
       <motion.span
         initial={{ x: "0%" }}
         animate={controls}
-        className="absolute left-0 top-0 inline-flex"
+        className="absolute left-0 inline-flex"
+        style={{
+          top: "0.12em",
+        }}
       >
         <span className={`inline-block ${grain ? "grain-hero-text" : ""}`}>
           {letter}

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
+import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
+
 import Navbar from "@/components/Navbar";
 import NavbarMobile from "@/components/NavbarMobile";
 import Footer from "@/components/Footer";
@@ -9,8 +11,17 @@ import { CartProvider } from "@/components/cart/CartProvider";
 import CartDrawer from "@/components/cart/CartDrawer";
 
 const mont = Montserrat({
-  variable: "--font-geist-sans",
+  variable: "--font-montserrat",
   subsets: ["latin"],
+});
+
+const migha = localFont({
+  src: [
+    {
+      path: "../public/fonts/Migha-MediumExpanded.otf",
+    },
+  ],
+  variable: "--font-migha",
 });
 
 export const metadata: Metadata = {
@@ -28,8 +39,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${mont.variable}`}>
-        {/* Google Ads tag */}
+      <body className={`${mont.variable} ${migha.variable}`}>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-18147507684"
           strategy="afterInteractive"
@@ -43,13 +53,11 @@ export default function RootLayout({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-
               gtag('config', 'AW-18147507684');
             `,
           }}
         />
 
-        {/* Meta Pixel */}
         <Script
           id="facebook-pixel"
           strategy="afterInteractive"
@@ -70,7 +78,6 @@ export default function RootLayout({
           }}
         />
 
-        {/* Microsoft Clarity */}
         <Script
           id="microsoft-clarity"
           strategy="afterInteractive"
