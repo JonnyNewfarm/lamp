@@ -246,7 +246,7 @@ function FloatingCenteredGallery({
           priority
           className="
             left-[35%] top-[1%] h-[30vh] w-[34vw]
-            md:left-[35%] md:top-[1%] md:h-[40vh] md:w-[15vw]
+            md:left-[35%] md:top-[-4%] md:h-[40vh] md:w-[15vw]
           "
         />
 
