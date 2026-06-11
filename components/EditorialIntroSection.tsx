@@ -29,7 +29,7 @@ export default function EditorialTextAssembleSection() {
               delay: 0.15,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="max-w-[230px] text-sm font-black uppercase leading-[0.95] tracking-[-0.055em] text-[#161310]/55 md:text-base"
+            className="max-w-[230px] text-sm mt-10 font-black uppercase leading-[0.95] tracking-[-0.055em] text-[#161310]/55 md:text-base"
           >
             Before the product comes the atmosphere.
           </motion.p>

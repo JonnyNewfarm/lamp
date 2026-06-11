@@ -176,7 +176,7 @@ export default function CaleroHero() {
       <section
         ref={sectionRef}
         onMouseMove={handleMouseMove}
-        className="relative noise-bg min-h-screen overflow-hidden bg-[#ecebeb] text-[#161310]"
+        className="relative noise-bg min-h-[110vh] overflow-hidden bg-[#ecebeb] text-[#161310]"
       >
         {isHeroReady && (
           <div className="relative min-h-screen">
@@ -255,8 +255,8 @@ function FloatingCenteredGallery({
           label={galleryImages[2].id}
           priority
           className="
-            left-[80%] top-[6%] h-[28vh] w-[34vw]
-            md:left-[80%] md:top-[5%] md:h-[38vh] md:w-[13vw]
+            left-[80%] invisible top-[6%] h-[28vh] w-[34vw]
+            md:left-[78%] md:top-[8%] md:visible md:h-[38vh] md:w-[13vw]
           "
         />
       </div>
@@ -266,8 +266,8 @@ function FloatingCenteredGallery({
           src={galleryImages[3].src}
           label={galleryImages[3].id}
           className="
-            left-[65%] top-[12%] h-[24vh] w-[28vw]
-            md:left-[65%] md:top-[3%] md:h-[31vh] md:w-[10vw]
+            left-[65%] top-[12%] invisible h-[24vh] w-[28vw]
+            md:left-[65%] md:top-[3%] md:visible md:h-[31vh] md:w-[10vw]
           "
         />
 
@@ -275,8 +275,8 @@ function FloatingCenteredGallery({
           src={galleryImages[4].src}
           label={galleryImages[4].id}
           className="
-            left-[5%] top-[66%] h-[25vh] w-[44vw]
-            md:left-[5%] md:top-[66%] md:h-[34vh] md:w-[20vw]
+            left-[5%] top-[66%] h-[28vh] w-[44vw]
+            md:left-[5%] md:top-[66%] md:h-[48vh] md:w-[20vw]
           "
         />
 
@@ -285,7 +285,7 @@ function FloatingCenteredGallery({
           label={galleryImages[5].id}
           className="
             left-[60%] top-[60%] h-[30vh] w-[34vw]
-            md:left-[60%] md:top-[60%] md:h-[41vh] md:w-[15vw]
+            md:left-[60%] md:top-[60%] md:h-[48vh] md:w-[15vw]
           "
         />
       </div>
@@ -295,7 +295,7 @@ function FloatingCenteredGallery({
           src={galleryImages[6].src}
           label={galleryImages[6].id}
           className="
-            left-[38%] top-[76%] h-[19vh] w-[33vw]
+            left-[38%] top-[76%] h-[25vh] w-[33vw]
             md:left-[40%] md:top-[75%] md:h-[25vh] md:w-[13vw]
           "
         />

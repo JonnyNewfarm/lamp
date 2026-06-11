@@ -11,9 +11,9 @@ export default function CartButton() {
     <button
       type="button"
       onClick={openCart}
-      className="font-extrabold text-[16px] text-[#161310] cursor-pointer"
+      className="cursor-pointer text-right uppercase hover:opacity-60"
     >
-      <WaveLinkText text="Cart" /> ({totalQuantity})
+      <WaveLinkText text={`Cart (${totalQuantity})`} />
     </button>
   );
 }

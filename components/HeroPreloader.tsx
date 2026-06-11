@@ -1,325 +1,211 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+
 import { motion } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
+
+type HeroPreloaderProps = {
+  images: string[];
+  onComplete: () => void;
+};
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export default function HeroPreloader({
   images,
   onComplete,
-}: {
-  images: string[];
-  onComplete: () => void;
-}) {
+}: HeroPreloaderProps) {
+  const [imagesReady, setImagesReady] = useState(false);
+  const [imagesOut, setImagesOut] = useState(false);
+  const [slideUp, setSlideUp] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [isWriting, setIsWriting] = useState(false);
-  const [isExiting, setIsExiting] = useState(false);
-  const hasCompleted = useRef(false);
 
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
+  const preloaderImages = useMemo(() => {
+    return images.filter(Boolean).slice(0, 8);
+  }, [images]);
 
   useEffect(() => {
     let mounted = true;
 
-    const preloadImages = Promise.all(
-      images.map(
-        (src) =>
-          new Promise<void>((resolve) => {
+    async function preloadImages() {
+      if (preloaderImages.length === 0) {
+        if (mounted) setImagesReady(true);
+        return;
+      }
+
+      await Promise.all(
+        preloaderImages.map((src) => {
+          return new Promise<void>((resolve) => {
             const img = new window.Image();
 
             img.onload = () => resolve();
-            img.onerror = () => resolve();
+            img.onerror = () => {
+              console.error("Preloader image failed:", src);
+              resolve();
+            };
+
             img.src = src;
-          }),
-      ),
-    );
+          });
+        }),
+      );
 
-    const progressTimer = window.setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 96) return prev;
-        return prev + 1;
-      });
-    }, 18);
+      if (mounted) {
+        setImagesReady(true);
+      }
+    }
 
-    const writeTimer = window.setTimeout(() => {
-      if (!mounted) return;
-      setIsWriting(true);
-    }, 220);
-
-    const minTimer = new Promise<void>((resolve) => {
-      window.setTimeout(resolve, 2600);
-    });
-
-    Promise.all([preloadImages, minTimer]).then(() => {
-      if (!mounted) return;
-
-      window.clearInterval(progressTimer);
-      setProgress(100);
-
-      window.setTimeout(() => {
-        if (!mounted) return;
-        setIsExiting(true);
-      }, 300);
-    });
+    preloadImages();
 
     return () => {
       mounted = false;
-      window.clearInterval(progressTimer);
-      window.clearTimeout(writeTimer);
     };
-  }, [images]);
+  }, [preloaderImages]);
 
-  const progressText = String(Math.round(progress)).padStart(3, "0");
+  useEffect(() => {
+    if (!imagesReady) return;
+
+    const duration = 3150;
+    let frameId = 0;
+    let startTime: number | null = null;
+
+    function tick(timestamp: number) {
+      if (startTime === null) startTime = timestamp;
+
+      const elapsed = timestamp - startTime;
+      const rawProgress = Math.min(elapsed / duration, 1);
+
+      const easedProgress = 1 - Math.pow(1 - rawProgress, 3);
+      const nextProgress = Math.round(easedProgress * 100);
+
+      setProgress(nextProgress);
+
+      if (rawProgress < 1) {
+        frameId = window.requestAnimationFrame(tick);
+      }
+    }
+
+    frameId = window.requestAnimationFrame(tick);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [imagesReady]);
+
+  useEffect(() => {
+    if (!imagesReady) return;
+
+    const outTimer = window.setTimeout(() => {
+      setImagesOut(true);
+    }, 1900);
+
+    const slideTimer = window.setTimeout(() => {
+      setSlideUp(true);
+    }, 3150);
+
+    const completeTimer = window.setTimeout(() => {
+      onComplete();
+    }, 4100);
+
+    return () => {
+      window.clearTimeout(outTimer);
+      window.clearTimeout(slideTimer);
+      window.clearTimeout(completeTimer);
+    };
+  }, [imagesReady, onComplete]);
 
   return (
     <motion.div
       initial={{ y: "0%" }}
-      animate={{ y: isExiting ? "-100%" : "0%" }}
+      animate={{ y: slideUp ? "-100%" : "0%" }}
+      exit={{ y: "-100%" }}
       transition={{
-        duration: 0.85,
-        ease: [0.76, 0, 0.24, 1],
-      }}
-      onAnimationComplete={() => {
-        if (!isExiting) return;
-        if (hasCompleted.current) return;
-
-        hasCompleted.current = true;
-        onComplete();
+        duration: 0.9,
+        ease,
       }}
       className="fixed inset-0 z-[9999] overflow-hidden bg-[#ecebeb] text-[#161310]"
     >
-      <motion.div
+      <div className="absolute left-5 top-5 z-50 text-[0.65rem] font-black uppercase tracking-[0.18em] md:left-8 md:top-8">
+        Loading
+      </div>
+
+      <div className="absolute right-5 top-5 z-50 text-[0.75rem] font-black uppercase tabular-nums tracking-[0.18em] md:right-8 md:top-8">
+        {String(progress).padStart(3, "0")}
+      </div>
+
+      <motion.h1
+        initial={{ opacity: 0, y: 24 }}
         animate={{
-          y: isExiting ? 70 : 0,
-          scale: isExiting ? 0.985 : 1,
+          opacity: imagesReady ? 1 : 0,
+          y: imagesReady ? 0 : 24,
         }}
         transition={{
-          duration: 0.85,
-          ease: [0.76, 0, 0.24, 1],
+          duration: 0.75,
+          delay: 0.15,
+          ease,
         }}
-        className="relative h-full w-full overflow-hidden"
+        className="absolute bottom-5 left-5 z-20 text-[16vw] font-black uppercase leading-[0.78] tracking-[-0.08em] text-[#161310] md:bottom-8 md:left-8 md:text-[8vw]"
       >
-        <div className="pointer-events-none absolute inset-0 noise-bg opacity-70" />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isExiting ? 0 : 1 }}
-          transition={{ duration: 0.7, delay: 0.3, ease }}
-          className="pointer-events-none absolute inset-0 z-30 hidden md:block"
-        >
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: isExiting ? 0 : 1, y: isExiting ? -10 : 0 }}
-            transition={{ duration: 0.7, delay: 0.4, ease }}
-            className="absolute left-10 top-8 text-[12px] font-black uppercase leading-none tracking-[0.22em] text-[#161310]/42"
-          >
-            CALERO / SELECTED LIGHT
-          </motion.p>
+        Calero
+      </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: isExiting ? 0 : 1, y: isExiting ? -10 : 0 }}
-            transition={{ duration: 0.7, delay: 0.52, ease }}
-            className="absolute right-10 top-8 text-right text-[12px] font-black uppercase leading-none tracking-[0.22em] text-[#161310]/38"
-          >
-            QUIET OBJECTS / SOFT ROOMS
-          </motion.p>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative h-[220px] w-[160px] md:h-[290px] md:w-[210px]">
+          {imagesReady &&
+            preloaderImages.map((src, index) => {
+              const total = preloaderImages.length;
+              const middle = (total - 1) / 2;
+              const offset = index - middle;
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: isExiting ? 0 : 1, y: isExiting ? -12 : 0 }}
-            transition={{ duration: 0.8, delay: 0.58, ease }}
-            className="absolute left-10 top-[22vh] invisible max-w-[25rem] text-[clamp(0.8rem,1.2vw,1.5rem)] font-black uppercase leading-[1.08] tracking-[0.16em] text-[#161310]/64"
-          >
-            Selected essentials for soft interiors, slower evenings and warm
-            atmosphere.
-          </motion.p>
+              const stackX = offset * 2.2;
+              const stackY = offset * 2.8;
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: isExiting ? 0 : 1, y: isExiting ? -12 : 0 }}
-            transition={{ duration: 0.8, delay: 0.76, ease }}
-            className="absolute right-[10vw] top-[60vh] invisible  max-w-[18rem] text-right text-[clamp(1rem,1.15vw,1.35rem)] font-black uppercase leading-[1.15] tracking-[0.18em] text-[#161310]/48"
-          >
-            Goods for quiet rituals, warm corners and everyday calm.
-          </motion.p>
+              const enterDelay = index * 0.13;
+              const exitDelay = (total - 1 - index) * 0.09;
 
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: isExiting ? 0 : 1, y: isExiting ? 10 : 0 }}
-            transition={{ duration: 0.7, delay: 1.02, ease }}
-            className="absolute left-[23vw] bottom-[24vh] text-[12px] font-black uppercase leading-[1.1] tracking-[0.18em] text-[#161310]/36"
-          >
-            QUIET INTERIOR LANGUAGE
-          </motion.p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isExiting ? 0 : 1 }}
-          transition={{ duration: 0.65, delay: 0.35, ease }}
-          className="pointer-events-none absolute inset-0 z-30 md:hidden"
-        >
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: isExiting ? 0 : 1, y: isExiting ? -8 : 0 }}
-            transition={{ duration: 0.7, delay: 0.45, ease }}
-            className="absolute left-5 top-6 text-[10px] font-black uppercase leading-none tracking-[0.2em] text-[#161310]/40"
-          >
-            CALERO / SELECTED LIGHT
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: isExiting ? 0 : 1, y: isExiting ? -10 : 0 }}
-            transition={{ duration: 0.75, delay: 0.58, ease }}
-            className="absolute left-5 top-[18vh] max-w-[15rem] text-[1rem] font-black uppercase leading-[1.14] tracking-[0.16em] text-[#161310]/58"
-          >
-            Selected essentials for soft interiors and quiet routines.
-          </motion.p>
-        </motion.div>
-        <div className="absolute inset-0 z-20 flex items-center justify-center px-4 md:px-6">
-          <div className="relative flex w-full max-w-[1800px] justify-center overflow-visible">
-            <motion.div
-              initial={{ opacity: 0, y: 42, scale: 0.985 }}
-              animate={{
-                opacity: isExiting ? 0 : 1,
-                y: isExiting ? -28 : 0,
-                scale: isExiting ? 0.99 : 1,
-              }}
-              transition={{
-                duration: 0.75,
-                ease,
-              }}
-              className="relative w-fit overflow-visible px-10 py-10 md:px-12 md:py-10"
-            >
-              <motion.h2
-                initial={{
-                  letterSpacing: "-0.055em",
-                  y: 16,
-                }}
-                animate={{
-                  letterSpacing: isExiting ? "-0.055em" : "-0.035em",
-                  y: isExiting ? -8 : 0,
-                }}
-                transition={{
-                  duration: 0.8,
-                  ease,
-                }}
-                className=" block select-none overflow-visible pt-[0.12em] text-center text-[21vw] font-black uppercase leading-[1.04]  md:text-[14vw] md:leading-[1.08]"
-              >
-                Calero
-              </motion.h2>
-
-              <div className="absolute right-[0.95rem] top-[2.65rem] z-20 md:right-[-4.6rem] md:top-[2.15rem]">
-                <StudioSignature isWriting={isWriting} isExiting={isExiting} />
-              </div>
-            </motion.div>
-          </div>
+              return (
+                <motion.div
+                  key={`${src}-${index}`}
+                  initial={{
+                    opacity: 0,
+                    scale: 0,
+                    x: stackX,
+                    y: stackY + 28,
+                  }}
+                  animate={
+                    imagesOut
+                      ? {
+                          opacity: 0,
+                          scale: 0,
+                          x: stackX,
+                          y: stackY - 28,
+                        }
+                      : {
+                          opacity: 1,
+                          scale: 1,
+                          x: stackX,
+                          y: stackY,
+                        }
+                  }
+                  transition={{
+                    duration: imagesOut ? 0.45 : 0.55,
+                    delay: imagesOut ? exitDelay : enterDelay,
+                    ease,
+                  }}
+                  className="absolute inset-0 overflow-hidden border border-[#161310]/10 bg-[#dfddd8]"
+                  style={{
+                    zIndex: index + 1,
+                  }}
+                >
+                  <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{
+                      backgroundImage: `url("${src}")`,
+                    }}
+                  />
+                </motion.div>
+              );
+            })}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{
-            opacity: isExiting ? 0 : 1,
-            y: isExiting ? 12 : 0,
-          }}
-          transition={{
-            duration: 0.5,
-            delay: 0.45,
-            ease,
-          }}
-          className="absolute bottom-6 left-6 right-6 z-40 flex items-end justify-between md:bottom-8 md:left-10 md:right-10"
-        >
-          <p className="max-w-[15rem] text-[11px] md:text-[20px] font-black uppercase leading-[1.15] tracking-[-0.035em] text-[#161310]/60">
-            Soft light for quiet interiors
-          </p>
-
-          <p className="text-right text-[clamp(1.3rem,3vw,3rem)] font-black uppercase leading-[0.8] tracking-[-0.08em] text-[#161310]/55">
-            <span className="tabular-nums">{progressText}</span>
-            <span className="mx-3">/</span>
-            <span>100</span>
-          </p>
-        </motion.div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function StudioSignature({
-  isWriting,
-  isExiting,
-}: {
-  isWriting: boolean;
-  isExiting: boolean;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 10, y: 8 }}
-      animate={{
-        opacity: isExiting ? 0 : 1,
-        x: isExiting ? 24 : 0,
-        y: isExiting ? -10 : 0,
-      }}
-      transition={{
-        duration: 0.45,
-        delay: 0.1,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className="relative w-[6.2rem] transform-gpu will-change-transform md:w-[13rem]"
-    >
-      <svg
-        width="282"
-        height="94"
-        viewBox="0 0 282 94"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="studio-script-logo h-auto w-full overflow-visible"
-        aria-label="studio"
-      >
-        <defs>
-          <mask id="studio-reveal-mask" maskUnits="userSpaceOnUse">
-            <rect width="282" height="94" fill="black" />
-
-            <motion.path
-              d="M4 75 C16 94 39 96 46 76 C54 52 18 57 11 37 C5 18 21 4 40 12 C51 17 55 29 47 39 C63 36 77 35 100 36 C83 43 77 80 84 92 C94 93 104 82 111 66 C108 84 112 92 124 91 C134 89 139 76 143 52 C142 75 145 89 153 91 C164 92 172 80 179 62 C172 86 173 95 185 93 C196 91 202 72 199 46 C200 20 199 5 193 1 C189 20 185 36 186 41 C174 33 163 40 160 61 C157 81 162 94 177 93 C190 91 196 74 199 55 C203 78 210 93 221 91 C232 88 233 75 232 53 C232 42 225 37 220 43 C216 50 220 84 221 88 C230 96 238 86 244 70 C240 87 246 93 258 93 C276 93 283 68 279 55 C276 42 266 36 255 39 C244 45 241 78 247 88 C258 99 273 87 281 66"
-              fill="none"
-              stroke="white"
-              strokeWidth="23"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              initial={{ pathLength: 0 }}
-              animate={{
-                pathLength: isWriting || isExiting ? 1 : 0,
-              }}
-              transition={{
-                duration: 2.6,
-                ease: [0.45, 0, 0.18, 1],
-                delay: 0.05,
-              }}
-            />
-          </mask>
-        </defs>
-
-        <motion.path
-          mask="url(#studio-reveal-mask)"
-          fill="#161310"
-          initial={{ opacity: 1 }}
-          animate={{
-            opacity: isExiting ? 0.9 : 1,
-          }}
-          transition={{
-            duration: 0.2,
-          }}
-          d="M30.464 92.032C29.8667 92.6293 28.032 92.928 24.96 92.928C22.8267 93.3547 20.3093 93.0133 17.408 91.904L14.72 91.008L10.752 89.088C10.4107 89.088 10.1973 89.088 10.112 89.088C10.0267 89.1733 9.81334 89.088 9.47201 88.832C8.96001 88.4053 8.36267 88.064 7.68001 87.808C5.97334 86.6133 4.77867 85.5467 4.09601 84.608C1.36534 80.256 5.96046e-06 76.6293 5.96046e-06 73.728C5.96046e-06 73.3867 0.426673 72.7467 1.28001 71.808C2.98667 69.76 5.12001 68.736 7.68001 68.736C8.70401 68.8213 9.51467 69.1627 10.112 69.76L14.336 75.264C15.0187 75.9467 15.7867 76.6293 16.64 77.312L18.304 79.104L20.864 81.28C21.2053 81.4507 21.5467 81.536 21.888 81.536C22.2293 81.7067 23.168 81.92 24.704 82.176C26.4107 81.7493 27.8613 81.28 29.056 80.768C29.824 80 30.5067 79.4027 31.104 78.976L32.896 76.928C33.0667 76.7573 33.3653 76.0747 33.792 74.88C33.792 73.7707 33.792 73.0453 33.792 72.704C33.8773 72.2773 33.7493 71.2107 33.408 69.504C33.3227 69.248 32.7253 68.5653 31.616 67.456C31.104 66.432 30.3787 65.3227 29.44 64.128C28.928 63.616 26.4533 62.2507 22.016 60.032L19.584 58.624L17.28 56.576C16.1707 56.2347 14.592 55.0827 12.544 53.12C11.6907 52.5227 11.0507 52.0533 10.624 51.712C10.112 51.5413 8.70401 50.0907 6.40001 47.36C6.40001 47.1893 5.67467 45.568 4.22401 42.496L3.07201 37.504L3.58401 34.176C3.07201 31.9573 2.90134 30.2933 3.07201 29.184C3.41334 28.672 3.84001 27.648 4.35201 26.112C4.09601 24.832 5.24801 22.3147 7.80801 18.56C7.80801 18.048 9.68534 16 13.44 12.416L17.792 10.112L19.84 9.216C20.608 9.13067 21.632 9.00267 22.912 8.832C24.2773 8.66134 26.2827 8.66134 28.928 8.832C31.5733 9.00267 33.2373 9.344 33.92 9.856C34.5173 10.112 36.224 11.264 39.04 13.312C42.7947 16.64 44.8427 19.6267 45.184 22.272C46.6347 26.624 46.72 31.2747 45.44 36.224C45.44 36.5653 44.2453 37.248 41.856 38.272L38.656 38.144C35.9253 37.8027 33.3227 36.3947 30.848 33.92C30.1653 33.4933 29.6533 32.2987 29.312 30.336C29.2267 28.288 28.8 27.0507 28.032 26.624C27.9467 26.5387 27.6053 25.7707 27.008 24.32C25.5573 22.4427 24.576 21.504 24.064 21.504C23.6373 21.504 23.1253 21.632 22.528 21.888C19.456 24.3627 17.8347 27.136 17.664 30.208C17.0667 32.6827 17.8347 35.712 19.968 39.296C20.9067 40.6613 21.504 41.344 21.76 41.344C22.272 42.1973 23.2533 43.264 24.704 44.544L26.496 46.464L31.872 50.432L34.048 52.608L36.48 54.144C37.8453 54.7413 39.168 55.552 40.448 56.576C42.1547 57.856 44.2453 60.2453 46.72 63.744C47.232 64.512 47.9147 66.816 48.768 70.656V75.648L48.128 78.592C47.7013 79.0187 47.232 79.872 46.72 81.152C46.72 81.2373 46.2507 82.3893 45.312 84.608C45.056 85.0347 44.032 85.9307 42.24 87.296C39.68 89.344 36.8213 90.88 33.664 91.904C32.9813 92.0747 31.9147 92.1173 30.464 92.032ZM67.026 43.392L67.154 42.24C65.362 42.0693 64.082 41.9413 63.314 41.856C62.6313 41.6853 61.4793 41.5147 59.858 41.344C58.2367 41.1733 56.9567 40.9173 56.018 40.576C54.226 39.9787 53.202 38.4427 52.946 35.968C52.69 33.408 53.5007 31.8293 55.378 31.232C57.0847 30.8053 58.2793 30.592 58.962 30.592C59.6447 30.592 60.9247 30.5067 62.802 30.336C63.7407 29.824 65.0207 29.5253 66.642 29.44L68.562 28.928C68.562 29.0133 68.9033 28.928 69.586 28.672L70.226 25.984C70.226 24.6187 70.61 23.2533 71.378 21.888C71.378 21.2907 71.9327 19.6267 73.042 16.896C73.042 16.5547 73.81 14.08 75.346 9.472C75.6873 9.04533 76.9673 8.064 79.186 6.528C80.5513 5.84533 82.4713 6.31466 84.946 7.936C86.3113 8.53333 87.25 9.344 87.762 10.368C87.25 10.88 86.994 12.0747 86.994 13.952C86.9087 14.5493 86.3113 17.7067 85.202 23.424V27.008C85.8847 27.0933 86.994 27.3067 88.53 27.648C90.1513 27.9893 92.0713 28.3733 94.29 28.8C98.5567 29.6533 101.245 31.36 102.354 33.92C102.781 35.7973 102.695 37.12 102.098 37.888C101.501 38.656 100.05 39.2107 97.746 39.552C95.8687 39.6373 93.394 39.68 90.322 39.68C87.3353 39.68 85.1167 39.8933 83.666 40.32C83.4953 41.856 83.41 43.0507 83.41 43.904L83.282 45.824C83.282 46.4213 82.898 49.5787 82.13 55.296C81.618 56.064 81.1913 60.032 80.85 67.2V76.544C80.85 78.08 80.978 79.5307 81.234 80.896C81.3193 82.7733 81.5327 84.096 81.874 84.864C81.874 85.632 82.0873 87.2533 82.514 89.728C81.49 92.2027 79.7833 93.44 77.394 93.44C75.09 93.44 73.042 92.5867 71.25 90.88L69.842 88.832C69.586 88.1493 69.3727 87.68 69.202 87.424C69.1167 87.168 69.0313 86.8693 68.946 86.528C68.3487 84.8213 67.8793 83.7547 67.538 83.328C67.026 82.6453 66.77 82.1333 66.77 81.792C66.77 81.4507 66.77 81.024 66.77 80.512C66.5993 79.0613 66.386 77.824 66.13 76.8C65.7033 76.3733 65.49 74.9227 65.49 72.448C65.6607 67.9253 65.6607 65.3227 65.49 64.64C65.746 64.384 65.7887 62.7627 65.618 59.776L66.002 56.96C66.002 56.6187 66.1727 55.3387 66.514 53.12C66.3433 52.7787 66.3007 51.8827 66.386 50.432C66.4713 48.896 66.5993 47.8293 66.77 47.232C66.9407 46.208 67.026 44.928 67.026 43.392ZM143.907 53.12L144.035 55.552C144.035 55.808 144.291 58.496 144.803 63.616V65.152C144.803 67.2 145.144 70.272 145.827 74.368C145.827 76.16 146.723 79.2747 148.515 83.712C148.942 83.968 149.24 84.5653 149.411 85.504L149.283 86.784C149.454 87.2107 149.24 87.68 148.643 88.192C148.643 88.7893 147.832 89.088 146.211 89.088C144.59 89.088 143.566 89.1733 143.139 89.344C142.712 89.5147 142.03 89.4293 141.091 89.088C140.75 89.2587 139.726 88.9173 138.019 88.064C137.251 87.8933 136.654 87.1253 136.227 85.76L135.203 83.328C135.203 81.792 134.776 80.4267 133.923 79.232C133.923 78.8053 133.71 78.0373 133.283 76.928C132.942 75.8187 132.686 75.2213 132.515 75.136C131.662 78.5493 130.595 81.1947 129.315 83.072C129.315 83.4987 129.059 84.0107 128.547 84.608L127.267 87.04C127.267 87.2107 126.883 87.68 126.115 88.448C125.603 89.5573 124.451 90.112 122.659 90.112C121.038 90.112 119.075 89.6853 116.771 88.832C116.174 88.7467 114.979 88.3627 113.187 87.68C112.675 87.7653 111.864 87.6373 110.755 87.296C109.731 86.8693 109.134 86.656 108.963 86.656C108.707 86.4 108.11 85.9733 107.171 85.376L104.995 83.072C104.91 82.9867 104.739 82.6027 104.483 81.92C104.312 81.152 104.27 80.64 104.355 80.384C104.44 80.0427 104.44 79.5733 104.355 78.976C104.27 78.3787 104.312 77.7813 104.483 77.184C104.483 75.4773 104.654 73.6 104.995 71.552C104.91 71.296 104.867 70.9973 104.867 70.656C104.867 70.3147 105.038 69.6747 105.379 68.736C105.294 68.3093 105.251 68.0107 105.251 67.84L105.891 62.848C105.891 61.6533 105.934 60.8 106.019 60.288V58.368C106.104 58.0267 106.147 57.5573 106.147 56.96L106.787 50.816C106.787 49.8773 106.83 49.28 106.915 49.024V47.744C107.086 47.5733 107.171 46.8907 107.171 45.696L108.323 42.112L109.219 40.576C109.304 40.2347 109.774 39.8507 110.627 39.424C111.992 38.5707 113.955 38.144 116.515 38.144C117.539 38.3147 118.648 38.7413 119.843 39.424C120.099 39.3387 120.696 39.5093 121.635 39.936C123.342 40.704 123.427 42.88 121.891 46.464C121.55 48.768 121.379 49.9627 121.379 50.048C121.038 50.7307 120.867 51.2853 120.867 51.712C120.355 54.4427 120.099 55.8933 120.099 56.064C120.44 55.7227 120.312 56.2347 119.715 57.6L119.203 62.336C118.606 64.384 118.35 66.6453 118.435 69.12L117.923 70.784C118.008 71.2107 117.966 72.5333 117.795 74.752C117.966 75.008 118.051 75.3067 118.051 75.648L118.179 76.672C118.094 76.928 118.136 77.184 118.307 77.44C118.478 77.6107 118.947 77.696 119.715 77.696C120.568 77.6107 121.294 77.3973 121.891 77.056C123.086 75.6053 123.896 74.112 124.323 72.576C124.75 70.9547 124.963 70.016 124.963 69.76C126.414 66.0907 127.31 63.9573 127.651 63.36C128.078 61.056 128.803 58.4107 129.827 55.424C129.656 54.9973 129.656 54.144 129.827 52.864L131.491 46.08C132.259 44.8 132.643 44.032 132.643 43.776C132.643 43.4347 133.155 42.24 134.179 40.192C134.179 39.8507 134.435 39.168 134.947 38.144C135.544 37.2053 136.611 36.3093 138.147 35.456H138.531C140.408 35.2853 142.03 35.5413 143.395 36.224C143.566 36.5653 143.651 37.1627 143.651 38.016C143.822 38.8693 143.992 40.4053 144.163 42.624V43.904L143.651 46.72C144.334 48.8533 144.419 50.9867 143.907 53.12ZM174.173 66.688C174.173 67.7973 174.088 69.1627 173.917 70.784C173.746 72.4053 174.173 75.008 175.197 78.592C175.624 81.0667 176.05 82.6453 176.477 83.328C177.074 83.328 177.629 82.688 178.141 81.408C178.141 81.3227 178.44 80.7253 179.037 79.616C179.293 79.5307 180.146 78.336 181.597 76.032C182.109 75.008 182.621 73.984 183.133 72.96C183.389 71.168 183.986 69.5893 184.925 68.224C185.864 66.7733 186.589 65.536 187.101 64.512C187.613 63.4027 187.826 61.952 187.741 60.16C187.741 59.4773 187.442 57.4293 186.845 54.016C186.674 53.5893 186.333 52.6507 185.821 51.2C185.394 49.664 184.797 48.5973 184.029 48C183.346 47.3173 182.621 47.0187 181.853 47.104C181.085 47.1893 180.146 48.384 179.037 50.688C177.672 53.4187 176.69 56.064 176.093 58.624C175.496 61.184 175.112 62.72 174.941 63.232C174.685 64 174.557 64.6827 174.557 65.28L174.173 66.688ZM190.301 0.639999C192.093 0.383998 193.16 0.298665 193.501 0.384003C193.928 0.384003 194.824 0.256002 196.189 0C197.981 2.13333 199.09 3.712 199.517 4.736L200.413 8.064C201.096 8.74667 201.437 9.38667 201.437 9.984C201.608 11.264 201.736 12.3733 201.821 13.312C201.992 14.1653 202.077 15.36 202.077 16.896C202.077 19.1147 201.778 24.1493 201.181 32C200.584 39.7653 200.029 45.3547 199.517 48.768L200.285 55.808C201.565 62.8053 202.376 66.6027 202.717 67.2C203.229 70.4427 204.296 73.4293 205.917 76.16L206.173 77.184L208.093 80.384C208.69 81.664 208.946 82.944 208.861 84.224C208.861 85.504 208.733 86.4 208.477 86.912C207.282 89.3013 206.088 90.5813 204.893 90.752C204.296 91.008 203.357 91.008 202.077 90.752C200.968 90.752 200.157 90.496 199.645 89.984C199.389 89.984 199.048 89.9413 198.621 89.856C197.341 90.112 196.53 89.8133 196.189 88.96C195.677 88.448 195.08 87.552 194.397 86.272C193.8 84.9067 193.074 83.7547 192.221 82.816L191.581 81.408C191.24 79.872 191.026 79.104 190.941 79.104C190.941 79.0187 190.898 78.8053 190.813 78.464L186.333 85.504C186.162 86.1013 185.053 87.808 183.005 90.624L181.341 92.032C180.317 92.544 178.824 92.672 176.861 92.416C176.69 92.5013 175.965 92.544 174.685 92.544L167.517 91.264C165.981 90.24 164.658 88.6187 163.549 86.4C162.866 85.2053 162.525 84.224 162.525 83.456C162.525 82.6027 162.141 80.9387 161.373 78.464L161.117 76.544V75.776L160.989 73.984C161.16 73.6427 161.074 72.9173 160.733 71.808L160.605 70.656V68.48C160.605 67.968 160.733 66.9867 160.989 65.536C161.074 64.4267 161.074 63.1893 160.989 61.824C160.989 60.3733 161.032 59.3493 161.117 58.752C160.946 57.8987 160.989 57.1733 161.245 56.576C161.074 55.9787 161.117 54.9547 161.373 53.504C161.373 52.5653 162.098 50.432 163.549 47.104C163.293 45.7387 163.89 44.2027 165.341 42.496C165.341 42.4107 165.768 41.7707 166.621 40.576C166.877 40.32 167.517 39.9787 168.541 39.552L171.613 37.504C174.856 36.5653 177.842 36.3947 180.573 36.992L185.693 38.784C185.864 37.504 185.821 33.28 185.565 26.112C185.565 25.088 185.693 22.8693 185.949 19.456C186.29 15.9573 186.546 12.5867 186.717 9.344L188.253 3.968C188.253 3.02933 188.424 2.34666 188.765 1.92L190.301 0.639999ZM223.112 5.76C223.197 5.67467 224.008 5.54667 225.544 5.376C228.019 4.94933 229.725 5.12 230.664 5.888C231.688 6.57067 232.413 7.33867 232.84 8.192C233.011 10.9227 232.627 14.464 231.688 18.816C230.749 21.632 229.939 23.7227 229.256 25.088L227.976 27.008C227.72 27.6907 227.165 28.416 226.312 29.184C225.459 29.952 224.819 30.336 224.392 30.336C224.051 30.2507 223.411 29.952 222.472 29.44C221.619 28.8427 221.107 28.416 220.936 28.16C220.851 27.904 220.765 27.6053 220.68 27.264L220.04 24.704L217.48 21.504C216.968 20.48 216.712 19.456 216.712 18.432C216.456 16.0427 216.755 14.208 217.608 12.928C217.608 12.7573 217.736 12.3307 217.992 11.648C218.419 9.77067 220.125 7.808 223.112 5.76ZM219.272 63.232C219.272 62.464 219.4 61.44 219.656 60.16C219.997 58.7947 220.083 57.856 219.912 57.344C219.827 56.832 219.827 55.3813 219.912 52.992C220.168 51.968 220.211 50.816 220.04 49.536C219.443 47.6587 219.272 46.2933 219.528 45.44C219.784 44.5867 220.339 43.648 221.192 42.624C222.045 41.5147 222.984 40.7467 224.008 40.32C225.032 39.8933 226.568 39.936 228.616 40.448C229.128 40.704 229.981 41.5573 231.176 43.008C231.432 43.264 231.731 44.2453 232.072 45.952C232.499 47.6587 232.755 49.536 232.84 51.584C233.011 53.5467 233.139 56.448 233.224 60.288C233.309 64.0427 233.48 69.12 233.736 75.52C233.992 81.8347 234.035 85.76 233.864 87.296C233.779 88.832 233.224 89.984 232.2 90.752C231.261 91.6053 230.408 91.776 229.64 91.264C228.957 90.8373 228.232 90.5387 227.464 90.368C226.099 90.368 224.904 89.8133 223.88 88.704C223.539 88.6187 222.728 88.2347 221.448 87.552C220.168 86.784 219.357 85.4187 219.016 83.456C218.589 82.6027 218.461 79.8293 218.632 75.136V70.528L219.272 66.176V63.232ZM256.336 66.304C255.909 69.2907 255.696 72.064 255.696 74.624C255.696 77.184 255.867 78.976 256.208 80C256.293 80.768 256.464 81.28 256.72 81.536C257.147 81.7067 257.744 81.7067 258.512 81.536C259.707 81.024 260.304 80.4693 260.304 79.872C262.779 77.4827 264.187 75.904 264.528 75.136C264.869 74.368 265.125 73.8987 265.296 73.728C265.637 73.3013 265.851 72.7467 265.936 72.064C266.363 71.6373 266.619 71.3387 266.704 71.168C266.619 70.912 266.789 70.1867 267.216 68.992C266.875 68.3947 266.875 67.968 267.216 67.712C267.643 67.3707 267.856 66.4747 267.856 65.024L268.368 60.928C268.368 60.416 268.411 60.032 268.496 59.776C268.411 59.4347 268.411 58.9227 268.496 58.24C268.667 57.472 268.709 56.2773 268.624 54.656C268.539 53.0347 268.24 51.968 267.728 51.456L267.472 50.688C267.301 50.0907 266.619 49.664 265.424 49.408L264.4 48.896C264.656 49.408 264.4 50.0907 263.632 50.944C260.304 55.4667 257.872 60.5867 256.336 66.304ZM247.504 52.608C247.589 51.9253 247.845 51.2853 248.272 50.688L248.144 49.92C248.485 48.7253 248.699 48.0427 248.784 47.872C248.869 47.7013 248.997 47.7013 249.168 47.872C249.083 47.5307 249.125 47.2747 249.296 47.104C249.552 46.336 249.936 45.44 250.448 44.416C251.045 43.392 251.387 42.752 251.472 42.496C251.984 41.0453 252.795 40.1067 253.904 39.68C253.904 38.9973 255.099 38.528 257.488 38.272C260.219 37.3333 262.437 37.1627 264.144 37.76C264.997 37.248 266.277 37.4613 267.984 38.4C269.264 38.912 270.629 39.68 272.08 40.704C273.36 41.5573 274.427 42.496 275.28 43.52C276.475 44.032 277.243 44.8853 277.584 46.08C279.973 51.7973 281.168 56.832 281.168 61.184L280.912 62.592C280.912 63.7867 280.784 64.5547 280.528 64.896C280.357 65.152 280.272 65.5787 280.272 66.176C280.443 66.2613 280.443 66.6453 280.272 67.328C280.272 67.7547 279.589 70.528 278.224 75.648L276.176 79.872C276.176 80.0427 275.963 80.3413 275.536 80.768V81.536C275.536 81.7067 275.323 82.048 274.896 82.56C274.043 84.2667 273.189 85.5467 272.336 86.4C270.971 88.6187 269.819 90.24 268.88 91.264L267.856 92.672L266.32 92.544C266.064 92.9707 265.808 93.184 265.552 93.184C265.381 93.184 264.784 93.0133 263.76 92.672L264.784 92.544C264.101 92.6293 263.547 92.5867 263.12 92.416C262.779 92.2453 262.437 92.16 262.096 92.16C260.475 91.3067 259.323 91.008 258.64 91.264C258.299 91.264 257.019 90.9227 254.8 90.24L251.216 89.6L248.4 88.576C247.632 88.1493 246.907 87.6373 246.224 87.04C245.968 86.528 245.84 86.1013 245.84 85.76L245.072 83.2C245.072 83.0293 244.987 82.6027 244.816 81.92V78.592C244.987 77.7387 245.072 76.928 245.072 76.16C244.901 75.7333 244.901 74.8373 245.072 73.472V72.064C245.072 71.808 245.115 71.3387 245.2 70.656C245.115 70.2293 245.157 69.2907 245.328 67.84C245.499 66.3893 245.584 65.0667 245.584 63.872C245.584 62.7627 245.755 61.2267 246.096 59.264C246.352 58.6667 246.523 57.6 246.608 56.064C246.693 54.4427 246.992 53.2907 247.504 52.608Z"
-        />
-      </svg>
+      </div>
     </motion.div>
   );
 }

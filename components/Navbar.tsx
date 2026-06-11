@@ -1,3 +1,4 @@
+// components/Navbar.tsx
 "use client";
 
 import Link from "next/link";
@@ -6,42 +7,32 @@ import WaveLinkText from "./WaveLinkText";
 
 const Navbar = () => {
   return (
-    <div className="hidden fixed noise-bg left-0 top-0 z-50 w-full md:block">
-      <div className="w-full px-20 py-3 text-[16px] font-extrabold text-[#161310]">
-        <div className="flex items-center justify-between">
-          <div className="tracking-tighter">
-            <h1 className="m-0 leading-none opacity-70">Studio:</h1>
-            <p className="m-0 leading-tight">Calero</p>
-          </div>
+    <header className="fixed left-0 top-0 z-50 w-full px-4 py-4 text-white mix-blend-difference   md:px-8 md:py-6">
+      <nav className="flex items-start justify-between">
+        <Link
+          href="/"
+          className="text-xl font-black uppercase leading-none tracking-[-0.05em] md:text-2xl"
+        >
+          <WaveLinkText text="Calero" />
+        </Link>
 
-          <div className="tracking-tighter">
-            <h1 className="opacity-70 m-0 leading-none">Selected by:</h1>
-            <p className="m-0 leading-tight">Mood & function</p>
-          </div>
+        <div className="flex flex-col items-end text-right  text-base font-black uppercase leading-[0.95] tracking-[-0.04em] md:text-xl">
+          <Link href="/" className="hover:opacity-60">
+            <WaveLinkText text="Home" />
+          </Link>
 
-          <div className="tracking-tighter">
-            <h1 className="m-0 leading-none opacity-70">Curated for:</h1>
-            <p className="m-0 leading-tight">Calm interiors</p>
-          </div>
+          <Link href="/shop" className="hover:opacity-60">
+            <WaveLinkText text="Shop" />
+          </Link>
 
-          <div className="tracking-tighter">
-            <h1 className="m-0 leading-none opacity-70">Navigation:</h1>
+          <Link href="/contact" className="hover:opacity-60">
+            <WaveLinkText text="Contact" />
+          </Link>
 
-            <div className="m-0 flex gap-x-1 leading-tight">
-              <Link className="" href="/">
-                <WaveLinkText text="Home," />
-              </Link>
-
-              <Link className="" href="/shop">
-                <WaveLinkText text="Shop," />
-              </Link>
-
-              <CartButton />
-            </div>
-          </div>
+          <CartButton />
         </div>
-      </div>
-    </div>
+      </nav>
+    </header>
   );
 };
 

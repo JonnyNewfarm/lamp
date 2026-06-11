@@ -95,7 +95,6 @@ export default function RootLayout({
         <CartProvider>
           <div className="relative h-full w-full">
             <Navbar />
-            <NavbarMobile />
             {children}
             <Footer />
           </div>
