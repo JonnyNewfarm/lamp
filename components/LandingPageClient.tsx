@@ -58,7 +58,7 @@ export default function CaleroHero() {
 
   useEffect(() => {
     const hasSeenPreloader =
-      window.localStorage.getItem("calero-preloader-seen") === "true";
+      window.sessionStorage.getItem("calero-preloader-seen") === "true";
 
     if (hasSeenPreloader) {
       setShowPreloader(false);
@@ -105,7 +105,7 @@ export default function CaleroHero() {
   const centerY = useTransform(smoothProgress, [0, 1], [0, 40]);
 
   function handlePreloaderComplete() {
-    window.localStorage.setItem("calero-preloader-seen", "true");
+    window.sessionStorage.setItem("calero-preloader-seen", "true");
     setShowPreloader(false);
     setIsHeroReady(true);
   }
@@ -191,13 +191,13 @@ export default function CaleroHero() {
               className="pointer-events-none absolute left-1/2 top-1/2 z-30 flex w-[min(94vw,1500px)] -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center mix-blend-difference"
             >
               <RevealLine delay={0.08}>
-                <h1 className="text-[18vw] font-black uppercase leading-[1] tracking-[-0.065em] text-[#ecebeb] md:text-[8.5vw]">
+                <h1 className="text-[18vw] font-black uppercase leading-[1] tracking-[-0.045em] text-[#ecebeb] md:text-[8.5vw]">
                   Calero
                 </h1>
               </RevealLine>
 
               <RevealLine delay={0.18}>
-                <h1 className="-mt-[0.01em] text-[15vw] font-black uppercase leading-[1] tracking-[-0.065em] text-[#ecebeb] md:text-[6.8vw]">
+                <h1 className="-mt-[0.01em] text-[15vw] font-black uppercase leading-[1] tracking-[-0.045em] text-[#ecebeb] md:text-[6.8vw]">
                   Studio
                 </h1>
               </RevealLine>
@@ -246,7 +246,7 @@ function FloatingCenteredGallery({
           priority
           className="
             left-[35%] top-[1%] h-[30vh] w-[34vw]
-            md:left-[35%] md:top-[-4%] md:h-[40vh] md:w-[15vw]
+            md:left-[35%] md:top-[-4%] md:h-[38vh] md:w-[15vw]
           "
         />
 

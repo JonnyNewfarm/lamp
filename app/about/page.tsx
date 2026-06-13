@@ -8,8 +8,8 @@ export default function AboutPage() {
           About
         </p>
 
-        <h1 className="mt-5 text-6xl font-light leading-[0.9] tracking-[-0.08em] md:text-8xl">
-          About Calero Studio
+        <h1 className="mt-5 text-6xl font-black leading-[0.9] tracking-[-0.045em] md:text-8xl">
+          About
         </h1>
 
         <p className="mt-8 max-w-2xl text-base leading-[1.8] text-[#161310]/60">

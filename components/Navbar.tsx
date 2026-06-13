@@ -16,7 +16,7 @@ const Navbar = () => {
           <WaveLinkText text="Calero" />
         </Link>
 
-        <div className="flex flex-col items-end text-right  text-base font-black uppercase leading-[0.95] tracking-[-0.04em] md:text-xl">
+        <div className="flex flex-col items-end text-right gap-y-1.5  text-base font-black uppercase leading-[0.95] tracking-[-0.04em] md:text-xl">
           <Link href="/" className="hover:opacity-60">
             <WaveLinkText text="Home" />
           </Link>

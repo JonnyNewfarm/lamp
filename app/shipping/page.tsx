@@ -139,7 +139,7 @@ function PolicyLayout({
         {label}
       </p>
 
-      <h1 className="mt-5 text-6xl font-light leading-[0.9] tracking-[-0.08em] md:text-8xl">
+      <h1 className="mt-5 text-6xl font-black leading-[0.9] tracking-[-0.045em] md:text-8xl">
         {title}
       </h1>
 
