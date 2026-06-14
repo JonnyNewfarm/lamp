@@ -136,12 +136,12 @@ export default function LightingByMood() {
           </div>
 
           <div className="md:col-span-7">
-            <div className="grid grid-cols-2 gap-4 text-sm lg:grid-cols-4">
+            <div className="grid grid-cols-1  gap-4 text-sm xl:grid-cols-4">
               {roomLinks.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="text-lg lg:text-center font-black "
+                  className="text-xl  font-black "
                 >
                   <WaveLinkText text={`For ${item.label}`} />
                 </Link>

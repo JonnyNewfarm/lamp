@@ -177,7 +177,7 @@ export default function CaleroHero() {
       <section
         ref={sectionRef}
         onMouseMove={handleMouseMove}
-        className="relative noise-bg min-h-[110vh] overflow-hidden bg-[#ecebeb] text-[#161310]"
+        className="relative noise-bg min-h-[115vh] overflow-hidden bg-[#ecebeb] text-[#161310]"
       >
         {isHeroReady && (
           <div className="relative min-h-screen">
@@ -266,7 +266,7 @@ function FloatingLeftGallery({
           label={galleryImages[1].id}
           priority
           className="
-            left-[40%] top-[2%] h-[28vh] w-[35vw]
+            left-[38.5%] top-[2%] h-[28vh] w-[35vw]
             md:left-[34%] md:top-[-3%] md:h-[37vh] md:w-[15vw]
           "
         />
@@ -296,7 +296,7 @@ function FloatingLeftGallery({
           src={galleryImages[4].src}
           label={galleryImages[4].id}
           className="
-            left-[25%] top-[48%] h-[24vh] w-[36vw]
+            left-[25%] top-[47%] h-[25.5vh] w-[36vw]
             md:left-[50%] md:top-[64%] md:h-[34vh] md:w-[14vw]
           "
         />
@@ -305,7 +305,7 @@ function FloatingLeftGallery({
           src={galleryImages[5].src}
           label={galleryImages[5].id}
           className="
-            left-[70%] top-[40%] h-[34vh] w-[36vw]
+            left-[70%] top-[35%] h-[34vh] w-[36vw]
             md:left-[66%] md:top-[53%] md:h-[47vh] md:w-[15vw]
           "
         />
@@ -317,7 +317,7 @@ function FloatingLeftGallery({
           label={galleryImages[6].id}
           className="
             left-[52%] invisible top-[82%] h-[24vh] w-[34vw]
-            md:left-[31%] md:top-[79%] md:visible md:h-[32vh] md:w-[13vw]
+            md:left-[33%] md:top-[80%] md:visible md:h-[32vh] md:w-[13vw]
           "
         />
 
@@ -325,8 +325,8 @@ function FloatingLeftGallery({
           src={galleryImages[7].src}
           label={galleryImages[7].id}
           className="
-            left-[68%] top-[84.5%] h-[23vh] w-[34vw]
-            md:left-[88%] md:top-[70%] md:h-[31vh] md:w-[12vw]
+            left-[69%] top-[84.5%] h-[23vh] w-[34vw]
+            md:left-[87.5%] md:top-[66.3%] md:h-[31vh] md:w-[12vw]
           "
         />
       </div>
