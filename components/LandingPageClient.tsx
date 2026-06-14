@@ -102,7 +102,8 @@ export default function CaleroHero() {
     mass: 0.8,
   });
 
-  const centerY = useTransform(smoothProgress, [0, 1], [0, 40]);
+  const titleY = useTransform(smoothProgress, [0, 1], [0, 52]);
+  const metaY = useTransform(smoothProgress, [0, 1], [0, -22]);
 
   function handlePreloaderComplete() {
     window.sessionStorage.setItem("calero-preloader-seen", "true");
@@ -180,24 +181,35 @@ export default function CaleroHero() {
       >
         {isHeroReady && (
           <div className="relative min-h-screen">
-            <FloatingCenteredGallery
+            <FloatingLeftGallery
               plane1={plane1}
               plane2={plane2}
               plane3={plane3}
             />
 
             <motion.div
-              style={{ y: centerY }}
-              className="pointer-events-none absolute left-1/2 top-1/2 z-30 flex w-[min(94vw,1500px)] -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center mix-blend-difference"
+              style={{ y: titleY }}
+              className="pointer-events-none absolute bottom-6 left-5 z-30 flex w-[min(90vw,980px)] flex-col items-start mix-blend-difference md:bottom-8 md:left-8"
             >
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.32, ease }}
+                className="mb-3 hidden w-full justify-end pr-[18%] md:flex"
+              >
+                <span className="text-[1rem] font-black uppercase leading-none tracking-[0.2em] text-[#ecebeb]/90">
+                  Calm by design
+                </span>
+              </motion.div>
+
               <RevealLine delay={0.08}>
-                <h1 className="text-[18vw] font-black uppercase leading-[1] tracking-[-0.045em] text-[#ecebeb] md:text-[8.5vw]">
+                <h1 className="text-[20vw] font-black uppercase leading-[0.84] tracking-[-0.045em] text-[#ecebeb] md:text-[9.8vw]">
                   Calero
                 </h1>
               </RevealLine>
 
               <RevealLine delay={0.18}>
-                <h1 className="-mt-[0.01em] text-[15vw] font-black uppercase leading-[1] tracking-[-0.045em] text-[#ecebeb] md:text-[6.8vw]">
+                <h1 className="text-[17vw] font-black uppercase leading-[0.84] tracking-[-0.045em] text-[#ecebeb] md:text-[7.9vw]">
                   Studio
                 </h1>
               </RevealLine>
@@ -206,10 +218,19 @@ export default function CaleroHero() {
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.45, ease }}
-                className="mt-5 max-w-[760px] text-[clamp(1.1rem,2vw,2rem)] font-semibold uppercase leading-[0.96] tracking-[-0.05em] text-[#ecebeb]"
+                className="mt-5 max-w-[560px] text-[clamp(1rem,1.55vw,1.6rem)] font-semibold uppercase leading-[0.98] tracking-[-0.05em] text-[#ecebeb] md:ml-1"
               >
                 Soft light for quiet interiors
               </motion.p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.75, ease }}
+              className="pointer-events-none absolute bottom-6 right-5 z-50 mix-blend-difference hidden max-w-[230px] text-right text-[0.75rem] font-medium uppercase leading-[1.05] tracking-[-0.035em] text-white md:block"
+            >
+              Move gently through selected forms, warm corners and quiet rooms.
             </motion.div>
           </div>
         )}
@@ -218,7 +239,7 @@ export default function CaleroHero() {
   );
 }
 
-function FloatingCenteredGallery({
+function FloatingLeftGallery({
   plane1,
   plane2,
   plane3,
@@ -235,8 +256,8 @@ function FloatingCenteredGallery({
           label={galleryImages[0].id}
           priority
           className="
-            left-[5%] top-[10%] h-[32vh] w-[42vw]
-            md:left-[5%] md:top-[10%] md:h-[42vh] md:w-[17vw]
+            left-[6%] top-[12%] h-[31vh] w-[44vw]
+            md:left-[5%] md:top-[12%] md:h-[44vh] md:w-[17vw]
           "
         />
 
@@ -245,8 +266,8 @@ function FloatingCenteredGallery({
           label={galleryImages[1].id}
           priority
           className="
-            left-[35%] top-[1%] h-[30vh] w-[34vw]
-            md:left-[35%] md:top-[-4%] md:h-[38vh] md:w-[15vw]
+            left-[40%] top-[2%] h-[28vh] w-[35vw]
+            md:left-[34%] md:top-[-3%] md:h-[37vh] md:w-[15vw]
           "
         />
 
@@ -255,8 +276,8 @@ function FloatingCenteredGallery({
           label={galleryImages[2].id}
           priority
           className="
-            left-[80%] invisible top-[6%] h-[28vh] w-[34vw]
-            md:left-[78%] md:top-[8%] md:visible md:h-[38vh] md:w-[13vw]
+            invisible left-[76%] top-[10%] h-[28vh] w-[34vw]
+            md:visible md:left-[78%] md:top-[11%] md:h-[38vh] md:w-[13vw]
           "
         />
       </div>
@@ -266,8 +287,8 @@ function FloatingCenteredGallery({
           src={galleryImages[3].src}
           label={galleryImages[3].id}
           className="
-            left-[65%] top-[12%] invisible h-[24vh] w-[28vw]
-            md:left-[65%] md:top-[3%] md:visible md:h-[31vh] md:w-[10vw]
+            invisible left-[64%] top-[14%] h-[24vh] w-[28vw]
+            md:visible md:left-[64%] md:top-[4%] md:h-[31vh] md:w-[10vw]
           "
         />
 
@@ -275,8 +296,8 @@ function FloatingCenteredGallery({
           src={galleryImages[4].src}
           label={galleryImages[4].id}
           className="
-            left-[5%] top-[66%] h-[28vh] w-[44vw]
-            md:left-[5%] md:top-[66%] md:h-[48vh] md:w-[20vw]
+            left-[25%] top-[48%] h-[24vh] w-[36vw]
+            md:left-[50%] md:top-[64%] md:h-[34vh] md:w-[14vw]
           "
         />
 
@@ -284,8 +305,8 @@ function FloatingCenteredGallery({
           src={galleryImages[5].src}
           label={galleryImages[5].id}
           className="
-            left-[60%] top-[60%] h-[30vh] w-[34vw]
-            md:left-[60%] md:top-[60%] md:h-[48vh] md:w-[15vw]
+            left-[70%] top-[40%] h-[34vh] w-[36vw]
+            md:left-[66%] md:top-[53%] md:h-[47vh] md:w-[15vw]
           "
         />
       </div>
@@ -295,8 +316,8 @@ function FloatingCenteredGallery({
           src={galleryImages[6].src}
           label={galleryImages[6].id}
           className="
-            left-[38%] top-[76%] h-[25vh] w-[33vw]
-            md:left-[40%] md:top-[75%] md:h-[25vh] md:w-[13vw]
+            left-[52%] invisible top-[82%] h-[24vh] w-[34vw]
+            md:left-[31%] md:top-[79%] md:visible md:h-[32vh] md:w-[13vw]
           "
         />
 
@@ -304,8 +325,8 @@ function FloatingCenteredGallery({
           src={galleryImages[7].src}
           label={galleryImages[7].id}
           className="
-            left-[90%] top-[72%] h-[23vh] w-[34vw]
-            md:left-[90%] md:top-[71%] md:h-[30vh] md:w-[12vw]
+            left-[68%] top-[84.5%] h-[23vh] w-[34vw]
+            md:left-[88%] md:top-[70%] md:h-[31vh] md:w-[12vw]
           "
         />
       </div>

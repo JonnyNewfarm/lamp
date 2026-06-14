@@ -6,12 +6,14 @@ import { useMemo, useRef } from "react";
 
 const lines = ["SOFT LIGHT", "QUIET ROOMS", "WARM OBJECTS"];
 
+const ease = [0.16, 1, 0.3, 1] as const;
+
 export default function EditorialTextAssembleSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   const isInView = useInView(sectionRef, {
     once: true,
-    margin: "-22% 0px -22% 0px",
+    margin: "-20% 0px -20% 0px",
   });
 
   return (
@@ -19,84 +21,92 @@ export default function EditorialTextAssembleSection() {
       ref={sectionRef}
       className="relative noise-bg overflow-hidden bg-[#ecebeb] px-5 py-20 text-[#161310] md:px-12 md:py-28"
     >
-      <div className="relative flex min-h-[72vh] flex-col justify-between">
-        <div className="relative z-20 flex items-start justify-between gap-8">
-          <motion.p
-            initial={{ y: 24, opacity: 0 }}
-            animate={isInView ? { y: 0, opacity: 1 } : { y: 24, opacity: 0 }}
-            transition={{
-              duration: 0.9,
-              delay: 0.15,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="max-w-[230px] text-sm mt-10 font-black uppercase leading-[0.95] tracking-[-0.055em] text-[#161310]/55 md:text-base"
-          >
-            Before the product comes the atmosphere.
-          </motion.p>
+      <div className="relative z-20 grid min-h-[78vh] grid-cols-1 content-between gap-14 md:grid-cols-12">
+        <div className="md:col-span-12">
+          <div className="grid grid-cols-1 gap-8 pt-12 md:grid-cols-12 md:pt-16">
+            <motion.p
+              initial={{ y: 28, opacity: 0 }}
+              animate={isInView ? { y: 0, opacity: 1 } : { y: 28, opacity: 0 }}
+              transition={{
+                duration: 0.95,
+                delay: 0.12,
+                ease,
+              }}
+              className="max-w-[260px] text-sm font-black uppercase leading-[0.9] tracking-[-0.06em] text-[#161310]/60 md:col-span-3 md:text-base"
+            >
+              Before the product comes the atmosphere.
+            </motion.p>
 
-          <motion.p
-            initial={{ y: 24, opacity: 0 }}
-            animate={isInView ? { y: 0, opacity: 1 } : { y: 24, opacity: 0 }}
-            transition={{
-              duration: 0.9,
-              delay: 0.25,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="hidden max-w-[280px] text-right text-sm font-medium leading-[1.25] tracking-[-0.04em] text-[#161310]/45 md:block"
-          >
-            Lighting and objects selected for rooms that feel slower, softer,
-            and more intentional.
-          </motion.p>
+            <motion.div
+              initial={{ y: 28, opacity: 0 }}
+              animate={isInView ? { y: 0, opacity: 1 } : { y: 28, opacity: 0 }}
+              transition={{
+                duration: 0.95,
+                delay: 0.2,
+                ease,
+              }}
+              className="hidden md:col-span-3 md:col-start-10 md:block"
+            >
+              <p className="text-right text-sm font-medium leading-[1.18] tracking-[-0.045em] text-[#161310]/45">
+                Lighting and objects selected for rooms that feel slower,
+                softer, and more intentional.
+              </p>
+            </motion.div>
+          </div>
         </div>
 
-        <div className="relative z-10 my-12 md:my-14">
-          {lines.map((line, index) => (
-            <AssembleLine
-              key={line}
-              text={line}
-              active={isInView}
-              lineIndex={index}
-            />
-          ))}
+        <div className="relative md:col-span-12">
+          <div className="relative">
+            {lines.map((line, index) => (
+              <AssembleLine
+                key={line}
+                text={line}
+                active={isInView}
+                lineIndex={index}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className="relative z-20 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <div className="grid grid-cols-1 gap-10 md:col-span-12 md:grid-cols-12 md:items-end">
           <motion.p
-            initial={{ y: 30, opacity: 0 }}
-            animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+            initial={{ y: 34, opacity: 0 }}
+            animate={isInView ? { y: 0, opacity: 1 } : { y: 34, opacity: 0 }}
             transition={{
               duration: 1,
-              delay: 1.35,
-              ease: [0.22, 1, 0.36, 1],
+              delay: 1.22,
+              ease,
             }}
-            className="max-w-[430px] text-base font-medium leading-[1.22] tracking-[-0.045em] text-[#161310]/55 md:text-lg"
+            className="max-w-[520px] text-[clamp(1.25rem,2.2vw,2.4rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-[#161310]/65 md:col-span-6"
           >
             A compact edit of pieces made to soften the room, warm the corners,
             and keep the atmosphere still.
           </motion.p>
 
           <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+            initial={{ y: 34, opacity: 0 }}
+            animate={isInView ? { y: 0, opacity: 1 } : { y: 34, opacity: 0 }}
             transition={{
               duration: 1,
-              delay: 1.48,
-              ease: [0.22, 1, 0.36, 1],
+              delay: 1.36,
+              ease,
             }}
-            className="flex items-center gap-5"
+            className="flex flex-col gap-5 md:col-span-4 md:col-start-9 md:items-end"
           >
             <Link
               href="/shop"
-              className="inline-flex h-11 items-center justify-center border border-[#161310] px-6 text-xs font-black uppercase tracking-[-0.045em] text-[#161310] transition-colors duration-200 hover:bg-[#161310] hover:text-[#ecebeb]"
+              className="group relative inline-flex h-12 w-fit items-center overflow-hidden border border-[#161310] px-7 text-xs font-black uppercase tracking-[-0.045em] text-[#161310]"
             >
-              View products
+              <span className="absolute inset-0 translate-y-full bg-[#161310] transition-transform duration-300 ease-out group-hover:translate-y-0" />
+              <span className="relative z-10 transition-colors duration-300 group-hover:text-[#ecebeb]">
+                View products
+              </span>
             </Link>
 
-            <span className="hidden h-px w-14 bg-[#161310]/60 md:block" />
-
-            <span className="text-sm font-medium tracking-[-0.04em] text-[#161310]/45">
-              New pieces next
-            </span>
+            <div className="flex items-center gap-4 text-sm font-medium tracking-[-0.04em] text-[#161310]/45">
+              <span className="h-px w-16 bg-[#161310]/45" />
+              <span>New pieces next</span>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -121,8 +131,8 @@ function AssembleLine({
   let visibleCharIndex = -1;
 
   return (
-    <div className="-mb-[0.04em] overflow-hidden md:-mb-[0.06em]">
-      <h2 className="flex justify-center whitespace-nowrap text-[clamp(2.8rem,9vw,10.5rem)] font-black uppercase leading-[0.86] tracking-[-0.04em] text-[#28311f] md:justify-start">
+    <div className="group relative -mb-[0.05em] overflow-hidden md:-mb-[0.075em]">
+      <h2 className="relative flex justify-center whitespace-nowrap text-[clamp(2.7rem,9.4vw,11rem)] md:text-[clamp(3.1rem,10.4vw,12rem)] font-black uppercase leading-[0.82] tracking-[-0.035em] text-[#28311f] md:justify-start">
         {characters.map((char, charIndex) => {
           const isSpace = char === " ";
 
@@ -140,22 +150,14 @@ function AssembleLine({
           const startX = isSpace
             ? 0
             : isLeftSide
-              ? -70 - distanceFromCenter * 8
+              ? -92 - distanceFromCenter * 10
               : isRightSide
-                ? 70 + distanceFromCenter * 8
+                ? 92 + distanceFromCenter * 10
                 : 0;
 
-          const startY = isSpace ? 0 : -105 - distanceFromCenter * 12;
+          const startY = isSpace ? 0 : 82 + distanceFromCenter * 8;
 
-          const startRotate = isSpace
-            ? 0
-            : isLeftSide
-              ? -7 - distanceFromCenter * 1
-              : isRightSide
-                ? 7 + distanceFromCenter * 1
-                : 0;
-
-          const delay = 0.12 + lineIndex * 0.28 + distanceFromCenter * 0.025;
+          const delay = 0.1 + lineIndex * 0.22 + distanceFromCenter * 0.018;
 
           return (
             <motion.span
@@ -163,34 +165,33 @@ function AssembleLine({
               initial={{
                 x: startX,
                 y: startY,
-                rotate: startRotate,
-                opacity: isSpace ? 1 : 0.18,
-                filter: isSpace ? "blur(0px)" : "blur(3px)",
+                opacity: isSpace ? 1 : 0,
+                filter: isSpace ? "blur(0px)" : "blur(8px)",
               }}
               animate={
                 active
                   ? {
                       x: 0,
                       y: 0,
-                      rotate: 0,
                       opacity: 1,
                       filter: "blur(0px)",
                     }
                   : {
                       x: startX,
                       y: startY,
-                      rotate: startRotate,
-                      opacity: isSpace ? 1 : 0.18,
-                      filter: isSpace ? "blur(0px)" : "blur(3px)",
+                      opacity: isSpace ? 1 : 0,
+                      filter: isSpace ? "blur(0px)" : "blur(8px)",
                     }
               }
               transition={{
-                duration: 1.45,
+                duration: 1.35,
                 delay,
-                ease: [0.22, 1, 0.36, 1],
+                ease,
               }}
               className={
-                isSpace ? "w-[0.24em]" : "inline-block will-change-transform"
+                isSpace
+                  ? "w-[0.24em]"
+                  : "inline-block will-change-transform transition-[letter-spacing] duration-500 group-hover:tracking-[-0.08em]"
               }
             >
               {isSpace ? "\u00A0" : char}
