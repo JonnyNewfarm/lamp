@@ -47,7 +47,7 @@ export default function CaleroHero() {
   const xForce = useRef(0);
   const yForce = useRef(0);
 
-  const [showPreloader, setShowPreloader] = useState<boolean | null>(null);
+  const [showPreloader, setShowPreloader] = useState(true);
   const [isHeroReady, setIsHeroReady] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -63,11 +63,7 @@ export default function CaleroHero() {
     if (hasSeenPreloader) {
       setShowPreloader(false);
       setIsHeroReady(true);
-      return;
     }
-
-    setShowPreloader(true);
-    setIsHeroReady(false);
   }, []);
 
   useEffect(() => {
