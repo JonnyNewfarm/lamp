@@ -40,33 +40,15 @@ const heroImages = [
 
 const ease = [0.16, 1, 0.3, 1] as const;
 const imageEase = [0.76, 0, 0.24, 1] as const;
+const letterEase = [0.65, 0, 0.35, 1] as const;
 
-const headingContainerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      delayChildren: 0.08,
-      staggerChildren: 0.055,
-    },
-  },
-};
+const TITLE_FROM = "STUDIO";
+const TITLE_TO = "CALERO";
 
-const headingLetterVariants = {
-  hidden: {
-    y: "120%",
-    rotate: 4,
-    opacity: 0,
-  },
-  visible: {
-    y: "0%",
-    rotate: 0,
-    opacity: 1,
-    transition: {
-      duration: 1,
-      ease,
-    },
-  },
-};
+const TITLE_REVEAL_DELAY = 0.25;
+const TITLE_MORPH_DELAY = 1.15;
+const TITLE_MORPH_DURATION = 0.9;
+const TITLE_STAGGER_WINDOW = 0.26;
 
 const textRevealVariants = {
   hidden: {
@@ -373,75 +355,23 @@ export default function CaleroHero() {
                   pt-[0.12em]
                 "
               >
-                <motion.h1
-                  variants={headingContainerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  aria-label="Calero"
-                  className="
-                    flex
-                    whitespace-nowrap
-                    text-center
-                    text-[20.5vw]
-                    font-black
-                    uppercase
-                    leading-[0.82]
-                    tracking-[-0.030em]
-                    md:text-[19.5vw]
-                  "
-                >
-                  {"Calero".split("").map((letter, index) => (
-                    <span
-                      key={`${letter}-${index}`}
-                      className="
-                        inline-block
-                        overflow-hidden
-                        pb-[0.16em]
-                        pt-[0.12em]
-                      "
-                    >
-                      <motion.span
-                        variants={headingLetterVariants}
-                        className="inline-block origin-bottom"
-                      >
-                        {letter}
-                      </motion.span>
-                    </span>
-                  ))}
-                </motion.h1>
-              </div>
-
-              <div className="overflow-hidden">
-                <motion.h2
+                <motion.div
                   initial={{
-                    y: "115%",
                     opacity: 0,
-                    rotate: 3,
+                    y: 30,
                   }}
                   animate={{
-                    y: "0%",
                     opacity: 1,
-                    rotate: 0,
+                    y: 0,
                   }}
                   transition={{
-                    duration: 1,
-                    delay: 0.48,
+                    duration: 0.9,
+                    delay: TITLE_REVEAL_DELAY,
                     ease,
                   }}
-                  className="
-                    mt-2
-                    whitespace-nowrap
-                    text-[2vw]
-                    font-black
-                    uppercase
-                    leading-none
-                    tracking-[-0.055em]
-                    md:mt-5
-                    md:text-[2.5vw]
-                  "
                 >
-                  Studio
-                </motion.h2>
+                  <SlotMachineHeading from={TITLE_FROM} to={TITLE_TO} />
+                </motion.div>
               </div>
             </div>
           </div>
@@ -539,6 +469,155 @@ export default function CaleroHero() {
       </motion.div>
     </section>
   );
+}
+
+function SlotMachineHeading({ from, to }: { from: string; to: string }) {
+  const fromLetters = Array.from(from);
+  const toLetters = Array.from(to);
+
+  const letterCount = Math.max(fromLetters.length, toLetters.length);
+
+  const morphStagger =
+    letterCount > 1 ? TITLE_STAGGER_WINDOW / (letterCount - 1) : 0;
+
+  return (
+    <div
+      className="
+        relative
+        grid
+        w-fit
+        overflow-hidden
+        px-[0.02em]
+        pb-[0.12em]
+        pt-[0.1em]
+        text-[20.5vw]
+        font-black
+        uppercase
+        leading-[0.82]
+        tracking-[-0.035em]
+        md:text-[19.5vw]
+      "
+    >
+      {/* Begge usynlige ord brukes kun for korrekt containerbredde */}
+      <span
+        aria-hidden="true"
+        className="
+          invisible
+          col-start-1
+          row-start-1
+          whitespace-nowrap
+        "
+      >
+        {from}
+      </span>
+
+      <span
+        aria-hidden="true"
+        className="
+          invisible
+          col-start-1
+          row-start-1
+          whitespace-nowrap
+        "
+      >
+        {to}
+      </span>
+
+      <h1
+        aria-label={to}
+        className="
+          pointer-events-none
+          absolute
+          inset-0
+          m-0
+        "
+      >
+        {/* STUDIO */}
+        <span
+          aria-hidden="true"
+          className="
+            absolute
+            left-[0.02em]
+            top-[0.1em]
+            inline-flex
+            whitespace-nowrap
+            leading-[0.82]
+            tracking-[-0.035em]
+          "
+        >
+          {fromLetters.map((letter, index) => {
+            const movesUp = index % 2 === 0;
+            const exitY = movesUp ? "-140%" : "140%";
+            const delay = TITLE_MORPH_DELAY + index * morphStagger;
+
+            return (
+              <motion.span
+                key={`from-${letter}-${index}`}
+                initial={{ y: "0%" }}
+                animate={{ y: exitY }}
+                transition={{
+                  duration: TITLE_MORPH_DURATION,
+                  delay,
+                  ease: letterEase,
+                }}
+                className="
+                  inline-block
+                  shrink-0
+                  will-change-transform
+                "
+              >
+                {displayLetter(letter)}
+              </motion.span>
+            );
+          })}
+        </span>
+
+        {/* CALERO */}
+        <span
+          aria-hidden="true"
+          className="
+            absolute
+            left-[0.02em]
+            top-[0.1em]
+            inline-flex
+            whitespace-nowrap
+            leading-[0.82]
+            tracking-[-0.035em]
+          "
+        >
+          {toLetters.map((letter, index) => {
+            const movesUp = index % 2 === 0;
+            const startY = movesUp ? "140%" : "-140%";
+            const delay = TITLE_MORPH_DELAY + index * morphStagger;
+
+            return (
+              <motion.span
+                key={`to-${letter}-${index}`}
+                initial={{ y: startY }}
+                animate={{ y: "0%" }}
+                transition={{
+                  duration: TITLE_MORPH_DURATION,
+                  delay,
+                  ease: letterEase,
+                }}
+                className="
+                  inline-block
+                  shrink-0
+                  will-change-transform
+                "
+              >
+                {displayLetter(letter)}
+              </motion.span>
+            );
+          })}
+        </span>
+      </h1>
+    </div>
+  );
+}
+
+function displayLetter(letter: string) {
+  return letter === " " ? "\u00A0" : letter;
 }
 
 function HeroImage({
