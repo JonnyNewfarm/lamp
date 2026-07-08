@@ -171,7 +171,7 @@ export default function NewProductsGallery({
 
       <div className="relative z-[20] w-full">
         <div className=" px-4 py-7 md:px-4 md:py-8">
-          <p className="sm:text-lg uppercase tracking-[0.22em] ">
+          <p className="sm:text-lg uppercase font-black tracking-[0.22em] ">
             Recently added products
           </p>
         </div>
