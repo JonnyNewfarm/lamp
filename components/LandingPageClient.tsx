@@ -32,9 +32,9 @@ const heroImages = [
   },
   {
     src: "/images/grain-lamp10.jpg",
-    href: "/shop?category=ceiling-lights",
-    alt: "Explore ceiling lights",
-    hoverText: "Ceiling",
+    href: "/shop?category=floor-lamps",
+    alt: "Explore floor lamps",
+    hoverText: "Floor",
   },
 ];
 
