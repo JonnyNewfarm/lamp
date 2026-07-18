@@ -42,6 +42,17 @@ const productLayouts = [
   "md:col-start-4 md:col-span-2 md:mt-32",
 ];
 
+const productScales = [1, 0.82, 0.93, 0.76, 0.88, 0.8];
+
+const productOrigins = [
+  "center center",
+  "right top",
+  "left center",
+  "right center",
+  "left top",
+  "center center",
+];
+
 function cleanTitle(title: string) {
   return title.split(/[–-]/)[0].trim();
 }
@@ -374,6 +385,10 @@ export default function NewProductsGallery({
           {visibleProducts.map((product, index) => {
             const title = cleanTitle(product.title);
             const displayNumber = String(index + 1).padStart(2, "0");
+            const scale = productScales[index % productScales.length];
+
+            const transformOrigin =
+              productOrigins[index % productOrigins.length];
 
             return (
               <article
@@ -383,82 +398,91 @@ export default function NewProductsGallery({
                   productLayouts[index % productLayouts.length],
                 ].join(" ")}
               >
-                <Link
-                  href={`/products/${product.slug}`}
-                  aria-label={`View ${title}`}
-                  data-product-image="true"
-                  data-hover-text={title}
-                  onMouseMove={handleImageMouseMove}
-                  onMouseEnter={(event) => handleImageMouseEnter(event, title)}
-                  onMouseLeave={handleImageMouseLeave}
-                  className="
-                    group
-                    relative
-                    block
-                    aspect-[3/4]
-                    w-full
-                    cursor-pointer
-                    overflow-hidden
-                    bg-[#d7d6d4]
-                    md:cursor-none
-                  "
+                <div
+                  style={{
+                    transform: `scale(${scale})`,
+                    transformOrigin,
+                  }}
                 >
-                  <Image
-                    src={product.image}
-                    alt={title}
-                    fill
-                    draggable={false}
-                    sizes="
-                      (max-width: 767px) 48vw,
-                      (max-width: 1024px) 25vw,
-                      18vw
+                  <Link
+                    href={`/products/${product.slug}`}
+                    aria-label={`View ${title}`}
+                    data-product-image="true"
+                    data-hover-text={title}
+                    onMouseMove={handleImageMouseMove}
+                    onMouseEnter={(event) =>
+                      handleImageMouseEnter(event, title)
+                    }
+                    onMouseLeave={handleImageMouseLeave}
+                    className="
+                      group
+                      relative
+                      block
+                      aspect-[3/4]
+                      w-full
+                      cursor-pointer
+                      overflow-hidden
+                      bg-[#d7d6d4]
+                      md:cursor-none
                     "
-                    className="object-cover"
-                  />
+                  >
+                    <Image
+                      src={product.image}
+                      alt={title}
+                      fill
+                      draggable={false}
+                      sizes="
+                        (max-width: 767px) 48vw,
+                        (max-width: 1024px) 25vw,
+                        18vw
+                      "
+                      className="object-cover"
+                    />
 
-                  <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-3 text-white mix-blend-difference">
-                    <span className="text-[10px] font-black uppercase md:hidden">
-                      {product.number}
-                    </span>
+                    <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-3 text-white mix-blend-difference">
+                      <span className="text-[10px] font-black uppercase md:hidden">
+                        {product.number}
+                      </span>
 
-                    <span className="ml-auto text-[10px] font-black uppercase md:text-xs">
-                      New
+                      <span className="ml-auto text-[10px] font-black uppercase md:text-xs">
+                        New
+                      </span>
+                    </div>
+                  </Link>
+
+                  <div className="pt-3 md:hidden">
+                    <h2
+                      className="
+                        text-[17px]
+                        font-black
+                        uppercase
+                        leading-[0.9]
+                        tracking-[-0.055em]
+                        sm:text-[20px]
+                      "
+                    >
+                      {title}
+                    </h2>
+
+                    <p
+                      className="
+                        mt-3
+                        text-[9px]
+                        font-bold
+                        uppercase
+                        tracking-[0.08em]
+                        opacity-60
+                      "
+                    >
+                      {product.category}
+                    </p>
+                  </div>
+
+                  <div className="hidden pt-2 md:block">
+                    <span className="text-xl font-bold uppercase tracking-[0.08em]">
+                      {displayNumber}
                     </span>
                   </div>
-                </Link>
-
-                <div className="pt-3 md:hidden">
-                  <h2
-                    className="
-                      text-[17px]
-                      font-black
-                      uppercase
-                      leading-[0.9]
-                      tracking-[-0.055em]
-                      sm:text-[20px]
-                    "
-                  >
-                    {title}
-                  </h2>
-
-                  <p
-                    className="
-                      mt-3
-                      text-[9px]
-                      font-bold
-                      uppercase
-                      tracking-[0.08em]
-                      opacity-60
-                    "
-                  >
-                    {product.category}
-                  </p>
-                </div>
-
-                <div className="hidden pt-2 md:block">
-                  <span className="text-xl font-bold uppercase tracking-[0.08em]">
-                    {displayNumber}
-                  </span>
                 </div>
               </article>
             );
@@ -469,27 +493,27 @@ export default function NewProductsGallery({
       <Link
         href="/shop"
         className="
-    group
-    flex
-    min-h-[86px]
-    items-center
-    px-4
-    md:min-h-[105px]
-    md:px-9
-  "
+          group
+          flex
+          min-h-[86px]
+          items-center
+          px-4
+          md:min-h-[105px]
+          md:px-9
+        "
       >
         <span
           className="
-      flex
-      items-center
-      gap-4
-      text-[28px]
-      font-black
-      uppercase
-      leading-none
-      tracking-[-0.055em]
-      md:text-[42px]
-    "
+            flex
+            items-center
+            gap-4
+            text-[28px]
+            font-black
+            uppercase
+            leading-none
+            tracking-[-0.055em]
+            md:text-[42px]
+          "
         >
           View all products
           <svg
@@ -512,13 +536,13 @@ export default function NewProductsGallery({
               strokeLinecap="square"
               pathLength="1"
               className="
-      [stroke-dasharray:1]
-      [stroke-dashoffset:1]
-      transition-[stroke-dashoffset]
-      duration-300
-      ease-[cubic-bezier(0.16,1,0.3,1)]
-      group-hover:[stroke-dashoffset:0]
-    "
+                [stroke-dasharray:1]
+                [stroke-dashoffset:1]
+                transition-[stroke-dashoffset]
+                duration-300
+                ease-[cubic-bezier(0.16,1,0.3,1)]
+                group-hover:[stroke-dashoffset:0]
+              "
             />
 
             <path
@@ -528,13 +552,13 @@ export default function NewProductsGallery({
               strokeLinecap="square"
               pathLength="1"
               className="
-      [stroke-dasharray:1]
-      [stroke-dashoffset:1]
-      transition-[stroke-dashoffset]
-      duration-300
-      ease-[cubic-bezier(0.16,1,0.3,1)]
-      group-hover:[stroke-dashoffset:0]
-    "
+                [stroke-dasharray:1]
+                [stroke-dashoffset:1]
+                transition-[stroke-dashoffset]
+                duration-300
+                ease-[cubic-bezier(0.16,1,0.3,1)]
+                group-hover:[stroke-dashoffset:0]
+              "
             />
           </svg>
         </span>
