@@ -50,6 +50,7 @@ export default async function NewProducts() {
       number: String(index + 1).padStart(2, "0"),
       title: product.title,
       slug: product.slug,
+      price: product.price,
       category: product.category?.name ?? "Product",
       image,
     };

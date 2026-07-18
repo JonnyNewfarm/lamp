@@ -3,6 +3,7 @@
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { formatPrice } from "@/lib/formatPrice";
 import {
   type MouseEvent as ReactMouseEvent,
   useCallback,
@@ -16,6 +17,7 @@ type ProductItem = {
   number: string;
   title: string;
   slug: string;
+  price: number;
   category: string;
   image: string;
 };
@@ -293,8 +295,7 @@ export default function NewProductsGallery({
           -translate-y-1/2
           items-center
           justify-center
-          text-white
-          mix-blend-difference
+          text-black
           md:flex
         "
       >
@@ -478,9 +479,12 @@ export default function NewProductsGallery({
                     </p>
                   </div>
 
-                  <div className="hidden pt-2 md:block">
+                  <div className="hidden pt-2 md:flex justify-between">
                     <span className="text-xl font-bold uppercase tracking-[0.08em]">
                       {displayNumber}
+                    </span>
+                    <span className="text-xl font-bold uppercase tracking-[0.08em]">
+                      {formatPrice(product.price)}
                     </span>
                   </div>
                 </div>
