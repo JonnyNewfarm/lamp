@@ -295,7 +295,8 @@ export default function NewProductsGallery({
           -translate-y-1/2
           items-center
           justify-center
-          text-black
+          text-white
+          mix-blend-difference
           md:flex
         "
       >
@@ -405,6 +406,9 @@ export default function NewProductsGallery({
                     transformOrigin,
                   }}
                 >
+                  <span className="text-lg pb-1 font-bold uppercase tracking-[0.08em]">
+                    {displayNumber}
+                  </span>
                   <Link
                     href={`/products/${product.slug}`}
                     aria-label={`View ${title}`}
@@ -480,8 +484,8 @@ export default function NewProductsGallery({
                   </div>
 
                   <div className="hidden pt-2 md:flex justify-between">
-                    <span className="text-xl font-bold uppercase tracking-[0.08em]">
-                      {displayNumber}
+                    <span className="text-lg font-bold uppercase tracking-[0.08em]">
+                      {product.category}
                     </span>
                     <span className="text-xl font-bold uppercase tracking-[0.08em]">
                       {formatPrice(product.price)}
@@ -494,32 +498,24 @@ export default function NewProductsGallery({
         </div>
       </div>
 
-      <Link
-        href="/shop"
-        className="
-          group
-          flex
-          min-h-[86px]
-          items-center
-          px-4
-          md:min-h-[105px]
-          md:px-9
-        "
-      >
-        <span
+      <div className="px-4 md:px-9">
+        <Link
+          href="/shop"
           className="
-            flex
-            items-center
-            gap-4
-            text-[28px]
-            font-black
-            uppercase
-            leading-none
-            tracking-[-0.055em]
-            md:text-[42px]
-          "
+      group
+      inline-flex
+      items-center
+      gap-4
+      text-[28px]
+      font-black
+      uppercase
+      leading-none
+      tracking-[-0.055em]
+      md:text-[42px]
+    "
         >
-          View all products
+          <span>View all products</span>
+
           <svg
             aria-hidden="true"
             viewBox="0 0 52 18"
@@ -540,13 +536,13 @@ export default function NewProductsGallery({
               strokeLinecap="square"
               pathLength="1"
               className="
-                [stroke-dasharray:1]
-                [stroke-dashoffset:1]
-                transition-[stroke-dashoffset]
-                duration-300
-                ease-[cubic-bezier(0.16,1,0.3,1)]
-                group-hover:[stroke-dashoffset:0]
-              "
+          [stroke-dasharray:1]
+          [stroke-dashoffset:1]
+          transition-[stroke-dashoffset]
+          duration-300
+          ease-[cubic-bezier(0.16,1,0.3,1)]
+          group-hover:[stroke-dashoffset:0]
+        "
             />
 
             <path
@@ -556,17 +552,17 @@ export default function NewProductsGallery({
               strokeLinecap="square"
               pathLength="1"
               className="
-                [stroke-dasharray:1]
-                [stroke-dashoffset:1]
-                transition-[stroke-dashoffset]
-                duration-300
-                ease-[cubic-bezier(0.16,1,0.3,1)]
-                group-hover:[stroke-dashoffset:0]
-              "
+          [stroke-dasharray:1]
+          [stroke-dashoffset:1]
+          transition-[stroke-dashoffset]
+          duration-300
+          ease-[cubic-bezier(0.16,1,0.3,1)]
+          group-hover:[stroke-dashoffset:0]
+        "
             />
           </svg>
-        </span>
-      </Link>
+        </Link>
+      </div>
     </section>
   );
 }
