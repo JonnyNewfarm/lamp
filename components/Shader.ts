@@ -1,29 +1,76 @@
 export const vertex = `
-  varying vec2 vUv;
-  uniform vec2 uDelta;
-  uniform float uAmplitude;
+  uniform vec2 uVelocity;
+  uniform float uStrength;
 
-  float PI = 3.141592653589793238;
+  varying vec2 vUv;
 
   void main() {
     vUv = uv;
 
-    vec3 newPosition = position;
+    vec3 transformed = position;
 
-    newPosition.x += sin(uv.y * PI) * uDelta.x * uAmplitude;
-    newPosition.y += sin(uv.x * PI) * uDelta.y * uAmplitude;
+    float horizontalMask =
+      sin(uv.y * 3.14159265);
 
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+    float verticalMask =
+      sin(uv.x * 3.14159265);
+
+    transformed.x +=
+      uVelocity.x *
+      0.0018 *
+      horizontalMask *
+      uStrength;
+
+    transformed.y +=
+      uVelocity.y *
+      0.0018 *
+      verticalMask *
+      uStrength;
+
+    gl_Position =
+      projectionMatrix *
+      modelViewMatrix *
+      vec4(transformed, 1.0);
   }
 `;
 
 export const fragment = `
-  varying vec2 vUv;
   uniform sampler2D uTexture;
-  uniform float uAlpha;
+  uniform vec2 uVelocity;
+  uniform float uStrength;
+
+  varying vec2 vUv;
 
   void main() {
-    vec3 textureColor = texture2D(uTexture, vUv).rgb;
-    gl_FragColor = vec4(textureColor, uAlpha);
+    vec2 uv = vUv;
+
+    float horizontalMask =
+      sin(uv.y * 3.14159265);
+
+    float verticalMask =
+      sin(uv.x * 3.14159265);
+
+    uv.x -=
+      uVelocity.x *
+      0.0016 *
+      horizontalMask *
+      uStrength;
+
+    uv.y -=
+      uVelocity.y *
+      0.0016 *
+      verticalMask *
+      uStrength;
+
+    uv = clamp(
+      uv,
+      vec2(0.002),
+      vec2(0.998)
+    );
+
+    gl_FragColor = texture2D(
+      uTexture,
+      uv
+    );
   }
 `;

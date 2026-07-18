@@ -1,52 +1,65 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { useEffect, useState } from "react";
-import Model from "./Model";
+import { MutableRefObject } from "react";
 
-type ProductItem = {
-  id: string;
-  number: string;
-  title: string;
-  slug: string;
-  category: string;
-  image: string;
-};
+import Model from "./Model";
+import type { ProductItem } from "./NewProductsGallery";
 
 type SceneProps = {
   products: ProductItem[];
-  activeMenu: number | null;
+
+  cardElementsRef: MutableRefObject<(HTMLDivElement | null)[]>;
+
+  pointerRef: MutableRefObject<{
+    x: number;
+    y: number;
+  }>;
+
+  activeIndex: number | null;
 };
 
-export default function Scene({ products, activeMenu }: SceneProps) {
-  const [eventSource, setEventSource] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    setEventSource(document.body);
-  }, []);
-
+export default function Scene({
+  products,
+  cardElementsRef,
+  pointerRef,
+  activeIndex,
+}: SceneProps) {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-[10] h-screen w-screen"
+      className="
+        pointer-events-none
+        fixed
+        inset-0
+        z-10
+        h-screen
+        w-screen
+      "
     >
-      {eventSource && (
-        <Canvas
-          camera={{ position: [0, 0, 5], fov: 45 }}
-          eventSource={eventSource}
-          eventPrefix="client"
-          style={{
-            pointerEvents: "none",
-            touchAction: "auto",
-          }}
-          gl={{
-            alpha: true,
-            antialias: true,
-          }}
-        >
-          <Model products={products} activeMenu={activeMenu} />
-        </Canvas>
-      )}
+      <Canvas
+        camera={{
+          position: [0, 0, 5],
+          fov: 45,
+        }}
+        dpr={[1, 1.5]}
+        gl={{
+          alpha: true,
+          antialias: true,
+          powerPreference: "high-performance",
+        }}
+        style={{
+          pointerEvents: "none",
+          touchAction: "auto",
+        }}
+      >
+        <Model
+          products={products}
+          cardElementsRef={cardElementsRef}
+          pointerRef={pointerRef}
+          activeIndex={activeIndex}
+        />
+      </Canvas>
     </div>
   );
 }
