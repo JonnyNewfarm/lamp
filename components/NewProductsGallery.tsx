@@ -547,12 +547,14 @@ export default function NewProductsGallery({
                     </p>
                   </div>
 
-                  <div className="hidden justify-between pt-2 md:flex">
-                    <span className="text-lg font-bold uppercase tracking-[0.055em]">
+                  <div className="hidden justify-between pt-2 md:flex ">
+                    <span className="text-lg font-bold  tracking-[0.055em] flex flex-col">
+                      <span className="text-sm opacity-80">Category:</span>
                       {product.category}
                     </span>
 
-                    <span className="text-xl font-bold uppercase tracking-[0.08em]">
+                    <span className="text-lg font-bold  tracking-[0.08em] flex flex-col">
+                      <span className="text-sm opacity-80">Price:</span>
                       {formatPrice(product.price)}
                     </span>
                   </div>

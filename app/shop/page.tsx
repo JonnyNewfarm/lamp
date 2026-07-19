@@ -248,16 +248,12 @@ export default async function ShopPage({
   return (
     <main className="min-h-screen bg-[#ecebeb] px-6 py-24 text-[#161310] md:px-12">
       <ScrollSection>
-        <section className="mb-12 border-b border-[#161310]/15 pb-10">
-          <p className="text-xs uppercase tracking-[0.34em] text-[#161310]/45">
-            Calero Studio
-          </p>
-
-          <h1 className="mt-4 max-w-5xl font-black text-[17vw] uppercase leading-[0.85] tracking-[-0.04em] md:text-[6vw]">
+        <section className="mb-12  pb-10">
+          <h1 className="mt-4 max-w-5xl font-semibold text-[17vw] uppercase leading-[0.85] tracking-[-0.065em] md:text-[6vw]">
             Shop lighting
           </h1>
 
-          <p className="mt-8 max-w-xl text-base leading-[1.8] text-[#161310]/60 md:text-lg">
+          <p className="mt-5 max-w-xl text-base leading-[1.8] text-[#161310]/85 md:text-lg">
             Minimal lighting curated for calm interiors, focused work and warm
             everyday spaces.
           </p>
@@ -385,31 +381,87 @@ export default async function ShopPage({
                           />
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-6">
                           {currentPage > 1 ? (
                             <Link
                               href={createPageHref(params, currentPage - 1)}
-                              className="group flex h-12 items-center gap-3 border border-[#161310]/20 px-5 text-sm text-[#161310]/70 transition hover:border-[#161310] hover:bg-[#161310] hover:text-[#ecebeb]"
+                              className="group flex items-center gap-3 text-xl font-black text-[#161310]"
                             >
-                              <span className="transition group-hover:-translate-x-1">
-                                ←
-                              </span>
+                              <svg
+                                aria-hidden="true"
+                                viewBox="0 0 38 18"
+                                fill="none"
+                                className="h-[16px] w-[34px] rotate-180 overflow-visible"
+                              >
+                                <path
+                                  d="M1 9H32"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="square"
+                                />
+
+                                <path
+                                  d="M32 9L25 2"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="square"
+                                  pathLength="1"
+                                  className="
+            [stroke-dasharray:1]
+            [stroke-dashoffset:1]
+            transition-[stroke-dashoffset]
+            duration-300
+            ease-[cubic-bezier(0.16,1,0.3,1)]
+            group-hover:[stroke-dashoffset:0]
+          "
+                                />
+
+                                <path
+                                  d="M32 9L25 16"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="square"
+                                  pathLength="1"
+                                  className="
+            [stroke-dasharray:1]
+            [stroke-dashoffset:1]
+            transition-[stroke-dashoffset]
+            duration-300
+            ease-[cubic-bezier(0.16,1,0.3,1)]
+            group-hover:[stroke-dashoffset:0]
+          "
+                                />
+                              </svg>
+
                               <span>Prev</span>
                             </Link>
                           ) : (
-                            <span className="flex h-12 items-center gap-3 border border-[#161310]/10 px-5 text-sm text-[#161310]/25">
-                              <span>←</span>
+                            <span className="flex items-center gap-3 text-xl font-black text-[#161310]/20">
+                              <svg
+                                aria-hidden="true"
+                                viewBox="0 0 38 18"
+                                fill="none"
+                                className="h-[16px] w-[34px] rotate-180 overflow-visible"
+                              >
+                                <path
+                                  d="M1 9H32"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="square"
+                                />
+                              </svg>
+
                               <span>Prev</span>
                             </span>
                           )}
 
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-4">
                             {visiblePages.map((page, index) => {
                               if (page === "...") {
                                 return (
                                   <span
                                     key={`ellipsis-${index}`}
-                                    className="flex h-12 min-w-10 items-center justify-center text-sm text-[#161310]/30"
+                                    className="text-base text-[#161310]/30"
                                   >
                                     …
                                   </span>
@@ -425,8 +477,8 @@ export default async function ShopPage({
                                   aria-current={isActive ? "page" : undefined}
                                   className={
                                     isActive
-                                      ? "flex h-12 min-w-12 items-center justify-center bg-[#161310] px-4 text-sm text-[#ecebeb]"
-                                      : "flex h-12 min-w-12 items-center justify-center border border-[#161310]/15 px-4 text-sm text-[#161310]/50 transition hover:border-[#161310] hover:text-[#161310]"
+                                      ? "text-lg font-black text-[#161310]"
+                                      : "text-lg text-[#161310]/35 transition-colors hover:text-[#161310]"
                                   }
                                 >
                                   {String(page).padStart(2, "0")}
@@ -438,17 +490,73 @@ export default async function ShopPage({
                           {currentPage < totalPages ? (
                             <Link
                               href={createPageHref(params, currentPage + 1)}
-                              className="group flex h-12 items-center gap-3 border border-[#161310]/20 px-5 text-sm text-[#161310]/70 transition hover:border-[#161310] hover:bg-[#161310] hover:text-[#ecebeb]"
+                              className="group flex items-center gap-3 text-xl font-black text-[#161310]"
                             >
                               <span>Next</span>
-                              <span className="transition group-hover:translate-x-1">
-                                →
-                              </span>
+
+                              <svg
+                                aria-hidden="true"
+                                viewBox="0 0 38 18"
+                                fill="none"
+                                className="h-[16px] w-[34px] overflow-visible"
+                              >
+                                <path
+                                  d="M1 9H32"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="square"
+                                />
+
+                                <path
+                                  d="M32 9L25 2"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="square"
+                                  pathLength="1"
+                                  className="
+            [stroke-dasharray:1]
+            [stroke-dashoffset:1]
+            transition-[stroke-dashoffset]
+            duration-300
+            ease-[cubic-bezier(0.16,1,0.3,1)]
+            group-hover:[stroke-dashoffset:0]
+          "
+                                />
+
+                                <path
+                                  d="M32 9L25 16"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="square"
+                                  pathLength="1"
+                                  className="
+            [stroke-dasharray:1]
+            [stroke-dashoffset:1]
+            transition-[stroke-dashoffset]
+            duration-300
+            ease-[cubic-bezier(0.16,1,0.3,1)]
+            group-hover:[stroke-dashoffset:0]
+          "
+                                />
+                              </svg>
                             </Link>
                           ) : (
-                            <span className="flex h-12 items-center gap-3 border border-[#161310]/10 px-5 text-sm text-[#161310]/25">
+                            <span className="flex items-center gap-3 text-xl font-black text-[#161310]/20">
                               <span>Next</span>
-                              <span>→</span>
+
+                              <svg
+                                aria-hidden="true"
+                                viewBox="0 0 38 18"
+                                fill="none"
+                                className="h-[16px] w-[34px] overflow-visible"
+                              >
+                                <path
+                                  d="M1 9H32"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="square"
+                                />
+                              </svg>
                             </span>
                           )}
                         </div>
