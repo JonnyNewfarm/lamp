@@ -469,7 +469,7 @@ export default function ProductDetailsClient({
                         type="button"
                         onClick={() => handleColorChange(color)}
                         disabled={!available}
-                        className={`flex items-center gap-3 border px-4 py-3 text-sm transition disabled:cursor-not-allowed disabled:opacity-35 ${
+                        className={`flex items-center cursor-pointer gap-3 border px-4 py-3 text-sm transition disabled:cursor-not-allowed disabled:opacity-35 ${
                           active
                             ? "border-[#161310]"
                             : "border-[#161310]/15 hover:border-[#161310]/40"
@@ -548,7 +548,7 @@ export default function ProductDetailsClient({
               type="button"
               disabled={!inStock}
               onClick={handleAddToCart}
-              className="mt-8 w-full bg-[#161310] px-8 py-5 text-sm text-[#ecebeb] transition hover:bg-[#2a261f] disabled:cursor-not-allowed disabled:opacity-35"
+              className="mt-8 w-full cursor-pointer bg-[#161310] px-8 py-5 text-sm text-[#ecebeb] transition hover:bg-[#2a261f] disabled:cursor-not-allowed disabled:opacity-35"
             >
               {inStock ? "Add to cart" : "Out of stock"}
             </button>
@@ -557,7 +557,7 @@ export default function ProductDetailsClient({
               type="button"
               disabled={!inStock}
               onClick={handleAddToCart}
-              className="mt-3 w-full border border-[#161310]/20 px-8 py-5 text-sm transition hover:border-[#161310] disabled:cursor-not-allowed disabled:opacity-35"
+              className="mt-3 w-full border cursor-pointer border-[#161310]/20 px-8 py-5 text-sm transition hover:border-[#161310] disabled:cursor-not-allowed disabled:opacity-35"
             >
               Buy now
             </button>
@@ -751,7 +751,7 @@ function ProductDescription({
         <button
           type="button"
           onClick={onToggle}
-          className="mt-4 inline-flex items-center gap-3 text-sm text-[#161310] transition hover:opacity-60"
+          className="mt-4 inline-flex items-center cursor-pointer gap-3 text-sm text-[#161310] transition hover:opacity-60"
           aria-expanded={open}
         >
           <span>{open ? "Hide description" : "View full description"}</span>
