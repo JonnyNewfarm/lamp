@@ -3,28 +3,6 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import WaveLinkText from "./WaveLinkText";
-
-const moods = [
-  {
-    number: "01",
-    title: "For quiet evenings",
-    text: "Soft lighting for bedrooms, reading corners and slow nights at home.",
-    href: "/shop?category=pendant-lighting",
-  },
-  {
-    number: "02",
-    title: "For focused work",
-    text: "Functional lamps for desks, shelves and calm workspace setups.",
-    href: "/shop?category=table-lamps",
-  },
-  {
-    number: "03",
-    title: "For warm corners",
-    text: "Small statement lights that bring atmosphere to overlooked spaces.",
-    href: "/shop?category=floor-lamps",
-  },
-];
 
 const roomLinks = [
   {
@@ -59,7 +37,7 @@ export default function LightingByMood() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-xs uppercase tracking-[0.34em] text-[#161310]/45"
+              className="text-xs uppercase tracking-[0.34em] text-[#161310]"
             >
               Lighting by mood
             </motion.p>
@@ -85,7 +63,7 @@ export default function LightingByMood() {
                 delay: 0.15,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="mt-10 max-w-xl text-base leading-[1.8] text-[#161310]/60 md:text-lg"
+              className="mt-10 max-w-xl text-base leading-[1.8] text-[#161310]/90 md:text-lg"
             >
               Calero Studio curates minimal lighting for calm interiors — from
               focused desk setups to warm evening corners and soft everyday
@@ -94,56 +72,62 @@ export default function LightingByMood() {
           </div>
         </div>
 
-        <div className="mt-20 grid md:grid-cols-3">
-          {moods.map((item, index) => (
-            <motion.article
-              key={item.title}
-              initial={{ opacity: 0, y: 36 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{
-                duration: 0.8,
-                delay: index * 0.1,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="group  py-8   md:px-8 "
-            >
-              <Link href={item.href} className="block">
-                <p className="text-sm text-[#161310]/40">{item.number}</p>
-
-                <h3 className="mt-8 max-w-xs text-4xl font-light leading-none tracking-[-0.06em] md:text-5xl">
-                  {item.title}
-                </h3>
-
-                <p className="mt-6 max-w-xs text-sm leading-[1.8] text-[#161310]/55 md:text-base">
-                  {item.text}
-                </p>
-
-                <div className="mt-10 flex items-center gap-4 text-sm">
-                  Explore
-                  <span className="h-px w-10 bg-[#161310] transition-all duration-500 group-hover:w-16" />
-                </div>
-              </Link>
-            </motion.article>
-          ))}
-        </div>
-
-        <div className="mt-20 grid gap-8 border-t border-[#161310]/15 pt-8 md:grid-cols-12">
-          <div className="md:col-span-5">
-            <p className="text-sm text-[#161310]/45">
-              Selected for atmosphere, simplicity and everyday use.
-            </p>
-          </div>
-
-          <div className="md:col-span-7">
-            <div className="grid grid-cols-1  gap-4 text-sm xl:grid-cols-4">
+        <div className="mt-20   pt-8">
+          <div className="">
+            <div className="grid grid-cols-1 gap-4 text-sm xl:grid-cols-4">
               {roomLinks.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="text-xl  font-black "
+                  className="group inline-flex w-fit items-center gap-3 text-xl font-black"
                 >
-                  <WaveLinkText text={`For ${item.label}`} />
+                  <span>{`For ${item.label}`}</span>
+
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 52 18"
+                    fill="none"
+                    className="h-[16px] w-[46px] hidden md:block overflow-visible"
+                  >
+                    <path
+                      d="M1 9H46"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="square"
+                    />
+
+                    <path
+                      d="M46 9L39 2"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="square"
+                      pathLength="1"
+                      className="
+            [stroke-dasharray:1]
+            [stroke-dashoffset:1]
+            transition-[stroke-dashoffset]
+            duration-300
+            ease-[cubic-bezier(0.16,1,0.3,1)]
+            group-hover:[stroke-dashoffset:0]
+          "
+                    />
+
+                    <path
+                      d="M46 9L39 16"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="square"
+                      pathLength="1"
+                      className="
+            [stroke-dasharray:1]
+            [stroke-dashoffset:1]
+            transition-[stroke-dashoffset]
+            duration-300
+            ease-[cubic-bezier(0.16,1,0.3,1)]
+            group-hover:[stroke-dashoffset:0]
+          "
+                    />
+                  </svg>
                 </Link>
               ))}
             </div>

@@ -333,7 +333,7 @@ export default function ProductDetailsClient({
           href="/shop"
           className="inline-flex items-center gap-4 text-sm text-[#161310]/55 transition hover:text-[#161310]"
         >
-          <span className="h-px w-10 bg-[#161310]/40" />
+          <span className="h-px w-10 bg-[#161310]/80" />
           Back to shop
         </Link>
       </div>
@@ -417,7 +417,7 @@ export default function ProductDetailsClient({
               {product.category.name}
             </p>
 
-            <h1 className="mt-5 max-w-2xl text-[14vw] font-light leading-[0.86] tracking-[-0.085em] md:text-[7vw] lg:text-[5.2vw]">
+            <h1 className="mt-5 max-w-2xl text-[14vw] font-semibold leading-[0.95] tracking-[-0.035em] md:text-[7vw] lg:text-[5.2vw]">
               {product.title}
             </h1>
 

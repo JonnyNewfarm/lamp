@@ -39,7 +39,7 @@ const productLayouts = [
   "md:col-start-1 md:col-span-2 md:mt-0",
   "md:col-start-5 md:col-span-2 md:mt-36",
   "md:col-start-3 md:col-span-2 md:mt-12",
-  "md:col-start-6 md:col-span-2 md:mt-40",
+  "md:col-start-6 md:col-span-2 md:mt-40 mr-5",
   "md:col-start-1 md:col-span-2 md:mt-16",
   "md:col-start-4 md:col-span-2 md:mt-32",
 ];
@@ -63,6 +63,43 @@ export default function NewProductsGallery({
   products,
 }: NewProductsGalleryProps) {
   const visibleProducts = products.slice(0, 6);
+
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  const [isSectionInView, setIsSectionInView] = useState(false);
+
+  useEffect(() => {
+    const checkSectionPosition = () => {
+      const section = sectionRef.current;
+
+      if (!section) {
+        return;
+      }
+
+      const rect = section.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      const showAfter = viewportHeight * 0.35;
+      const hideBefore = viewportHeight * 0.65;
+
+      const shouldShow = rect.top <= showAfter && rect.bottom >= hideBefore;
+
+      setIsSectionInView(shouldShow);
+    };
+
+    checkSectionPosition();
+
+    window.addEventListener("scroll", checkSectionPosition, {
+      passive: true,
+    });
+
+    window.addEventListener("resize", checkSectionPosition);
+
+    return () => {
+      window.removeEventListener("scroll", checkSectionPosition);
+      window.removeEventListener("resize", checkSectionPosition);
+    };
+  }, []);
 
   const [hoverText, setHoverText] = useState("");
   const [isHoveringImage, setIsHoveringImage] = useState(false);
@@ -262,7 +299,51 @@ export default function NewProductsGallery({
   }
 
   return (
-    <section className="relative bg-[#ecebeb] text-[#161310]">
+    <section ref={sectionRef} className="relative bg-[#ecebeb] text-[#161310]">
+      <motion.div
+        aria-hidden="true"
+        initial={false}
+        animate={{
+          opacity: isSectionInView ? 1 : 0,
+          x: isSectionInView ? 0 : 14,
+        }}
+        transition={{
+          duration: 0.55,
+          ease,
+        }}
+        className="
+          pointer-events-none
+          fixed
+          right-2
+          top-1/2
+          z-40
+          hidden
+          -translate-y-1/2
+          mix-blend-difference
+          md:block
+          lg:right-4
+        "
+      >
+        <span
+          className="
+          hidden
+            md:block
+            translate-x-[42%]
+            rotate-90
+            whitespace-nowrap
+            text-[10px]
+            font-black
+          text-white
+            uppercase
+            tracking-[0.2em]
+            mix-blend-difference
+            lg:text-[12px]
+          "
+        >
+          New products — 2026
+        </span>
+      </motion.div>
+
       <motion.div
         aria-hidden="true"
         style={{
@@ -330,7 +411,7 @@ export default function NewProductsGallery({
                 lg:text-[82px]
               "
             >
-              Recently added
+              Recently <br /> added
             </h2>
 
             <span
@@ -350,24 +431,6 @@ export default function NewProductsGallery({
               {String(visibleProducts.length).padStart(2, "0")}
             </span>
           </div>
-
-          <p
-            className="
-              mb-1
-              hidden
-              max-w-[190px]
-              text-right
-              text-[11px]
-              font-medium
-              uppercase
-              leading-[1.15]
-              tracking-[-0.02em]
-              md:block
-              md:text-sm
-            "
-          >
-            Selected lighting objects
-          </p>
         </div>
       </div>
 
@@ -406,9 +469,10 @@ export default function NewProductsGallery({
                     transformOrigin,
                   }}
                 >
-                  <span className="text-lg pb-1 font-bold uppercase tracking-[0.08em]">
+                  <span className="pb-1 text-lg font-bold uppercase tracking-[0.08em]">
                     {displayNumber}
                   </span>
+
                   <Link
                     href={`/products/${product.slug}`}
                     aria-label={`View ${title}`}
@@ -483,10 +547,11 @@ export default function NewProductsGallery({
                     </p>
                   </div>
 
-                  <div className="hidden pt-2 md:flex justify-between">
-                    <span className="text-lg font-bold uppercase tracking-[0.08em]">
+                  <div className="hidden justify-between pt-2 md:flex">
+                    <span className="text-lg font-bold uppercase tracking-[0.055em]">
                       {product.category}
                     </span>
+
                     <span className="text-xl font-bold uppercase tracking-[0.08em]">
                       {formatPrice(product.price)}
                     </span>
@@ -502,17 +567,17 @@ export default function NewProductsGallery({
         <Link
           href="/shop"
           className="
-      group
-      inline-flex
-      items-center
-      gap-4
-      text-[28px]
-      font-black
-      uppercase
-      leading-none
-      tracking-[-0.055em]
-      md:text-[42px]
-    "
+            group
+            inline-flex
+            items-center
+            gap-4
+            text-[28px]
+            font-black
+            uppercase
+            leading-none
+            tracking-[-0.055em]
+            md:text-[42px]
+          "
         >
           <span>View all products</span>
 
@@ -536,13 +601,13 @@ export default function NewProductsGallery({
               strokeLinecap="square"
               pathLength="1"
               className="
-          [stroke-dasharray:1]
-          [stroke-dashoffset:1]
-          transition-[stroke-dashoffset]
-          duration-300
-          ease-[cubic-bezier(0.16,1,0.3,1)]
-          group-hover:[stroke-dashoffset:0]
-        "
+                [stroke-dasharray:1]
+                [stroke-dashoffset:1]
+                transition-[stroke-dashoffset]
+                duration-300
+                ease-[cubic-bezier(0.16,1,0.3,1)]
+                group-hover:[stroke-dashoffset:0]
+              "
             />
 
             <path
@@ -552,13 +617,13 @@ export default function NewProductsGallery({
               strokeLinecap="square"
               pathLength="1"
               className="
-          [stroke-dasharray:1]
-          [stroke-dashoffset:1]
-          transition-[stroke-dashoffset]
-          duration-300
-          ease-[cubic-bezier(0.16,1,0.3,1)]
-          group-hover:[stroke-dashoffset:0]
-        "
+                [stroke-dasharray:1]
+                [stroke-dashoffset:1]
+                transition-[stroke-dashoffset]
+                duration-300
+                ease-[cubic-bezier(0.16,1,0.3,1)]
+                group-hover:[stroke-dashoffset:0]
+              "
             />
           </svg>
         </Link>

@@ -19,7 +19,7 @@ export default function EditorialTextAssembleSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative noise-bg overflow-hidden bg-[#ecebeb] px-5 py-20 text-[#161310] md:px-12 md:py-28"
+      className="noise-bg relative overflow-hidden bg-[#ecebeb] px-5 py-20 text-[#161310] md:px-12 md:py-28"
     >
       <div className="relative z-20 grid min-h-[78vh] grid-cols-1 content-between gap-14 md:grid-cols-12">
         <div className="md:col-span-12">
@@ -74,10 +74,10 @@ export default function EditorialTextAssembleSection() {
             animate={isInView ? { y: 0, opacity: 1 } : { y: 34, opacity: 0 }}
             transition={{
               duration: 1,
-              delay: 1.22,
+              delay: 1.12,
               ease,
             }}
-            className="max-w-[520px] text-[clamp(1.25rem,2.2vw,2.4rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-[#161310]/65 md:col-span-6"
+            className="max-w-[520px] text-[clamp(1.25rem,2.2vw,2.4rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-[#161310]/85 md:col-span-6"
           >
             A compact edit of pieces made to soften the room, warm the corners,
             and keep the atmosphere still.
@@ -88,7 +88,7 @@ export default function EditorialTextAssembleSection() {
             animate={isInView ? { y: 0, opacity: 1 } : { y: 34, opacity: 0 }}
             transition={{
               duration: 1,
-              delay: 1.36,
+              delay: 1.24,
               ease,
             }}
             className="flex flex-col gap-5 md:col-span-4 md:col-start-9 md:items-end"
@@ -98,6 +98,7 @@ export default function EditorialTextAssembleSection() {
               className="group relative inline-flex h-12 w-fit items-center overflow-hidden border border-[#161310] px-7 text-xs font-black uppercase tracking-[-0.045em] text-[#161310]"
             >
               <span className="absolute inset-0 translate-y-full bg-[#161310] transition-transform duration-300 ease-out group-hover:translate-y-0" />
+
               <span className="relative z-10 transition-colors duration-300 group-hover:text-[#ecebeb]">
                 View products
               </span>
@@ -132,7 +133,7 @@ function AssembleLine({
 
   return (
     <div className="group relative -mb-[0.05em] overflow-hidden md:-mb-[0.075em]">
-      <h2 className="relative flex justify-center whitespace-nowrap text-[clamp(2.7rem,9.4vw,11rem)] md:text-[clamp(3.1rem,10.4vw,12rem)] font-black uppercase leading-[0.82] tracking-[-0.035em] text-[#28311f] md:justify-start">
+      <h2 className="relative flex justify-start whitespace-nowrap text-[clamp(2.7rem,9.4vw,11rem)] font-black uppercase leading-[0.82] tracking-[-0.035em] text-[#28311f] md:text-[clamp(2.3rem,9.6vw,11.2rem)]">
         {characters.map((char, charIndex) => {
           const isSpace = char === " ";
 
@@ -150,24 +151,26 @@ function AssembleLine({
           const startX = isSpace
             ? 0
             : isLeftSide
-              ? -92 - distanceFromCenter * 10
+              ? -52 - distanceFromCenter * 5
               : isRightSide
-                ? 92 + distanceFromCenter * 10
+                ? 52 + distanceFromCenter * 5
                 : 0;
 
-          const startY = isSpace ? 0 : 82 + distanceFromCenter * 8;
+          const startY = isSpace ? 0 : 42 + distanceFromCenter * 3;
 
-          const delay = 0.1 + lineIndex * 0.22 + distanceFromCenter * 0.018;
+          const delay = 0.1 + lineIndex * 0.2 + distanceFromCenter * 0.015;
+
+          const hiddenState = {
+            x: startX,
+            y: startY,
+            opacity: isSpace ? 1 : 0,
+            filter: isSpace ? "blur(0px)" : "blur(5px)",
+          };
 
           return (
             <motion.span
               key={`${text}-${charIndex}-${char}`}
-              initial={{
-                x: startX,
-                y: startY,
-                opacity: isSpace ? 1 : 0,
-                filter: isSpace ? "blur(0px)" : "blur(8px)",
-              }}
+              initial={hiddenState}
               animate={
                 active
                   ? {
@@ -176,15 +179,10 @@ function AssembleLine({
                       opacity: 1,
                       filter: "blur(0px)",
                     }
-                  : {
-                      x: startX,
-                      y: startY,
-                      opacity: isSpace ? 1 : 0,
-                      filter: isSpace ? "blur(0px)" : "blur(8px)",
-                    }
+                  : hiddenState
               }
               transition={{
-                duration: 1.35,
+                duration: 1.18,
                 delay,
                 ease,
               }}

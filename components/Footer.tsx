@@ -2,10 +2,6 @@ import Link from "next/link";
 
 const footerLinks = [
   {
-    label: "About",
-    href: "/about",
-  },
-  {
     label: "Contact",
     href: "/contact",
   },
@@ -103,15 +99,6 @@ const Footer = () => {
                   </a>
                 </p>
 
-                <p>
-                  <a
-                    href="tel:+4748263011"
-                    className="underline decoration-[#161310]/20 underline-offset-4 transition-colors duration-200 hover:text-[#161310]"
-                  >
-                    +47 48 26 30 11
-                  </a>
-                </p>
-
                 <p>Orders fulfilled through trusted shipping partners.</p>
               </div>
             </div>
@@ -159,7 +146,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <p className="mb-5 text-[0.62rem] font-black uppercase tracking-[0.18em] text-[#161310]/40">
+      <p className="mb-5 text-[0.62rem] font-black uppercase tracking-[0.18em] text-[#161310]/60">
         {title}
       </p>
 
@@ -168,7 +155,7 @@ function FooterColumn({
           <Link
             key={link.href}
             href={link.href}
-            className="group flex items-center justify-between border-b border-[#161310]/15 py-3 text-sm font-black uppercase tracking-[-0.035em] text-[#161310]/70 transition-colors duration-200 hover:text-[#161310]"
+            className="group flex items-center justify-between border-b border-[#161310]/15 py-3 text-sm font-black uppercase tracking-[-0.035em] text-[#161310]/90 transition-colors duration-200 hover:text-[#161310]"
           >
             <span>{link.label}</span>
 

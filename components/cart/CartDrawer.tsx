@@ -77,33 +77,37 @@ export default function CartDrawer() {
       >
         <div className="flex h-24 items-center justify-between border-b border-[#161310]/15 px-6 md:px-8">
           <div>
-            <p className="text-xs uppercase tracking-[0.28em] text-[#161310]/45">
+            <p className="text-xs uppercase tracking-[0.28em] font-black text-[#161310]">
               Cart
             </p>
-            <p className="mt-2 text-sm text-[#161310]/55">
+            <p className="mt-2 text-sm text-[#161310]">
               {totalQuantity} {totalQuantity === 1 ? "item" : "items"}
             </p>
           </div>
 
-          <button type="button" onClick={closeCart} className="text-sm">
+          <button
+            type="button"
+            onClick={closeCart}
+            className="text-sm cursor-pointer"
+          >
             Close
           </button>
         </div>
 
         {items.length === 0 ? (
           <div className="flex h-[calc(100dvh-96px)] flex-col items-center justify-center px-6 text-center">
-            <h2 className="text-5xl font-light tracking-[-0.07em]">
+            <h2 className="text-5xl font-black tracking-[-0.07em]">
               Your cart is empty.
             </h2>
 
-            <p className="mt-5 max-w-sm text-sm leading-[1.8] text-[#161310]/55">
+            <p className="mt-5 max-w-sm text-sm leading-[1.8] text-[#161310]/80">
               Add a lamp from the shop to continue.
             </p>
 
             <Link
               href="/shop"
               onClick={closeCart}
-              className="mt-8 bg-[#161310] px-7 py-4 text-sm text-[#ecebeb]"
+              className="mt-8 bg-[#161310] uppercase font-semibold px-7 py-4 text-sm text-[#ecebeb]"
             >
               Shop lighting
             </Link>

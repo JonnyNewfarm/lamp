@@ -76,17 +76,7 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-[#ecebeb] text-[#161310]">
       <ScrollSection>
-        <section className="px-4 pb-24 pt-28 md:px-9 md:pb-32 md:pt-36">
-          <div className="flex items-start justify-between gap-8">
-            <p className="text-[10px] font-bold uppercase tracking-[0.07em] opacity-45 md:text-xs">
-              Contact
-            </p>
-
-            <p className="max-w-[190px] text-right text-[10px] font-medium uppercase leading-[1.35] tracking-[0.01em] opacity-45 md:max-w-[260px] md:text-xs">
-              Orders, delivery, returns and product enquiries
-            </p>
-          </div>
-
+        <section className="px-4 pt-36 md:px-9">
           <h1 className="mt-16 text-[19vw] font-black uppercase leading-[0.76] tracking-[-0.038em] sm:text-[17vw] md:mt-24 md:text-[13vw] lg:text-[11.5vw]">
             Get In Touch
           </h1>
@@ -192,7 +182,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <p className="mt-10 max-w-md text-sm leading-[1.7] text-[#161310]/55">
+              <p className="mt-10 max-w-md text-md leading-[1.7] text-[#161310]/90">
                 For the fastest response, please contact us by email. Phone
                 support is available for order-related questions when needed.
               </p>
@@ -227,7 +217,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div className="mt-10 max-w-lg space-y-5 text-sm leading-[1.7] text-[#161310]/55">
+              <div className="mt-10 max-w-lg space-y-5 text-md leading-[1.7] text-[#161310]/95">
                 <p>
                   Calero Studio is an online lighting store operated from Oslo,
                   Norway and serves selected international markets.
