@@ -394,17 +394,6 @@ export default function CaleroHero() {
           className="mt-2"
         >
           <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{
-              duration: 1.2,
-              delay: 0.68,
-              ease,
-            }}
-            className="h-px origin-left bg-[#161310]"
-          />
-
-          <motion.div
             initial="hidden"
             animate="visible"
             variants={{
@@ -419,8 +408,9 @@ export default function CaleroHero() {
             className="
               mb-5
               grid
-              grid-cols-2
-              gap-x-4
+              grid-cols-1
+              gap-x-1
+              
               gap-y-5
               pt-4
               md:mb-7
@@ -430,13 +420,13 @@ export default function CaleroHero() {
             "
           >
             <motion.div variants={textRevealVariants}>
-              <p className="text-[0.68rem] font-black uppercase leading-none tracking-[-0.025em] md:text-xs">
-                Calero
+              <p className="text-[0.68rem] hidden md:block font-black uppercase leading-none tracking-[-0.025em] md:text-xs">
+                Categories
               </p>
             </motion.div>
 
             <motion.div variants={textRevealVariants} className="md:col-span-2">
-              <p className="max-w-[520px] text-[0.68rem] font-semibold uppercase leading-[1.05] tracking-[-0.035em] md:text-sm">
+              <p className="max-w-[270px] sm:max-w-[520px] text-[0.9rem] font-semibold uppercase leading-[1.05] tracking-[-0.035em] md:text-sm">
                 Soft light for quiet interiors. Selected forms, warm corners and
                 calm rooms.
               </p>
@@ -495,10 +485,9 @@ function SlotMachineHeading({ from, to }: { from: string; to: string }) {
         uppercase
         leading-[0.82]
         tracking-[-0.035em]
-        md:text-[19.5vw]
+        md:text-[14.5vw]
       "
     >
-      {/* Begge usynlige ord brukes kun for korrekt containerbredde */}
       <span
         aria-hidden="true"
         className="

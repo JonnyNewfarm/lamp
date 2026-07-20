@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/formatPrice";
 import {
@@ -326,17 +325,17 @@ export default function NewProductsGallery({
       >
         <span
           className="
-          hidden
-            md:block
+            hidden
             translate-x-[42%]
             rotate-90
             whitespace-nowrap
             text-[10px]
             font-black
-          text-white
             uppercase
             tracking-[0.2em]
+            text-white
             mix-blend-difference
+            md:block
             lg:text-[12px]
           "
         >
@@ -487,25 +486,27 @@ export default function NewProductsGallery({
                       group
                       relative
                       block
-                      aspect-[3/4]
-                      w-full
+                      w-fit
+                      max-w-full
                       cursor-pointer
                       overflow-hidden
                       bg-[#d7d6d4]
                       md:cursor-none
                     "
                   >
-                    <Image
+                    <img
                       src={product.image}
                       alt={title}
-                      fill
                       draggable={false}
-                      sizes="
-                        (max-width: 767px) 48vw,
-                        (max-width: 1024px) 25vw,
-                        18vw
-                      "
-                      className="object-cover"
+                      className="
+    block
+    h-auto
+    max-w-full
+    transition-transform
+    duration-700
+    ease-[cubic-bezier(0.16,1,0.3,1)]
+    group-hover:scale-[1.035]
+  "
                     />
 
                     <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-3 text-white mix-blend-difference">
@@ -547,13 +548,13 @@ export default function NewProductsGallery({
                     </p>
                   </div>
 
-                  <div className="hidden justify-between pt-2 md:flex ">
-                    <span className="text-lg font-bold  tracking-[0.055em] flex flex-col">
+                  <div className="hidden justify-between pt-2 md:flex">
+                    <span className="flex flex-col text-lg font-bold tracking-[0.055em]">
                       <span className="text-sm opacity-80">Category:</span>
                       {product.category}
                     </span>
 
-                    <span className="text-lg font-bold  tracking-[0.08em] flex flex-col">
+                    <span className="flex flex-col text-lg font-bold tracking-[0.08em]">
                       <span className="text-sm opacity-80">Price:</span>
                       {formatPrice(product.price)}
                     </span>
