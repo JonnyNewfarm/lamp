@@ -2,11 +2,12 @@
 
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 
 const lines = ["SOFT LIGHT", "QUIET ROOMS", "WARM OBJECTS"];
 
 const ease = [0.16, 1, 0.3, 1] as const;
+const textEase = [0.76, 0, 0.24, 1] as const;
 
 export default function EditorialTextAssembleSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -25,8 +26,21 @@ export default function EditorialTextAssembleSection() {
         <div className="md:col-span-12">
           <div className="grid grid-cols-1 gap-8 pt-12 md:grid-cols-12 md:pt-16">
             <motion.div
-              initial={{ y: 28, opacity: 0 }}
-              animate={isInView ? { y: 0, opacity: 1 } : { y: 28, opacity: 0 }}
+              initial={{
+                y: 28,
+                opacity: 0,
+              }}
+              animate={
+                isInView
+                  ? {
+                      y: 0,
+                      opacity: 1,
+                    }
+                  : {
+                      y: 28,
+                      opacity: 0,
+                    }
+              }
               transition={{
                 duration: 0.95,
                 delay: 0.2,
@@ -57,8 +71,21 @@ export default function EditorialTextAssembleSection() {
 
         <div className="grid grid-cols-1 gap-10 md:col-span-12 md:grid-cols-12 md:items-end">
           <motion.p
-            initial={{ y: 34, opacity: 0 }}
-            animate={isInView ? { y: 0, opacity: 1 } : { y: 34, opacity: 0 }}
+            initial={{
+              y: 34,
+              opacity: 0,
+            }}
+            animate={
+              isInView
+                ? {
+                    y: 0,
+                    opacity: 1,
+                  }
+                : {
+                    y: 34,
+                    opacity: 0,
+                  }
+            }
             transition={{
               duration: 1,
               delay: 1.12,
@@ -71,8 +98,21 @@ export default function EditorialTextAssembleSection() {
           </motion.p>
 
           <motion.div
-            initial={{ y: 34, opacity: 0 }}
-            animate={isInView ? { y: 0, opacity: 1 } : { y: 34, opacity: 0 }}
+            initial={{
+              y: 34,
+              opacity: 0,
+            }}
+            animate={
+              isInView
+                ? {
+                    y: 0,
+                    opacity: 1,
+                  }
+                : {
+                    y: 34,
+                    opacity: 0,
+                  }
+            }
             transition={{
               duration: 1,
               delay: 1.24,
@@ -111,79 +151,47 @@ function AssembleLine({
   active: boolean;
   lineIndex: number;
 }) {
-  const characters = useMemo(() => text.split(""), [text]);
-
-  const visibleCharacters = characters.filter((char) => char !== " ");
-  const centerIndex = (visibleCharacters.length - 1) / 2;
-
-  let visibleCharIndex = -1;
-
   return (
-    <div className="group relative -mb-[0.05em] overflow-hidden md:-mb-[0.075em]">
-      <h2 className="relative flex justify-start whitespace-nowrap text-[clamp(2.4rem,9.4vw,11rem)] font-black uppercase leading-[0.82] tracking-[-0.035em] text-[#28311f] md:text-[clamp(1.2rem,7.5vw,9rem)]">
-        {characters.map((char, charIndex) => {
-          const isSpace = char === " ";
-
-          if (!isSpace) {
-            visibleCharIndex += 1;
-          }
-
-          const distanceFromCenter = isSpace
-            ? 0
-            : Math.abs(visibleCharIndex - centerIndex);
-
-          const isLeftSide = !isSpace && visibleCharIndex < centerIndex;
-          const isRightSide = !isSpace && visibleCharIndex > centerIndex;
-
-          const startX = isSpace
-            ? 0
-            : isLeftSide
-              ? -52 - distanceFromCenter * 5
-              : isRightSide
-                ? 52 + distanceFromCenter * 5
-                : 0;
-
-          const startY = isSpace ? 0 : 42 + distanceFromCenter * 3;
-
-          const delay = 0.1 + lineIndex * 0.2 + distanceFromCenter * 0.015;
-
-          const hiddenState = {
-            x: startX,
-            y: startY,
-            opacity: isSpace ? 1 : 0,
-            filter: isSpace ? "blur(0px)" : "blur(5px)",
-          };
-
-          return (
-            <motion.span
-              key={`${text}-${charIndex}-${char}`}
-              initial={hiddenState}
-              animate={
-                active
-                  ? {
-                      x: 0,
-                      y: 0,
-                      opacity: 1,
-                      filter: "blur(0px)",
-                    }
-                  : hiddenState
+    <div className="relative -mb-[0.05em] overflow-hidden pb-[0.08em] pt-[0.04em] md:-mb-[0.075em]">
+      <motion.h2
+        initial={{
+          y: "115%",
+          rotate: 2,
+          skewY: 3,
+        }}
+        animate={
+          active
+            ? {
+                y: "0%",
+                rotate: 0,
+                skewY: 0,
               }
-              transition={{
-                duration: 1.18,
-                delay,
-                ease,
-              }}
-              className={
-                isSpace
-                  ? "w-[0.24em]"
-                  : "inline-block will-change-transform transition-[letter-spacing] duration-500 group-hover:tracking-[-0.08em]"
+            : {
+                y: "115%",
+                rotate: 2,
+                skewY: 3,
               }
-            >
-              {isSpace ? "\u00A0" : char}
-            </motion.span>
-          );
-        })}
-      </h2>
+        }
+        transition={{
+          duration: 1.25,
+          delay: 0.08 + lineIndex * 0.13,
+          ease: textEase,
+        }}
+        className="
+          origin-bottom-left
+          whitespace-nowrap
+          text-[clamp(2.4rem,9.4vw,11rem)]
+          font-black
+          uppercase
+          leading-[0.82]
+          tracking-[-0.035em]
+          text-[#28311f]
+          will-change-transform
+          md:text-[clamp(1.2rem,7.5vw,9rem)]
+        "
+      >
+        {text}
+      </motion.h2>
     </div>
   );
 }
