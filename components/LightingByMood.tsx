@@ -49,7 +49,7 @@ export default function LightingByMood() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-5xl text-[14vw] text-[#28311f] uppercase font-black leading-[0.9] tracking-[-0.085em] md:text-[7vw]"
+              className="max-w-5xl text-[14vw] text-[#28311f] uppercase font-black leading-[0.9] tracking-[-0.035em] md:text-[6vw]"
             >
               Find the right light for you.
             </motion.h2>

@@ -51,16 +51,16 @@ const Footer = () => {
       <div className="grid gap-14 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-7">
           <Link href="/" aria-label="Go to home page" className="block w-fit">
-            <span className="block text-[clamp(3.5rem,10vw,14rem)] font-black uppercase leading-[0.80] tracking-[-0.035em]">
+            <span className="block text-[clamp(2rem,7vw,11rem)] font-semibold uppercase leading-[0.80] tracking-[-0.035em]">
               Calero
             </span>
 
-            <span className="block text-[clamp(2.8rem,8vw,10rem)] font-black uppercase leading-[0.90] tracking-[-0.035em]">
+            <span className="block text-[clamp(2rem,7vw,11rem)] font-semibold uppercase leading-[0.90] tracking-[-0.035em]">
               Studio
             </span>
           </Link>
 
-          <p className="mt-8 max-w-[560px] text-[clamp(1.5rem,2.4vw,3rem)] font-semibold uppercase leading-[0.9] tracking-[-0.065em] text-[#161310]">
+          <p className="mt-8 max-w-[560px] text-[clamp(1.2rem,2vw,2.6rem)]   leading-[0.9] tracking-[-0.065em] text-[#161310]">
             Minimal lighting curated for calm interiors, warm corners and
             everyday atmosphere.
           </p>

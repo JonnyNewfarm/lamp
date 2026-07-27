@@ -91,7 +91,7 @@ export default function EditorialTextAssembleSection() {
               delay: 1.12,
               ease,
             }}
-            className="max-w-[520px] text-[clamp(1.25rem,2.2vw,2.4rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-[#161310]/85 md:col-span-6"
+            className="max-w-[520px] text-[clamp(1.25rem,2.2vw,2.4rem)]  leading-[0.95] tracking-[-0.06em] text-[#161310]/85 md:col-span-6"
           >
             A compact edit of pieces made to soften the room, warm the corners,
             and keep the atmosphere still.
@@ -181,7 +181,7 @@ function AssembleLine({
           origin-bottom-left
           whitespace-nowrap
           text-[clamp(2.4rem,9.4vw,11rem)]
-          font-black
+          font-semibold
           uppercase
           leading-[0.82]
           tracking-[-0.035em]

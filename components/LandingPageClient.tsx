@@ -399,7 +399,7 @@ export default function CaleroHero() {
               <div className="overflow-hidden pb-[0.08em]">
                 <motion.h1
                   variants={labelRevealVariants}
-                  className="origin-bottom-left text-xs font-semibold uppercase"
+                  className="origin-bottom-left hidden md:block text-xs font-semibold uppercase"
                 >
                   Calm by design
                 </motion.h1>
