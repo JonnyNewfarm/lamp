@@ -40,28 +40,45 @@ const heroImages = [
 
 const ease = [0.16, 1, 0.3, 1] as const;
 const imageEase = [0.76, 0, 0.24, 1] as const;
-const letterEase = [0.65, 0, 0.35, 1] as const;
 
-const TITLE_FROM = "STUDIO";
-const TITLE_TO = "CALERO";
-
-const TITLE_REVEAL_DELAY = 0.25;
-const TITLE_MORPH_DELAY = 1.15;
-const TITLE_MORPH_DURATION = 0.9;
-const TITLE_STAGGER_WINDOW = 0.26;
-
-const textRevealVariants = {
+const titleRevealVariants = {
   hidden: {
-    y: 24,
-    opacity: 0,
-    filter: "blur(8px)",
+    y: "115%",
+    rotate: 2,
+    skewY: 3,
   },
   visible: {
-    y: 0,
-    opacity: 1,
-    filter: "blur(0px)",
+    y: "0%",
+    rotate: 0,
+    skewY: 0,
     transition: {
-      duration: 0.9,
+      duration: 1.25,
+      delay: 0.08,
+      ease: imageEase,
+    },
+  },
+};
+
+const labelContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      delayChildren: 0.42,
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const labelRevealVariants = {
+  hidden: {
+    y: "125%",
+    rotate: 2,
+  },
+  visible: {
+    y: "0%",
+    rotate: 0,
+    transition: {
+      duration: 0.85,
       ease,
     },
   },
@@ -323,13 +340,7 @@ export default function CaleroHero() {
         </span>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{
-          duration: 0.8,
-          ease: "easeOut",
-        }}
+      <div
         className="
           flex
           min-h-screen
@@ -346,7 +357,7 @@ export default function CaleroHero() {
       >
         <div className="flex flex-1 items-center pt-32 sm:pt-32 md:pt-32">
           <div className="w-full">
-            <div className="relative flex justify-start">
+            <div className="relative mt-16 flex justify-start">
               <div
                 className="
                   overflow-hidden
@@ -355,258 +366,101 @@ export default function CaleroHero() {
                   pt-[0.12em]
                 "
               >
-                <motion.div
-                  initial={{
-                    opacity: 0,
-                    y: 30,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  transition={{
-                    duration: 0.9,
-                    delay: TITLE_REVEAL_DELAY,
-                    ease,
-                  }}
+                <motion.h1
+                  variants={titleRevealVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="
+                    origin-bottom-left
+                    whitespace-nowrap
+                    text-[15.5vw]
+                    font-black
+                    uppercase
+                    leading-[0.82]
+                    tracking-[-0.035em]
+                    md:text-[14.5vw]
+                  "
                 >
-                  <SlotMachineHeading from={TITLE_FROM} to={TITLE_TO} />
-                </motion.div>
+                  Calero
+                </motion.h1>
               </div>
             </div>
           </div>
         </div>
 
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 35,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 1,
-            delay: 0.62,
-            ease,
-          }}
-          className="mt-2"
-        >
+        <div className="mt-2 w-full">
           <motion.div
+            variants={labelContainerVariants}
             initial="hidden"
             animate="visible"
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  delayChildren: 0.78,
-                  staggerChildren: 0.1,
-                },
-              },
-            }}
-            className="
-              mb-5
-              grid
-              grid-cols-1
-              gap-x-1
-              
-              gap-y-5
-              pt-4
-              md:mb-7
-              md:grid-cols-4
-              md:gap-x-7
-              md:pt-5
-            "
+            className="mb-2 flex w-full flex-row items-center justify-end"
           >
-            <motion.div variants={textRevealVariants}>
-              <p className="text-[0.68rem] hidden md:block font-black uppercase leading-none tracking-[-0.025em] md:text-xs">
-                Categories
-              </p>
-            </motion.div>
+            <div className="flex space-x-30">
+              <div className="overflow-hidden pb-[0.08em]">
+                <motion.h1
+                  variants={labelRevealVariants}
+                  className="origin-bottom-left text-xs font-semibold uppercase"
+                >
+                  Calm by design
+                </motion.h1>
+              </div>
 
-            <motion.div variants={textRevealVariants} className="md:col-span-2">
-              <p className="max-w-[270px] sm:max-w-[520px] text-[0.9rem] font-semibold uppercase leading-[1.05] tracking-[-0.035em] md:text-sm">
-                Soft light for quiet interiors. Selected forms, warm corners and
-                calm rooms.
-              </p>
-            </motion.div>
-
-            <motion.div variants={textRevealVariants} className="text-right">
-              <p className="text-[0.68rem] font-black uppercase leading-none tracking-[-0.025em] md:text-xs">
-                Calm by design
-              </p>
-            </motion.div>
+              <div className="overflow-hidden pb-[0.08em]">
+                <motion.h1
+                  variants={labelRevealVariants}
+                  className="origin-bottom-left text-xs font-black uppercase"
+                >
+                  Categories
+                </motion.h1>
+              </div>
+            </div>
           </motion.div>
 
-          <div className="grid grid-cols-2 gap-2.5 md:grid-cols-4 md:gap-4">
-            {heroImages.map((image, index) => (
-              <HeroImage
-                key={image.href}
-                src={image.src}
-                href={image.href}
-                alt={image.alt}
-                hoverText={image.hoverText}
-                index={index}
-                priority={index < 2}
-                onMouseMove={handleImageMouseMove}
-                onMouseEnter={handleImageMouseEnter}
-                onMouseLeave={handleImageMouseLeave}
-              />
-            ))}
-          </div>
-        </motion.div>
-      </motion.div>
+          {/* Samme fade-wrapper som bildene hadde opprinnelig */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: 0.8,
+              ease: "easeOut",
+            }}
+          >
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 35,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 1,
+                delay: 0.62,
+                ease,
+              }}
+              className="grid grid-cols-2 gap-2.5 md:grid-cols-4 md:gap-4"
+            >
+              {heroImages.map((image, index) => (
+                <HeroImage
+                  key={image.href}
+                  src={image.src}
+                  href={image.href}
+                  alt={image.alt}
+                  hoverText={image.hoverText}
+                  index={index}
+                  priority={index < 2}
+                  onMouseMove={handleImageMouseMove}
+                  onMouseEnter={handleImageMouseEnter}
+                  onMouseLeave={handleImageMouseLeave}
+                />
+              ))}
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
-}
-
-function SlotMachineHeading({ from, to }: { from: string; to: string }) {
-  const fromLetters = Array.from(from);
-  const toLetters = Array.from(to);
-
-  const letterCount = Math.max(fromLetters.length, toLetters.length);
-
-  const morphStagger =
-    letterCount > 1 ? TITLE_STAGGER_WINDOW / (letterCount - 1) : 0;
-
-  return (
-    <div
-      className="
-        relative
-        grid
-        w-fit
-        overflow-hidden
-        px-[0.02em]
-        pb-[0.12em]
-        pt-[0.1em]
-        text-[20.5vw]
-        font-black
-        uppercase
-        leading-[0.82]
-        tracking-[-0.035em]
-        md:text-[14.5vw]
-      "
-    >
-      <span
-        aria-hidden="true"
-        className="
-          invisible
-          col-start-1
-          row-start-1
-          whitespace-nowrap
-        "
-      >
-        {from}
-      </span>
-
-      <span
-        aria-hidden="true"
-        className="
-          invisible
-          col-start-1
-          row-start-1
-          whitespace-nowrap
-        "
-      >
-        {to}
-      </span>
-
-      <h1
-        aria-label={to}
-        className="
-          pointer-events-none
-          absolute
-          inset-0
-          m-0
-        "
-      >
-        {/* STUDIO */}
-        <span
-          aria-hidden="true"
-          className="
-            absolute
-            left-[0.02em]
-            top-[0.1em]
-            inline-flex
-            whitespace-nowrap
-            leading-[0.82]
-            tracking-[-0.035em]
-          "
-        >
-          {fromLetters.map((letter, index) => {
-            const movesUp = index % 2 === 0;
-            const exitY = movesUp ? "-140%" : "140%";
-            const delay = TITLE_MORPH_DELAY + index * morphStagger;
-
-            return (
-              <motion.span
-                key={`from-${letter}-${index}`}
-                initial={{ y: "0%" }}
-                animate={{ y: exitY }}
-                transition={{
-                  duration: TITLE_MORPH_DURATION,
-                  delay,
-                  ease: letterEase,
-                }}
-                className="
-                  inline-block
-                  shrink-0
-                  will-change-transform
-                "
-              >
-                {displayLetter(letter)}
-              </motion.span>
-            );
-          })}
-        </span>
-
-        {/* CALERO */}
-        <span
-          aria-hidden="true"
-          className="
-            absolute
-            left-[0.02em]
-            top-[0.1em]
-            inline-flex
-            whitespace-nowrap
-            leading-[0.82]
-            tracking-[-0.035em]
-          "
-        >
-          {toLetters.map((letter, index) => {
-            const movesUp = index % 2 === 0;
-            const startY = movesUp ? "140%" : "-140%";
-            const delay = TITLE_MORPH_DELAY + index * morphStagger;
-
-            return (
-              <motion.span
-                key={`to-${letter}-${index}`}
-                initial={{ y: startY }}
-                animate={{ y: "0%" }}
-                transition={{
-                  duration: TITLE_MORPH_DURATION,
-                  delay,
-                  ease: letterEase,
-                }}
-                className="
-                  inline-block
-                  shrink-0
-                  will-change-transform
-                "
-              >
-                {displayLetter(letter)}
-              </motion.span>
-            );
-          })}
-        </span>
-      </h1>
-    </div>
-  );
-}
-
-function displayLetter(letter: string) {
-  return letter === " " ? "\u00A0" : letter;
 }
 
 function HeroImage({
@@ -653,7 +507,7 @@ function HeroImage({
       }}
       transition={{
         duration: 1.25,
-        delay: 0.82 + index * 0.12,
+        delay: 0.2 + index * 0.12,
         ease: imageEase,
       }}
       className="origin-bottom"

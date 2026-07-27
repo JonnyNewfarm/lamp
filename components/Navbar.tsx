@@ -1,4 +1,3 @@
-// components/Navbar.tsx
 "use client";
 
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
@@ -7,11 +6,13 @@ import { useRef, useState } from "react";
 
 import CartButton from "./cart/CartButton";
 import NavigationLink from "./NavigationLink";
+import CaleroLogo from "./navbar/CaleroLogo";
 
 const Navbar = () => {
   const { scrollY } = useScroll();
 
   const [isNavigationVisible, setIsNavigationVisible] = useState(true);
+
   const previousScrollY = useRef(0);
 
   useMotionValueEvent(scrollY, "change", (currentScrollY) => {
@@ -33,13 +34,19 @@ const Navbar = () => {
   });
 
   return (
-    <header className="fixed left-0 top-0 z-50 w-full px-4 py-4 text-white mix-blend-difference md:px-8 md:py-6">
+    <header className="fixed left-0 text-white mix-blend-difference top-0 z-50 w-full px-4 py-4 md:px-8 md:py-6">
       <nav className="flex items-start justify-between">
         <Link
           href="/"
-          className="text-xl font-black uppercase leading-none tracking-[-0.05em] md:text-2xl"
+          aria-label="Calero home"
+          className="
+            flex
+            flex-col
+            items-center
+            
+          "
         >
-          Calero
+          <CaleroLogo className="h-12 w-12 md:h-14 md:w-14" />
         </Link>
 
         <motion.div
@@ -52,12 +59,23 @@ const Navbar = () => {
             duration: 0.5,
             ease: [0.76, 0, 0.24, 1],
           }}
-          className="flex flex-col items-end gap-y-1.5 text-right text-base font-black uppercase leading-[0.95] tracking-[-0.04em] md:text-xl"
+          className="
+            flex
+            flex-col
+            items-end
+            gap-y-1.5
+            text-right
+            text-base
+            font-black
+            uppercase
+            leading-[0.95]
+            tracking-[-0.04em]
+            
+            md:text-xl
+          "
         >
           <NavigationLink href="/">Home</NavigationLink>
-
           <NavigationLink href="/shop">Shop</NavigationLink>
-
           <NavigationLink href="/contact">Contact</NavigationLink>
 
           <CartButton />

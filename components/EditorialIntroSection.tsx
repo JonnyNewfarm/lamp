@@ -24,19 +24,6 @@ export default function EditorialTextAssembleSection() {
       <div className="relative z-20 grid min-h-[78vh] grid-cols-1 content-between gap-14 md:grid-cols-12">
         <div className="md:col-span-12">
           <div className="grid grid-cols-1 gap-8 pt-12 md:grid-cols-12 md:pt-16">
-            <motion.p
-              initial={{ y: 28, opacity: 0 }}
-              animate={isInView ? { y: 0, opacity: 1 } : { y: 28, opacity: 0 }}
-              transition={{
-                duration: 0.95,
-                delay: 0.12,
-                ease,
-              }}
-              className="max-w-[260px] text-sm font-black uppercase leading-[0.9] tracking-[-0.06em] text-[#161310]/60 md:col-span-3 md:text-base"
-            >
-              Before the product comes the atmosphere.
-            </motion.p>
-
             <motion.div
               initial={{ y: 28, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : { y: 28, opacity: 0 }}
@@ -133,7 +120,7 @@ function AssembleLine({
 
   return (
     <div className="group relative -mb-[0.05em] overflow-hidden md:-mb-[0.075em]">
-      <h2 className="relative flex justify-start whitespace-nowrap text-[clamp(2.7rem,9.4vw,11rem)] font-black uppercase leading-[0.82] tracking-[-0.035em] text-[#28311f] md:text-[clamp(2.3rem,9.6vw,11.2rem)]">
+      <h2 className="relative flex justify-start whitespace-nowrap text-[clamp(2.4rem,9.4vw,11rem)] font-black uppercase leading-[0.82] tracking-[-0.035em] text-[#28311f] md:text-[clamp(1.2rem,7.5vw,9rem)]">
         {characters.map((char, charIndex) => {
           const isSpace = char === " ";
 

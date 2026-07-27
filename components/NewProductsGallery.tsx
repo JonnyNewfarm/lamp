@@ -405,9 +405,9 @@ export default function NewProductsGallery({
                 uppercase
                 leading-[0.85]
                 tracking-[-0.06em]
-                sm:text-[48px]
-                md:text-[64px]
-                lg:text-[82px]
+                sm:text-[44px]
+                md:text-[50px]
+                lg:text-[60px]
               "
             >
               Recently <br /> added
@@ -468,7 +468,7 @@ export default function NewProductsGallery({
                     transformOrigin,
                   }}
                 >
-                  <span className="pb-1 text-lg font-bold uppercase tracking-[0.08em]">
+                  <span className="pb-1 text-lg  uppercase tracking-[0.08em]">
                     {displayNumber}
                   </span>
 
@@ -510,7 +510,7 @@ export default function NewProductsGallery({
                     />
 
                     <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-3 text-white mix-blend-difference">
-                      <span className="text-[10px] font-black uppercase md:hidden">
+                      <span className="text-[10px] uppercase md:hidden">
                         {product.number}
                       </span>
 
@@ -548,14 +548,12 @@ export default function NewProductsGallery({
                     </p>
                   </div>
 
-                  <div className="hidden justify-between pt-2 md:flex">
-                    <span className="flex flex-col text-lg font-bold tracking-[0.055em]">
-                      <span className="text-sm opacity-80">Category:</span>
+                  <div className="hidden justify-between pt-3 md:flex">
+                    <span className="flex flex-col text-sm md:text-lg font-bold tracking-[0.055em]">
                       {product.category}
                     </span>
 
-                    <span className="flex flex-col text-lg font-bold tracking-[0.08em]">
-                      <span className="text-sm opacity-80">Price:</span>
+                    <span className="flex flex-col text-xs md:text-sm font-bold tracking-[0.08em]">
                       {formatPrice(product.price)}
                     </span>
                   </div>
