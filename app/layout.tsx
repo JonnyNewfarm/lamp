@@ -5,7 +5,6 @@ import Script from "next/script";
 import "./globals.css";
 
 import Navbar from "@/components/Navbar";
-import NavbarMobile from "@/components/NavbarMobile";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/components/cart/CartProvider";
 import CartDrawer from "@/components/cart/CartDrawer";
@@ -13,15 +12,59 @@ import CartDrawer from "@/components/cart/CartDrawer";
 const mont = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const migha = localFont({
+const nohemi = localFont({
   src: [
     {
-      path: "../public/fonts/Migha-MediumExpanded.otf",
+      path: "../public/fonts/Nohemi-Thin.woff2",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Nohemi-ExtraLight.woff2",
+      weight: "200",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Nohemi-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Nohemi-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Nohemi-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Nohemi-SemiBold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Nohemi-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Nohemi-ExtraBold.woff2",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Nohemi-Black.woff2",
+      weight: "900",
+      style: "normal",
     },
   ],
-  variable: "--font-migha",
+  variable: "--font-nohemi",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -39,7 +82,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${mont.variable} ${migha.variable}`}>
+      <body
+        className={`${nohemi.className} ${nohemi.variable} ${mont.variable}`}
+      >
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-18147507684"
           strategy="afterInteractive"

@@ -48,7 +48,7 @@ export default function EditorialTextAssembleSection() {
               }}
               className="hidden md:col-span-3 md:col-start-10 md:block"
             >
-              <p className="text-right text-sm font-medium leading-[1.18] tracking-[-0.045em] text-[#161310]/45">
+              <p className="text-right text-sm font-medium leading-[1.18] tracking-[-0.045em] text-[#161310]/80 md:text-md">
                 Lighting and objects selected for rooms that feel slower,
                 softer, and more intentional.
               </p>
@@ -70,33 +70,6 @@ export default function EditorialTextAssembleSection() {
         </div>
 
         <div className="grid grid-cols-1 gap-10 md:col-span-12 md:grid-cols-12 md:items-end">
-          <motion.p
-            initial={{
-              y: 34,
-              opacity: 0,
-            }}
-            animate={
-              isInView
-                ? {
-                    y: 0,
-                    opacity: 1,
-                  }
-                : {
-                    y: 34,
-                    opacity: 0,
-                  }
-            }
-            transition={{
-              duration: 1,
-              delay: 1.12,
-              ease,
-            }}
-            className="max-w-[520px] text-[clamp(1.25rem,2.2vw,2.4rem)]  leading-[0.95] tracking-[-0.06em] text-[#161310]/85 md:col-span-6"
-          >
-            A compact edit of pieces made to soften the room, warm the corners,
-            and keep the atmosphere still.
-          </motion.p>
-
           <motion.div
             initial={{
               y: 34,
@@ -118,23 +91,71 @@ export default function EditorialTextAssembleSection() {
               delay: 1.24,
               ease,
             }}
-            className="flex flex-col gap-5 md:col-span-4 md:col-start-9 md:items-end"
+            className="flex flex-col items-end gap-5 md:col-span-4 md:col-start-9"
           >
             <Link
               href="/shop"
-              className="group relative inline-flex h-12 w-fit items-center overflow-hidden border border-[#161310] px-7 text-xs font-black uppercase tracking-[-0.045em] text-[#161310]"
+              className="
+                group
+                inline-flex
+                items-center
+                gap-4
+                text-[28px]
+                font-bold
+                uppercase
+                leading-none
+                tracking-[-0.01em]
+                md:text-[42px]
+              "
             >
-              <span className="absolute inset-0 translate-y-full bg-[#161310] transition-transform duration-300 ease-out group-hover:translate-y-0" />
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 52 18"
+                fill="none"
+                className="h-[18px] w-[52px] overflow-visible"
+              >
+                <path
+                  d="M51 9H6"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="square"
+                />
 
-              <span className="relative z-10 transition-colors duration-300 group-hover:text-[#ecebeb]">
-                View products
-              </span>
+                <path
+                  d="M6 9L13 2"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="square"
+                  pathLength="1"
+                  className="
+                    [stroke-dasharray:1]
+                    [stroke-dashoffset:1]
+                    transition-[stroke-dashoffset]
+                    duration-300
+                    ease-[cubic-bezier(0.16,1,0.3,1)]
+                    group-hover:[stroke-dashoffset:0]
+                  "
+                />
+
+                <path
+                  d="M6 9L13 16"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="square"
+                  pathLength="1"
+                  className="
+                    [stroke-dasharray:1]
+                    [stroke-dashoffset:1]
+                    transition-[stroke-dashoffset]
+                    duration-300
+                    ease-[cubic-bezier(0.16,1,0.3,1)]
+                    group-hover:[stroke-dashoffset:0]
+                  "
+                />
+              </svg>
+
+              <span>View all</span>
             </Link>
-
-            <div className="flex items-center gap-4 text-sm font-medium tracking-[-0.04em] text-[#161310]/45">
-              <span className="h-px w-16 bg-[#161310]/45" />
-              <span>New pieces next</span>
-            </div>
           </motion.div>
         </div>
       </div>
@@ -181,10 +202,9 @@ function AssembleLine({
           origin-bottom-left
           whitespace-nowrap
           text-[clamp(2.4rem,9.4vw,11rem)]
-          font-semibold
-          uppercase
-          leading-[0.82]
-          tracking-[-0.035em]
+          font-normal
+          leading-[0.9]
+          tracking-[-0.015em]
           text-[#28311f]
           will-change-transform
           md:text-[clamp(1.2rem,7.5vw,9rem)]

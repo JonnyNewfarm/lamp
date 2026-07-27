@@ -49,7 +49,7 @@ export default function LightingByMood() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-5xl text-[14vw] text-[#28311f] uppercase font-black leading-[0.9] tracking-[-0.035em] md:text-[6vw]"
+              className="max-w-5xl text-[14vw] text-[#28311f] uppercase font-bold leading-[0.9] tracking-[-0.01em] md:text-[6vw]"
             >
               Find the right light for you.
             </motion.h2>
@@ -79,7 +79,7 @@ export default function LightingByMood() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="group inline-flex w-fit items-center gap-3 text-xl font-black"
+                  className="group inline-flex w-fit items-center gap-3 text-xl font-semibold"
                 >
                   <span>{`For ${item.label}`}</span>
 

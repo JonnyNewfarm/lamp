@@ -96,7 +96,7 @@ export default function CartDrawer() {
 
         {items.length === 0 ? (
           <div className="flex h-[calc(100dvh-96px)] flex-col items-center justify-center px-6 text-center">
-            <h2 className="text-5xl font-black tracking-[-0.07em]">
+            <h2 className="text-5xl font-semibold tracking-[-0.01em]">
               Your cart is empty.
             </h2>
 

@@ -66,10 +66,10 @@ const Navbar = () => {
             gap-y-1.5
             text-right
             text-base
-            font-black
+            font-semibold
             uppercase
             leading-[0.95]
-            tracking-[-0.04em]
+            tracking-[-0.01em]
             
             md:text-xl
           "

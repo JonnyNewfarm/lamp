@@ -77,7 +77,7 @@ export default function ContactPage() {
     <main className="min-h-screen bg-[#ecebeb] text-[#161310]">
       <ScrollSection>
         <section className="px-4 pt-36 md:px-9">
-          <h1 className="mt-16 text-[19vw] font-black uppercase leading-[0.76] tracking-[-0.038em] sm:text-[17vw] md:mt-24 md:text-[13vw] lg:text-[11.5vw]">
+          <h1 className="mt-16 text-[19vw] font-semibold uppercase leading-[0.76] tracking-[-0.01em] sm:text-[17vw] md:mt-24 md:text-[13vw] lg:text-[11.5vw]">
             Get In Touch
           </h1>
 
@@ -87,7 +87,7 @@ export default function ContactPage() {
                 Get in touch
               </p>
 
-              <h2 className="mt-6 max-w-sm text-[32px] font-black uppercase leading-[0.95] tracking-[-0.025em] md:text-[42px]">
+              <h2 className="mt-6 max-w-sm text-[32px] font-semibold uppercase leading-[0.95] tracking-[-0.025em] md:text-[42px]">
                 How can we help?
               </h2>
             </div>
@@ -101,7 +101,7 @@ export default function ContactPage() {
 
               <a
                 href="mailto:support@calero.studio"
-                className="group mt-10 inline-flex items-center gap-4 text-[6.5vw] font-black uppercase leading-[0.9] tracking-[-0.03em] transition-opacity hover:opacity-55 sm:text-[5vw] md:mt-14 md:text-[3.5vw] lg:text-[3vw]"
+                className="group mt-10 inline-flex items-center gap-4 text-[6.5vw] font-semibold uppercase leading-[0.9] tracking-[-0.01em] transition-opacity hover:opacity-55 sm:text-[5vw] md:mt-14 md:text-[3.5vw] lg:text-[3vw]"
               >
                 support@calero.studio
                 <svg
@@ -129,7 +129,7 @@ export default function ContactPage() {
           <div className="mt-24 grid gap-20 md:mt-36 md:grid-cols-12 md:gap-8">
             <section className="md:col-span-5">
               <div className="flex items-start justify-between">
-                <h2 className="text-[32px] font-black uppercase leading-[0.95] tracking-[-0.025em] md:text-[42px]">
+                <h2 className="text-[32px] font-semibold uppercase leading-[0.95] tracking-[-0.025em] md:text-[42px]">
                   Support
                 </h2>
 
@@ -190,7 +190,7 @@ export default function ContactPage() {
 
             <section className="md:col-span-5 md:col-start-8">
               <div className="flex items-start justify-between">
-                <h2 className="text-[32px] font-black uppercase leading-[0.95] tracking-[-0.025em] md:text-[42px]">
+                <h2 className="text-[32px] font-semibold uppercase leading-[0.95] tracking-[-0.01em] md:text-[42px]">
                   Studio
                 </h2>
 
@@ -244,7 +244,7 @@ export default function ContactPage() {
                   More information
                 </p>
 
-                <h2 className="mt-5 text-[32px] font-black uppercase leading-[0.95] tracking-[-0.025em] md:text-[42px]">
+                <h2 className="mt-5 text-[32px] font-semibold uppercase leading-[0.95] tracking-[-0.01em] md:text-[42px]">
                   Helpful pages
                 </h2>
               </div>
@@ -257,7 +257,7 @@ export default function ContactPage() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="group inline-flex items-center gap-2 text-lg font-bold uppercase tracking-[-0.01em] transition-opacity hover:opacity-50 md:text-xl"
+                    className="group inline-flex items-center gap-2 text-lg font-semibold uppercase tracking-[-0.01em] transition-opacity hover:opacity-50 md:text-xl"
                   >
                     {link.label}
 

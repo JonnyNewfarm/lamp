@@ -60,7 +60,7 @@ const Footer = () => {
             </span>
           </Link>
 
-          <p className="mt-8 max-w-[560px] text-[clamp(1.2rem,2vw,2.6rem)]   leading-[0.9] tracking-[-0.065em] text-[#161310]">
+          <p className="mt-8 max-w-[560px] text-[clamp(1.2rem,2vw,2.6rem)]   leading-[0.9] tracking-[-0.01em] text-[#161310]">
             Minimal lighting curated for calm interiors, warm corners and
             everyday atmosphere.
           </p>
@@ -146,7 +146,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <p className="mb-5 text-[0.62rem] font-black uppercase tracking-[0.18em] text-[#161310]/60">
+      <p className="mb-5 text-[0.62rem] font-black uppercase tracking-[0.1em] text-[#161310]/60">
         {title}
       </p>
 
@@ -155,7 +155,7 @@ function FooterColumn({
           <Link
             key={link.href}
             href={link.href}
-            className="group flex items-center justify-between border-b border-[#161310]/15 py-3 text-sm font-black uppercase tracking-[-0.035em] text-[#161310]/90 transition-colors duration-200 hover:text-[#161310]"
+            className="group flex items-center justify-between border-b border-[#161310]/15 py-3 text-sm font-black uppercase tracking-[-0.01em] text-[#161310]/90 transition-colors duration-200 hover:text-[#161310]"
           >
             <span>{link.label}</span>
 

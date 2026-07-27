@@ -581,7 +581,7 @@ export default function ProductDetailsClient({
           </div>
 
           <div className="md:col-span-8">
-            <h2 className="max-w-4xl text-5xl font-light leading-[0.95] tracking-[-0.07em] md:text-7xl">
+            <h2 className="max-w-4xl text-5xl font-light leading-[0.95] tracking-[-0.02em] md:text-7xl">
               A quiet object for everyday atmosphere.
             </h2>
 

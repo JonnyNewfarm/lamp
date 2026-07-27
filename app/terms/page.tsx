@@ -218,9 +218,8 @@ export default function TermsPage() {
               Calero Studio / Terms
             </p>
 
-            <h1 className="mt-16 text-[19vw] font-black uppercase leading-[0.76] tracking-[-0.038em] sm:text-[17vw] md:mt-24 md:text-[13vw] lg:text-[11.5vw]">
-              Terms of
-              <span className="block">Service</span>
+            <h1 className="mt-16 text-[19vw] font-semibold uppercase leading-[0.76] tracking-[-0.01em] sm:text-[17vw] md:mt-24 md:text-[13vw] lg:text-[11.5vw]">
+              Terms
             </h1>
 
             <div className="mt-20 grid gap-8 md:mt-28 md:grid-cols-12">
@@ -229,7 +228,7 @@ export default function TermsPage() {
                   Store conditions
                 </p>
 
-                <h2 className="mt-6 max-w-sm text-[32px] font-black uppercase leading-[0.95] tracking-[-0.025em] md:text-[42px]">
+                <h2 className="mt-6 max-w-sm text-[32px] font-semibold uppercase leading-[0.95] tracking-[-0.01em] md:text-[42px]">
                   The terms behind every order
                 </h2>
               </div>
@@ -269,7 +268,7 @@ export default function TermsPage() {
                 Terms support
               </p>
 
-              <h2 className="mt-6 max-w-sm text-[32px] font-black uppercase leading-[0.95] tracking-[-0.025em] md:text-[42px]">
+              <h2 className="mt-6 max-w-sm text-[32px] font-semibold uppercase leading-[0.95] tracking-[-0.01em] md:text-[42px]">
                 Something unclear?
               </h2>
             </div>
@@ -282,7 +281,7 @@ export default function TermsPage() {
 
               <Link
                 href="/contact"
-                className="group mt-10 inline-flex items-center gap-4 text-[9vw] font-black uppercase leading-[0.85] tracking-[-0.035em] transition-opacity hover:opacity-55 sm:text-[7vw] md:mt-14 md:text-[4vw] lg:text-[3.5vw]"
+                className="group mt-10 inline-flex items-center gap-4 text-[9vw] font-black uppercase leading-[0.85] tracking-[-0.01em] transition-opacity hover:opacity-55 sm:text-[7vw] md:mt-14 md:text-[4vw] lg:text-[3.5vw]"
               >
                 Contact us
                 <svg
@@ -315,7 +314,7 @@ export default function TermsPage() {
 function TermsHighlight({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-[10px] font-bold uppercase tracking-[0.07em] opacity-40">
+      <p className="text-[10px] font-bold uppercase tracking-[0.01em] opacity-40">
         {label}
       </p>
 
@@ -336,11 +335,11 @@ function PolicySection({
   return (
     <section className="grid gap-8 md:grid-cols-12">
       <div className="flex items-start justify-between md:col-span-4 md:block">
-        <h2 className="max-w-sm text-[32px] font-black uppercase leading-[0.95] tracking-[-0.025em] md:text-[42px]">
+        <h2 className="max-w-sm text-[32px] font-semibold uppercase leading-[0.95] tracking-[-0.01em] md:text-[42px]">
           {title}
         </h2>
 
-        <span className="text-[10px] font-bold tracking-[0.04em] opacity-35 md:mt-6 md:block">
+        <span className="text-[10px] font-bold tracking-[0.01em] opacity-35 md:mt-6 md:block">
           {number}
         </span>
       </div>

@@ -53,11 +53,18 @@ export default async function NewProducts() {
       price: product.price,
       category: product.category?.name ?? "Product",
       image,
+
+      variants: product.variants.map((variant) => ({
+        id: variant.id,
+        name: variant.name,
+        color: variant.color,
+        colorHex: variant.colorHex,
+      })),
     };
   });
 
   return (
-    <section id="new-products" className="bg-[#ecebeb] noise-bg text-[#161310]">
+    <section id="new-products" className="noise-bg bg-[#ecebeb] text-[#161310]">
       <NewProductsGallery products={productItems} />
     </section>
   );

@@ -331,7 +331,7 @@ export default function CaleroHero() {
             font-black
             uppercase
             leading-none
-            tracking-[-0.055em]
+            tracking-[-0.01em]
             text-white
             mix-blend-difference
           "
@@ -374,10 +374,10 @@ export default function CaleroHero() {
                     origin-bottom-left
                     whitespace-nowrap
                     text-[15.5vw]
-                    font-black
+                    font-bold
                     uppercase
-                    leading-[0.82]
-                    tracking-[-0.035em]
+                    leading-[0.9]
+                    tracking-[-0.0em]
                     md:text-[14.5vw]
                   "
                 >
@@ -395,11 +395,11 @@ export default function CaleroHero() {
             animate="visible"
             className="mb-2 flex w-full flex-row items-center justify-end"
           >
-            <div className="flex space-x-30">
+            <div className="flex w-full justify-between">
               <div className="overflow-hidden pb-[0.08em]">
                 <motion.h1
                   variants={labelRevealVariants}
-                  className="origin-bottom-left hidden md:block text-xs font-semibold uppercase"
+                  className="origin-bottom-left text-xs font-normal uppercase"
                 >
                   Calm by design
                 </motion.h1>
@@ -561,28 +561,6 @@ function HeroImage({
             draggable={false}
           />
         </motion.div>
-
-        <motion.div
-          initial={{ x: "-105%" }}
-          animate={{ x: "105%" }}
-          transition={{
-            duration: 1.15,
-            delay: 1 + index * 0.12,
-            ease: imageEase,
-          }}
-          className="
-            pointer-events-none
-            absolute
-            inset-y-0
-            z-20
-            w-1/2
-            bg-gradient-to-r
-            from-transparent
-            via-white/30
-            to-transparent
-            blur-xl
-          "
-        />
 
         <div
           className="

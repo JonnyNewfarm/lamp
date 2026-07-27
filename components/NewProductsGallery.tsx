@@ -11,6 +11,13 @@ import {
   useState,
 } from "react";
 
+type ProductVariantItem = {
+  id: string;
+  name: string;
+  color?: string | null;
+  colorHex?: string | null;
+};
+
 type ProductItem = {
   id: string;
   number: string;
@@ -19,6 +26,7 @@ type ProductItem = {
   price: number;
   category: string;
   image: string;
+  variants: ProductVariantItem[];
 };
 
 type NewProductsGalleryProps = {
@@ -56,6 +64,22 @@ const productOrigins = [
 
 function cleanTitle(title: string) {
   return title.split(/[–-]/)[0].trim();
+}
+
+function getVariantColorKey(variant: ProductVariantItem) {
+  const colorHex = variant.colorHex?.trim().toLowerCase();
+
+  if (colorHex) {
+    return colorHex;
+  }
+
+  const colorName = variant.color?.trim().toLowerCase();
+
+  if (colorName) {
+    return colorName;
+  }
+
+  return null;
 }
 
 export default function NewProductsGallery({
@@ -330,7 +354,7 @@ export default function NewProductsGallery({
             rotate-90
             whitespace-nowrap
             text-[10px]
-            font-black
+            font-normal
             uppercase
             tracking-[0.2em]
             text-white
@@ -388,7 +412,7 @@ export default function NewProductsGallery({
             font-black
             uppercase
             leading-[0.9]
-            tracking-[-0.055em]
+            tracking-[-0.01em]
           "
         >
           {hoverText}
@@ -401,10 +425,10 @@ export default function NewProductsGallery({
             <h2
               className="
                 text-[36px]
-                font-black
+                font-bold
                 uppercase
                 leading-[0.85]
-                tracking-[-0.06em]
+                tracking-[-0.01em]
                 sm:text-[44px]
                 md:text-[50px]
                 lg:text-[60px]
@@ -454,6 +478,25 @@ export default function NewProductsGallery({
             const transformOrigin =
               productOrigins[index % productOrigins.length];
 
+            const variants = product.variants ?? [];
+
+            const uniqueColors = Array.from(
+              variants
+                .reduce<Map<string, ProductVariantItem>>((map, variant) => {
+                  const colorKey = getVariantColorKey(variant);
+
+                  if (colorKey && !map.has(colorKey)) {
+                    map.set(colorKey, variant);
+                  }
+
+                  return map;
+                }, new Map())
+                .values(),
+            );
+
+            const visibleColors = uniqueColors.slice(0, 4);
+            const hiddenColorCount = uniqueColors.length - visibleColors.length;
+
             return (
               <article
                 key={product.id}
@@ -468,7 +511,7 @@ export default function NewProductsGallery({
                     transformOrigin,
                   }}
                 >
-                  <span className="pb-1 text-lg  uppercase tracking-[0.08em]">
+                  <span className="pb-1 text-lg uppercase tracking-[0.08em]">
                     {displayNumber}
                   </span>
 
@@ -499,14 +542,14 @@ export default function NewProductsGallery({
                       alt={title}
                       draggable={false}
                       className="
-    block
-    h-auto
-    max-w-full
-    transition-transform
-    duration-700
-    ease-[cubic-bezier(0.16,1,0.3,1)]
-    group-hover:scale-[1.035]
-  "
+                        block
+                        h-auto
+                        max-w-full
+                        transition-transform
+                        duration-700
+                        ease-[cubic-bezier(0.16,1,0.3,1)]
+                        group-hover:scale-[1.035]
+                      "
                     />
 
                     <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-3 text-white mix-blend-difference">
@@ -549,85 +592,56 @@ export default function NewProductsGallery({
                   </div>
 
                   <div className="hidden justify-between pt-3 md:flex">
-                    <span className="flex flex-col text-sm md:text-lg font-bold tracking-[0.055em]">
+                    <span className="flex flex-col text-sm font-bold tracking-[0.055em] md:text-lg">
                       {product.category}
                     </span>
 
-                    <span className="flex flex-col text-xs md:text-sm font-bold tracking-[0.08em]">
+                    <span className="flex flex-col text-xs font-bold tracking-[0.08em] md:text-sm">
                       {formatPrice(product.price)}
                     </span>
                   </div>
+
+                  {variants.length > 0 && (
+                    <div className="mt-3 flex items-center justify-between gap-3">
+                      <span className="text-[9px] font-bold uppercase tracking-[0.08em] opacity-50 md:text-[10px]">
+                        {variants.length}{" "}
+                        {variants.length === 1 ? "variant" : "variants"}
+                      </span>
+
+                      {visibleColors.length > 0 && (
+                        <div className="flex items-center gap-1.5">
+                          {visibleColors.map((variant) => {
+                            const colorKey = getVariantColorKey(variant);
+
+                            return (
+                              <span
+                                key={colorKey}
+                                title={variant.color || variant.name}
+                                className="h-2.5 w-2.5 border border-[#161310]/20 md:h-3 md:w-3"
+                                style={{
+                                  backgroundColor:
+                                    variant.colorHex ||
+                                    variant.color ||
+                                    "#d8d1c7",
+                                }}
+                              />
+                            );
+                          })}
+
+                          {hiddenColorCount > 0 && (
+                            <span className="ml-0.5 text-[9px] font-bold opacity-40 md:text-[10px]">
+                              +{hiddenColorCount}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </article>
             );
           })}
         </div>
-      </div>
-
-      <div className="px-4 md:px-9">
-        <Link
-          href="/shop"
-          className="
-            group
-            inline-flex
-            items-center
-            gap-4
-            text-[28px]
-            font-black
-            uppercase
-            leading-none
-            tracking-[-0.055em]
-            md:text-[42px]
-          "
-        >
-          <span>View all products</span>
-
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 52 18"
-            fill="none"
-            className="h-[18px] w-[52px] overflow-visible"
-          >
-            <path
-              d="M1 9H46"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="square"
-            />
-
-            <path
-              d="M46 9L39 2"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="square"
-              pathLength="1"
-              className="
-                [stroke-dasharray:1]
-                [stroke-dashoffset:1]
-                transition-[stroke-dashoffset]
-                duration-300
-                ease-[cubic-bezier(0.16,1,0.3,1)]
-                group-hover:[stroke-dashoffset:0]
-              "
-            />
-
-            <path
-              d="M46 9L39 16"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="square"
-              pathLength="1"
-              className="
-                [stroke-dasharray:1]
-                [stroke-dashoffset:1]
-                transition-[stroke-dashoffset]
-                duration-300
-                ease-[cubic-bezier(0.16,1,0.3,1)]
-                group-hover:[stroke-dashoffset:0]
-              "
-            />
-          </svg>
-        </Link>
       </div>
     </section>
   );

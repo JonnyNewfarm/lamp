@@ -249,7 +249,7 @@ export default async function ShopPage({
     <main className="min-h-screen bg-[#ecebeb] px-6 py-24 text-[#161310] md:px-12">
       <ScrollSection>
         <section className="mb-12  pb-10">
-          <h1 className="mt-4 max-w-5xl font-semibold text-[17vw] uppercase leading-[0.85] tracking-[-0.065em] md:text-[6vw]">
+          <h1 className="mt-4 max-w-5xl font-normal text-[17vw] uppercase leading-[0.85] tracking-[-0.01em] md:text-[6vw]">
             Shop lighting
           </h1>
 
