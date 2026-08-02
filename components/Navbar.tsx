@@ -8,6 +8,8 @@ import CartButton from "./cart/CartButton";
 import NavigationLink from "./NavigationLink";
 import CaleroLogo from "./navbar/CaleroLogo";
 
+const NAVIGATION_EASE = [0.76, 0, 0.24, 1] as const;
+
 const Navbar = () => {
   const { scrollY } = useScroll();
 
@@ -34,7 +36,21 @@ const Navbar = () => {
   });
 
   return (
-    <header className="fixed left-0 text-white mix-blend-difference top-0 z-50 w-full px-4 py-4 md:px-8 md:py-6">
+    <header
+      className="
+        fixed
+        left-0
+        top-0
+        z-50
+        w-full
+        px-4
+        py-4
+        text-white
+        mix-blend-difference
+        md:px-8
+        md:py-6
+      "
+    >
       <nav className="flex items-start justify-between">
         <Link
           href="/"
@@ -43,7 +59,6 @@ const Navbar = () => {
             flex
             flex-col
             items-center
-            
           "
         >
           <CaleroLogo className="h-12 w-12 md:h-14 md:w-14" />
@@ -57,7 +72,7 @@ const Navbar = () => {
           }}
           transition={{
             duration: 0.5,
-            ease: [0.76, 0, 0.24, 1],
+            ease: NAVIGATION_EASE,
           }}
           className="
             flex
@@ -70,12 +85,13 @@ const Navbar = () => {
             uppercase
             leading-[0.95]
             tracking-[-0.01em]
-            
             md:text-xl
           "
         >
           <NavigationLink href="/">Home</NavigationLink>
+
           <NavigationLink href="/shop">Shop</NavigationLink>
+
           <NavigationLink href="/contact">Contact</NavigationLink>
 
           <CartButton />

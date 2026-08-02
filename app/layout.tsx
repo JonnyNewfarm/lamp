@@ -9,61 +9,56 @@ import Footer from "@/components/Footer";
 import { CartProvider } from "@/components/cart/CartProvider";
 import CartDrawer from "@/components/cart/CartDrawer";
 
-const mont = Montserrat({
+const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
   display: "swap",
 });
 
-const nohemi = localFont({
+const merchant = localFont({
   src: [
     {
-      path: "../public/fonts/Nohemi-Thin.woff2",
+      path: "../public/fonts/Merchant-Thin.woff2",
       weight: "100",
       style: "normal",
     },
     {
-      path: "../public/fonts/Nohemi-ExtraLight.woff2",
+      path: "../public/fonts/Merchant-ExtraLight.woff2",
       weight: "200",
       style: "normal",
     },
     {
-      path: "../public/fonts/Nohemi-Light.woff2",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/Nohemi-Regular.woff2",
+      path: "../public/fonts/Merchant-Regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../public/fonts/Nohemi-Medium.woff2",
+      path: "../public/fonts/Merchant-Medium.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../public/fonts/Nohemi-SemiBold.woff2",
+      path: "../public/fonts/Merchant-SemiBold.woff2",
       weight: "600",
       style: "normal",
     },
     {
-      path: "../public/fonts/Nohemi-Bold.woff2",
+      path: "../public/fonts/Merchant-Bold.woff2",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../public/fonts/Nohemi-ExtraBold.woff2",
+      path: "../public/fonts/Merchant-ExtraBold.woff2",
       weight: "800",
       style: "normal",
     },
     {
-      path: "../public/fonts/Nohemi-Black.woff2",
+      path: "../public/fonts/Merchant-Black.woff2",
       weight: "900",
       style: "normal",
     },
   ],
-  variable: "--font-nohemi",
+  variable: "--font-merchant",
   display: "swap",
 });
 
@@ -77,13 +72,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
       <body
-        className={`${nohemi.className} ${nohemi.variable} ${mont.variable}`}
+        className={`
+          ${montserrat.className}
+          ${montserrat.variable}
+          ${merchant.variable}
+        `}
       >
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-18147507684"
@@ -96,9 +95,13 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'AW-18147507684');
+
+              function gtag() {
+                window.dataLayer.push(arguments);
+              }
+
+              gtag("js", new Date());
+              gtag("config", "AW-18147507684");
             `,
           }}
         />
@@ -108,17 +111,39 @@ export default function RootLayout({
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              !function(f,b,e,v,n,t,s)
-              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)}(window, document,'script',
-              'https://connect.facebook.net/en_US/fbevents.js');
+              !function(f,b,e,v,n,t,s) {
+                if (f.fbq) return;
 
-              fbq('init', '2145113892911426');
-              fbq('track', 'PageView');
+                n = f.fbq = function() {
+                  n.callMethod
+                    ? n.callMethod.apply(n, arguments)
+                    : n.queue.push(arguments);
+                };
+
+                if (!f._fbq) {
+                  f._fbq = n;
+                }
+
+                n.push = n;
+                n.loaded = true;
+                n.version = "2.0";
+                n.queue = [];
+
+                t = b.createElement(e);
+                t.async = true;
+                t.src = v;
+
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s);
+              }(
+                window,
+                document,
+                "script",
+                "https://connect.facebook.net/en_US/fbevents.js"
+              );
+
+              fbq("init", "2145113892911426");
+              fbq("track", "PageView");
             `,
           }}
         />
@@ -128,19 +153,34 @@ export default function RootLayout({
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity", "script", "wqte6hm8sz");
+              (function(c,l,a,r,i,t,y) {
+                c[a] = c[a] || function() {
+                  (c[a].q = c[a].q || []).push(arguments);
+                };
+
+                t = l.createElement(r);
+                t.async = 1;
+                t.src = "https://www.clarity.ms/tag/" + i;
+
+                y = l.getElementsByTagName(r)[0];
+                y.parentNode.insertBefore(t, y);
+              })(
+                window,
+                document,
+                "clarity",
+                "script",
+                "wqte6hm8sz"
+              );
             `,
           }}
         />
 
         <CartProvider>
-          <div className="relative h-full w-full">
+          <div className="relative min-h-screen w-full">
             <Navbar />
-            {children}
+
+            <main>{children}</main>
+
             <Footer />
           </div>
 

@@ -1,107 +1,65 @@
+"use client";
+
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
+
+type NavigationLinkProps = {
+  href: string;
+  children: ReactNode;
+};
 
 export default function NavigationLink({
   href,
   children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) {
+}: NavigationLinkProps) {
+  const pathname = usePathname();
+
+  const isActive =
+    href === "/"
+      ? pathname === "/"
+      : pathname === href || pathname.startsWith(`${href}/`);
+
   return (
-    <motion.div initial="idle" whileHover="hover" className="w-fit">
-      <Link href={href} className="flex items-center justify-end gap-2">
-        <svg
+    <Link
+      href={href}
+      aria-current={isActive ? "page" : undefined}
+      className={`
+        group
+        relative
+        inline-flex
+        overflow-hidden
+        pb-[5px]
+        transition-opacity
+        duration-300
+
+        ${isActive ? "opacity-100" : "opacity-60 hover:opacity-100"}
+      `}
+    >
+      <span>{children}</span>
+
+      {!isActive && (
+        <span
           aria-hidden="true"
-          viewBox="0 0 52 18"
-          fill="none"
-          className="h-[14px] w-[42px] overflow-visible md:h-[16px] md:w-[48px]"
-        >
-          <motion.path
-            d="M1 9H45"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="square"
-            variants={{
-              idle: {
-                pathLength: 0,
-                opacity: 0,
-              },
-              hover: {
-                pathLength: 1,
-                opacity: 1,
-              },
-            }}
-            transition={{
-              pathLength: {
-                duration: 0.18,
-                ease: [0.22, 1, 0.36, 1],
-              },
-              opacity: {
-                duration: 0.06,
-              },
-            }}
-          />
+          className="
+            pointer-events-none
+            absolute
+            bottom-0
+            left-0
+            h-[1px]
+            w-full
+            origin-right
+            scale-x-0
+            bg-current
+            transition-transform
+            duration-500
+            ease-[cubic-bezier(0.76,0,0.24,1)]
 
-          <motion.path
-            d="M45 9L38 2"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="square"
-            variants={{
-              idle: {
-                pathLength: 0,
-                opacity: 0,
-              },
-              hover: {
-                pathLength: 1,
-                opacity: 1,
-              },
-            }}
-            transition={{
-              pathLength: {
-                duration: 0.14,
-                delay: 0.08,
-                ease: [0.22, 1, 0.36, 1],
-              },
-              opacity: {
-                duration: 0.05,
-                delay: 0.08,
-              },
-            }}
-          />
-
-          <motion.path
-            d="M45 9L38 16"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="square"
-            variants={{
-              idle: {
-                pathLength: 0,
-                opacity: 0,
-              },
-              hover: {
-                pathLength: 1,
-                opacity: 1,
-              },
-            }}
-            transition={{
-              pathLength: {
-                duration: 0.14,
-                delay: 0.08,
-                ease: [0.22, 1, 0.36, 1],
-              },
-              opacity: {
-                duration: 0.05,
-                delay: 0.08,
-              },
-            }}
-          />
-        </svg>
-
-        <span>{children}</span>
-      </Link>
-    </motion.div>
+            group-hover:origin-left
+            group-hover:scale-x-100
+          "
+        />
+      )}
+    </Link>
   );
 }

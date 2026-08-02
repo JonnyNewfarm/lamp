@@ -90,6 +90,31 @@ export default function NewProductsGallery({
   const sectionRef = useRef<HTMLElement | null>(null);
 
   const [isSectionInView, setIsSectionInView] = useState(false);
+  const [hoverText, setHoverText] = useState("");
+  const [isHoveringImage, setIsHoveringImage] = useState(false);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const pointerPosition = useRef({
+    x: 0,
+    y: 0,
+  });
+
+  const hasPointerPosition = useRef(false);
+  const frameRef = useRef<number | null>(null);
+
+  const cursorX = useSpring(mouseX, {
+    stiffness: 220,
+    damping: 25,
+    mass: 0.35,
+  });
+
+  const cursorY = useSpring(mouseY, {
+    stiffness: 220,
+    damping: 25,
+    mass: 0.35,
+  });
 
   useEffect(() => {
     const checkSectionPosition = () => {
@@ -123,32 +148,6 @@ export default function NewProductsGallery({
       window.removeEventListener("resize", checkSectionPosition);
     };
   }, []);
-
-  const [hoverText, setHoverText] = useState("");
-  const [isHoveringImage, setIsHoveringImage] = useState(false);
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const pointerPosition = useRef({
-    x: 0,
-    y: 0,
-  });
-
-  const hasPointerPosition = useRef(false);
-  const frameRef = useRef<number | null>(null);
-
-  const cursorX = useSpring(mouseX, {
-    stiffness: 220,
-    damping: 25,
-    mass: 0.35,
-  });
-
-  const cursorY = useSpring(mouseY, {
-    stiffness: 220,
-    damping: 25,
-    mass: 0.35,
-  });
 
   const updateHoverAtPointer = useCallback(() => {
     if (!hasPointerPosition.current) {
@@ -299,10 +298,7 @@ export default function NewProductsGallery({
     }
   }
 
-  function handleImageMouseEnter(
-    event: ReactMouseEvent<HTMLAnchorElement>,
-    title: string,
-  ) {
+  function handleImageMouseEnter(event: ReactMouseEvent<HTMLAnchorElement>) {
     hasPointerPosition.current = true;
 
     pointerPosition.current = {
@@ -313,7 +309,7 @@ export default function NewProductsGallery({
     mouseX.set(event.clientX);
     mouseY.set(event.clientY);
 
-    setHoverText(title);
+    setHoverText("View lamp");
     setIsHoveringImage(true);
   }
 
@@ -407,7 +403,7 @@ export default function NewProductsGallery({
         <span
           className="
             max-w-[34vw]
-            text-left
+            text-center
             text-[3.6vw]
             font-black
             uppercase
@@ -424,9 +420,9 @@ export default function NewProductsGallery({
           <div className="relative inline-block">
             <h2
               className="
+                font-merchant
                 text-[36px]
                 font-bold
-                uppercase
                 leading-[0.85]
                 tracking-[-0.01em]
                 sm:text-[44px]
@@ -434,13 +430,14 @@ export default function NewProductsGallery({
                 lg:text-[60px]
               "
             >
-              Recently <br /> added
+              Added <br /> lately
             </h2>
 
             <span
               className="
+                font-merchant
                 absolute
-                right-0
+                -right-4
                 top-0
                 -translate-y-[115%]
                 text-[9px]
@@ -448,7 +445,7 @@ export default function NewProductsGallery({
                 uppercase
                 tracking-[0.08em]
                 opacity-90
-                md:text-[16px]
+                md:text-[14px]
               "
             >
               {String(visibleProducts.length).padStart(2, "0")}
@@ -511,7 +508,7 @@ export default function NewProductsGallery({
                     transformOrigin,
                   }}
                 >
-                  <span className="pb-1 text-lg uppercase tracking-[0.08em]">
+                  <span className="pb-1 text-lg font-merchant uppercase tracking-[0.08em]">
                     {displayNumber}
                   </span>
 
@@ -519,11 +516,9 @@ export default function NewProductsGallery({
                     href={`/products/${product.slug}`}
                     aria-label={`View ${title}`}
                     data-product-image="true"
-                    data-hover-text={title}
+                    data-hover-text="View lamp"
                     onMouseMove={handleImageMouseMove}
-                    onMouseEnter={(event) =>
-                      handleImageMouseEnter(event, title)
-                    }
+                    onMouseEnter={handleImageMouseEnter}
                     onMouseLeave={handleImageMouseLeave}
                     className="
                       group
@@ -587,13 +582,13 @@ export default function NewProductsGallery({
                         opacity-60
                       "
                     >
-                      {product.category}
+                      {title}
                     </p>
                   </div>
 
                   <div className="hidden justify-between pt-3 md:flex">
-                    <span className="flex flex-col text-sm font-bold tracking-[0.055em] md:text-lg">
-                      {product.category}
+                    <span className="flex flex-col text-sm font-bold tracking-[-0.55.em] md:text-lg">
+                      {title}
                     </span>
 
                     <span className="flex flex-col text-xs font-bold tracking-[0.08em] md:text-sm">

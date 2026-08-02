@@ -371,51 +371,51 @@ export default function CaleroHero() {
                   initial="hidden"
                   animate="visible"
                   className="
+                      font-merchant
+
                     origin-bottom-left
                     whitespace-nowrap
-                    text-[15.5vw]
-                    font-bold
-                    uppercase
+                    text-[13vw]
+                    font-normal
                     leading-[0.9]
-                    tracking-[-0.0em]
-                    md:text-[14.5vw]
+                    tracking-[-0.04em]
+                    md:text-[11.5vw]
                   "
                 >
-                  Calero
+                  Calero Studio
                 </motion.h1>
               </div>
+              <motion.div
+                variants={labelContainerVariants}
+                initial="hidden"
+                animate="visible"
+                className="mb-2 flex w-full flex-row items-center justify-end"
+              >
+                <div className="hidden flex-row-reverse w-full justify-between">
+                  <div className="overflow-hidden pb-[0.08em]">
+                    <motion.h1
+                      variants={labelRevealVariants}
+                      className="origin-bottom-left text-[11px] font-normal uppercase"
+                    >
+                      Calm by design
+                    </motion.h1>
+                  </div>
+
+                  <div className="overflow-hidden pb-[0.08em]">
+                    <motion.h1
+                      variants={labelRevealVariants}
+                      className="origin-bottom-left text-[11px] font-semibold uppercase"
+                    >
+                      Categories
+                    </motion.h1>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
 
         <div className="mt-2 w-full">
-          <motion.div
-            variants={labelContainerVariants}
-            initial="hidden"
-            animate="visible"
-            className="mb-2 flex w-full flex-row items-center justify-end"
-          >
-            <div className="flex w-full justify-between">
-              <div className="overflow-hidden pb-[0.08em]">
-                <motion.h1
-                  variants={labelRevealVariants}
-                  className="origin-bottom-left text-xs font-normal uppercase"
-                >
-                  Calm by design
-                </motion.h1>
-              </div>
-
-              <div className="overflow-hidden pb-[0.08em]">
-                <motion.h1
-                  variants={labelRevealVariants}
-                  className="origin-bottom-left text-xs font-black uppercase"
-                >
-                  Categories
-                </motion.h1>
-              </div>
-            </div>
-          </motion.div>
-
           {/* Samme fade-wrapper som bildene hadde opprinnelig */}
           <motion.div
             initial={{ opacity: 0 }}

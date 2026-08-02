@@ -249,11 +249,11 @@ export default async function ShopPage({
     <main className="min-h-screen bg-[#ecebeb] px-6 py-24 text-[#161310] md:px-12">
       <ScrollSection>
         <section className="mb-12  pb-10">
-          <h1 className="mt-4 max-w-5xl font-normal text-[17vw] uppercase leading-[0.85] tracking-[-0.01em] md:text-[6vw]">
+          <h1 className="mt-4 max-w-5xl font-merchant font-normal text-[17vw]  leading-[0.85] tracking-[-0.01em] md:text-[6vw]">
             Shop lighting
           </h1>
 
-          <p className="mt-5 max-w-xl text-base leading-[1.8] text-[#161310]/85 md:text-lg">
+          <p className="mt-5 max-w-xl font-merchant font-thin text-lg leading-[1.8] text-[#161310]/85 md:text-xl">
             Minimal lighting curated for calm interiors, focused work and warm
             everyday spaces.
           </p>

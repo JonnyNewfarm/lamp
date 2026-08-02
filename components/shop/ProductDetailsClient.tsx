@@ -328,12 +328,11 @@ export default function ProductDetailsClient({
 
   return (
     <main className="min-h-screen bg-[#ecebeb] px-6 py-24 text-[#161310] md:px-12">
-      <div className="mb-10">
+      <div className="mb-10 mt-5">
         <Link
           href="/shop"
-          className="inline-flex items-center gap-4 text-sm text-[#161310]/55 transition hover:text-[#161310]"
+          className=" gap-4 text-sm text-[#161310]/55  hover:text-[#161310]"
         >
-          <span className="h-px w-10 bg-[#161310]/80" />
           Back to shop
         </Link>
       </div>
@@ -417,7 +416,7 @@ export default function ProductDetailsClient({
               {product.category.name}
             </p>
 
-            <h1 className="mt-5 max-w-2xl text-[14vw] font-semibold leading-[0.95] tracking-[-0.035em] md:text-[7vw] lg:text-[5.2vw]">
+            <h1 className="mt-5 max-w-2xl font-merchant text-[14vw] font-semibold leading-[0.95] tracking-[-0.035em] md:text-[7vw] lg:text-[5.2vw]">
               {product.title}
             </h1>
 
@@ -581,11 +580,11 @@ export default function ProductDetailsClient({
           </div>
 
           <div className="md:col-span-8">
-            <h2 className="max-w-4xl text-5xl font-light leading-[0.95] tracking-[-0.02em] md:text-7xl">
+            <h2 className="max-w-4xl text-5xl font-merchant font-light leading-[0.95] tracking-[-0.02em] md:text-7xl">
               A quiet object for everyday atmosphere.
             </h2>
 
-            <p className="mt-8 max-w-2xl leading-[1.8] text-[#161310]/60">
+            <p className="mt-8 max-w-2xl text-xl font-merchant font-light leading-[1.8] text-[#161310]">
               Selected by Calero Studio for soft interiors, calm lighting and
               everyday use. Each available variant may differ in finish, color,
               plug type and supplier details.

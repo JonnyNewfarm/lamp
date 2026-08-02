@@ -51,16 +51,16 @@ const Footer = () => {
       <div className="grid gap-14 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-7">
           <Link href="/" aria-label="Go to home page" className="block w-fit">
-            <span className="block text-[clamp(2rem,7vw,11rem)] font-semibold uppercase leading-[0.80] tracking-[-0.035em]">
+            <span className="block text-[clamp(2rem,7vw,11rem)] font-merchant font-semibold  leading-[0.80] tracking-[-0.035em]">
               Calero
             </span>
 
-            <span className="block text-[clamp(2rem,7vw,11rem)] font-semibold uppercase leading-[0.90] tracking-[-0.035em]">
+            <span className="block text-[clamp(2rem,7vw,11rem)] font-merchant font-semibold  leading-[0.90] tracking-[-0.035em]">
               Studio
             </span>
           </Link>
 
-          <p className="mt-8 max-w-[560px] text-[clamp(1.2rem,2vw,2.6rem)]   leading-[0.9] tracking-[-0.01em] text-[#161310]">
+          <p className="mt-8 max-w-[560px] font-merchant font-thin text-[clamp(1.2rem,2vw,2.6rem)]   leading-[0.9] tracking-[-0.01em] text-[#161310]">
             Minimal lighting curated for calm interiors, warm corners and
             everyday atmosphere.
           </p>
@@ -77,7 +77,7 @@ const Footer = () => {
           </div>
 
           <div className="mt-14 border-t border-[#161310]/15 pt-6">
-            <p className="mb-5 text-[0.62rem] font-black uppercase tracking-[0.18em] text-[#161310]/40">
+            <p className="mb-5 text-[0.62rem] font-black uppercase tracking-[0.18em] text-[#161310]">
               Studio
             </p>
 
@@ -106,7 +106,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="mt-16 grid gap-4 border-t border-[#161310]/15 pt-5 text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#161310]/45 md:mt-24 md:grid-cols-12 md:items-center">
+      <div className="mt-16 grid gap-4 border-t border-[#161310]/15 pt-5 text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#161310] md:mt-24 md:grid-cols-12 md:items-center">
         <span className="md:col-span-3">© {year} Calero Studio</span>
 
         <span className="md:col-span-3 md:col-start-5">Calm by design.</span>
@@ -146,7 +146,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <p className="mb-5 text-[0.62rem] font-black uppercase tracking-[0.1em] text-[#161310]/60">
+      <p className="mb-5 text-[0.62rem] font-black uppercase tracking-[0.1em] text-[#161310]/90">
         {title}
       </p>
 
