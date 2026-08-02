@@ -24,9 +24,9 @@ export default function NavigationButton({
         items-center
         justify-end
         overflow-hidden
-        pb-[5px]
+        pb-[2px]
         uppercase
-        opacity-60
+        md:opacity-60
         transition-opacity
         duration-300
         hover:opacity-100

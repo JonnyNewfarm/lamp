@@ -405,8 +405,8 @@ export default function NewProductsGallery({
             max-w-[34vw]
             text-center
             text-[3.6vw]
-            font-black
-            uppercase
+            font-merchant
+            font-bold
             leading-[0.9]
             tracking-[-0.01em]
           "
@@ -422,7 +422,7 @@ export default function NewProductsGallery({
               className="
                 font-merchant
                 text-[36px]
-                font-bold
+                font-normal
                 leading-[0.85]
                 tracking-[-0.01em]
                 sm:text-[44px]
@@ -440,12 +440,12 @@ export default function NewProductsGallery({
                 -right-4
                 top-0
                 -translate-y-[115%]
-                text-[9px]
-                font-bold
+                text-[8px]
+                font-normal
                 uppercase
                 tracking-[0.08em]
-                opacity-90
-                md:text-[14px]
+                
+                md:text-[12px]
               "
             >
               {String(visibleProducts.length).padStart(2, "0")}

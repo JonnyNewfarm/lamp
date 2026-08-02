@@ -343,7 +343,7 @@ export default function ProductDetailsClient({
             type="button"
             onClick={() => selectedImage && setFullscreenOpen(true)}
             disabled={!selectedImage}
-            className="relative aspect-[4/5] w-full overflow-hidden bg-[#f4f3f0] text-left disabled:cursor-default"
+            className="relative aspect-[4/5] w-full cursor-pointer overflow-hidden bg-[#f4f3f0] text-left disabled:cursor-default"
             aria-label="Open product image fullscreen"
           >
             {selectedImage ? (
@@ -358,7 +358,7 @@ export default function ProductDetailsClient({
                   className="object-cover"
                 />
 
-                <span className="absolute bottom-4 right-4 bg-[#ecebeb]/90 px-4 py-2 text-xs uppercase tracking-[0.18em] text-[#161310]/60">
+                <span className="absolute bottom-4 right-4  px-4 py-2 text-sm uppercase tracking-[0.18em] text-[#161310]/60">
                   View fullscreen
                 </span>
               </>
@@ -380,7 +380,7 @@ export default function ProductDetailsClient({
                       key={`${image.imageType}-${image.id}`}
                       type="button"
                       onClick={() => setSelectedImageId(image.id)}
-                      className={`relative h-24 w-20 shrink-0 overflow-hidden bg-[#f4f3f0] transition md:h-28 md:w-24 ${
+                      className={`relative cursor-pointer h-24 w-20 shrink-0 overflow-hidden bg-[#f4f3f0] transition md:h-28 md:w-24 ${
                         active ? "opacity-100" : "opacity-45 hover:opacity-100"
                       }`}
                     >
@@ -416,17 +416,17 @@ export default function ProductDetailsClient({
               {product.category.name}
             </p>
 
-            <h1 className="mt-5 max-w-2xl font-merchant text-[14vw] font-semibold leading-[0.95] tracking-[-0.035em] md:text-[7vw] lg:text-[5.2vw]">
+            <h1 className="mt-5 max-w-2xl font-merchant text-[11vw] font-semibold leading-[0.95] tracking-[-0.035em] md:text-[7vw] lg:text-[5.2vw]">
               {product.title}
             </h1>
 
             <div className="mt-8 flex items-baseline gap-4">
-              <p className="text-4xl font-light tracking-[-0.05em] md:text-5xl">
+              <p className="text-4xl font-merchant font-light tracking-[-0.05em] md:text-5xl">
                 {formatPrice(price, product.currency)}
               </p>
 
               {product.compareAtPrice && (
-                <p className="text-xl text-[#161310]/35 line-through md:text-2xl">
+                <p className="text-xl font-merchant text-[#161310]/35 line-through md:text-2xl">
                   {formatPrice(product.compareAtPrice, product.currency)}
                 </p>
               )}
@@ -447,7 +447,7 @@ export default function ProductDetailsClient({
             {colors.length > 0 && (
               <div className="mt-10 border-t border-[#161310]/15 pt-8">
                 <div className="mb-5 flex items-center justify-between">
-                  <p className="text-sm text-[#161310]/45">Color</p>
+                  <p className="text-sm text-[#161310]/90">Color</p>
                   {selectedColor && <p className="text-sm">{selectedColor}</p>}
                 </div>
 
@@ -543,23 +543,104 @@ export default function ProductDetailsClient({
               )}
             </div>
 
-            <button
-              type="button"
-              disabled={!inStock}
-              onClick={handleAddToCart}
-              className="mt-8 w-full cursor-pointer bg-[#161310] px-8 py-5 text-sm text-[#ecebeb] transition hover:bg-[#2a261f] disabled:cursor-not-allowed disabled:opacity-35"
-            >
-              {inStock ? "Add to cart" : "Out of stock"}
-            </button>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                disabled={!inStock}
+                onClick={handleAddToCart}
+                className="
+      group
+      relative
+      min-h-16
+      cursor-pointer
+      overflow-hidden
+      border
+      border-[#161310]
+      bg-[#161310]
+      px-6
+      text-[#ecebeb]
+      disabled:cursor-not-allowed
+      disabled:opacity-35
+    "
+              >
+                <span
+                  className="
+        absolute
+        inset-0
+        translate-y-full
+        bg-[#ecebeb]
+        transition-transform
+        duration-500
+        ease-[cubic-bezier(0.76,0,0.24,1)]
+        group-hover:translate-y-0
+      "
+                />
 
-            <button
-              type="button"
-              disabled={!inStock}
-              onClick={handleAddToCart}
-              className="mt-3 w-full border cursor-pointer border-[#161310]/20 px-8 py-5 text-sm transition hover:border-[#161310] disabled:cursor-not-allowed disabled:opacity-35"
-            >
-              Buy now
-            </button>
+                <span
+                  className="
+        relative
+        z-10
+        text-lg
+        transition-colors
+        duration-500
+        group-hover:text-[#161310]
+      "
+                >
+                  {inStock ? "Add to cart" : "Out of stock"}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                disabled={!inStock}
+                onClick={handleAddToCart}
+                className="
+      group
+      relative
+      min-h-16
+      cursor-pointer
+      overflow-hidden
+      border
+      border-[#161310]/25
+      px-6
+      text-[#161310]
+      transition-colors
+      duration-500
+      hover:border-[#161310]
+      disabled:cursor-not-allowed
+      disabled:opacity-35
+    "
+              >
+                <span
+                  className="
+        absolute
+        inset-x-0
+        bottom-0
+        h-full
+        origin-bottom
+        scale-y-0
+        bg-[#161310]
+        transition-transform
+        duration-500
+        ease-[cubic-bezier(0.76,0,0.24,1)]
+        group-hover:scale-y-100
+      "
+                />
+
+                <span
+                  className="
+        relative
+        z-10
+        text-lg
+        transition-colors
+        duration-500
+        group-hover:text-[#ecebeb]
+      "
+                >
+                  Buy now
+                </span>
+              </button>
+            </div>
 
             <div className="mt-10 grid grid-cols-2 gap-px bg-[#161310]/15 text-sm">
               <InfoBlock title="Shipping" text="Free tracked shipping" />
@@ -595,62 +676,148 @@ export default function ProductDetailsClient({
 
       {fullscreenOpen && selectedImage && (
         <div
-          className="fixed inset-0 z-50 bg-[#161310]/95 text-[#ecebeb]"
+          className="
+      fixed
+      inset-0
+      z-50
+      flex
+      items-center
+      justify-center
+      bg-[#161310]/70
+      p-0
+      text-[#ecebeb]
+      backdrop-blur-[3px]
+      md:p-10
+      lg:p-14
+    "
           role="dialog"
           aria-modal="true"
           aria-label="Product image fullscreen view"
+          onMouseDown={() => setFullscreenOpen(false)}
         >
-          <button
-            type="button"
-            onClick={() => setFullscreenOpen(false)}
-            className="absolute right-5 top-5 z-20 px-4 py-3 text-sm uppercase tracking-[0.18em] text-[#ecebeb]/70 transition hover:text-[#ecebeb]"
-          >
-            Close
-          </button>
-
-          {galleryImages.length > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={showPreviousImage}
-                className="absolute left-4 top-1/2 z-20 hidden -translate-y-1/2 px-5 py-5 text-4xl font-light text-[#ecebeb]/60 transition hover:text-[#ecebeb] md:block"
-                aria-label="Previous image"
-              >
-                ‹
-              </button>
-
-              <button
-                type="button"
-                onClick={showNextImage}
-                className="absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 px-5 py-5 text-4xl font-light text-[#ecebeb]/60 transition hover:text-[#ecebeb] md:block"
-                aria-label="Next image"
-              >
-                ›
-              </button>
-            </>
-          )}
-
           <div
-            className="flex h-full w-full touch-pan-y items-center justify-center px-6 py-20 md:px-16"
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
+            className="
+        relative
+        flex
+        h-full
+        w-full
+        flex-col
+        overflow-hidden
+        bg-[#161310]
+        md:h-[84vh]
+        md:w-[70vw]
+        md:max-w-[1100px]
+      "
+            onMouseDown={(event) => event.stopPropagation()}
           >
-            <div className="relative h-full w-full">
+            <button
+              type="button"
+              onClick={() => setFullscreenOpen(false)}
+              aria-label="Close image viewer"
+              className="
+    group
+    absolute
+    right-5
+    top-5
+    z-30
+    flex
+    cursor-pointer
+    items-center
+    gap-4
+    uppercase
+    font-normal
+    tracking-[0.18em]
+    text-white
+    md:right-7
+    md:top-7
+  "
+            >
+              <span className="relative block h-4 w-8">
+                <span
+                  className="
+        absolute
+        left-0
+        top-1/2
+        h-px
+        w-8
+        -translate-y-1/2
+        bg-current
+        transition-all
+        duration-500
+        ease-[cubic-bezier(0.22,1,0.36,1)]
+        group-hover:left-2
+        group-hover:w-4
+        group-hover:rotate-45
+      "
+                />
+
+                <span
+                  className="
+        absolute
+        left-2
+        top-1/2
+        h-px
+        w-4
+        -translate-y-1/2
+        -rotate-45
+        scale-x-0
+        bg-current
+        opacity-0
+        transition-all
+        duration-500
+        ease-[cubic-bezier(0.22,1,0.36,1)]
+        group-hover:scale-x-100
+        group-hover:opacity-100
+      "
+                />
+              </span>
+
+              <span
+                className="
+      transition-transform
+      text-xl
+      duration-500
+      ease-[cubic-bezier(0.22,1,0.36,1)]
+      group-hover:translate-x-1
+    "
+              >
+                Close
+              </span>
+            </button>
+
+            <div
+              className="
+          relative
+          min-h-0
+          flex-1
+          touch-pan-y
+        "
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
               <Image
                 src={selectedImage.url}
                 alt={selectedImage.alt || product.title}
                 fill
-                quality={85}
-                sizes="100vw"
-                className="object-contain"
+                quality={90}
+                sizes="(min-width: 768px) 82vw, 100vw"
+                className="object-contain p-6 md:p-12"
                 priority
               />
             </div>
-          </div>
 
-          {galleryImages.length > 1 && (
-            <div className="absolute bottom-5 left-1/2 z-20 w-full max-w-4xl -translate-x-1/2 px-6">
-              <div className="no-scrollbar overflow-x-auto">
+            {galleryImages.length > 1 && (
+              <div
+                className="
+            no-scrollbar
+            shrink-0
+            overflow-x-auto
+            px-5
+            pb-5
+            md:px-8
+            md:pb-8
+          "
+              >
                 <div className="mx-auto flex w-max gap-3">
                   {galleryImages.map((image, index) => {
                     const active = selectedImage.id === image.id;
@@ -660,11 +827,24 @@ export default function ProductDetailsClient({
                         key={`fullscreen-${image.imageType}-${image.id}`}
                         type="button"
                         onClick={() => setSelectedImageId(image.id)}
-                        className={`relative h-16 w-14 shrink-0 overflow-hidden bg-[#f4f3f0] transition md:h-20 md:w-16 ${
-                          active
-                            ? "opacity-100"
-                            : "opacity-40 hover:opacity-100"
-                        }`}
+                        className={`
+                    relative
+                    h-16
+                    w-14
+                    shrink-0
+                    cursor-pointer
+                    overflow-hidden
+                    bg-[#f4f3f0]
+                    transition-all
+                    duration-300
+                    md:h-20
+                    md:w-16
+                    ${
+                      active
+                        ? "scale-100 opacity-100"
+                        : "scale-[0.94] opacity-35 hover:scale-100 hover:opacity-75"
+                    }
+                  `}
                         aria-label={`View image ${index + 1}`}
                       >
                         <Image
@@ -675,17 +855,13 @@ export default function ProductDetailsClient({
                           sizes="80px"
                           className="object-cover"
                         />
-
-                        {active && (
-                          <span className="absolute bottom-0 left-0 h-px w-full bg-[#ecebeb]" />
-                        )}
                       </button>
                     );
                   })}
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
     </main>
@@ -722,7 +898,7 @@ function ProductDescription({
   return (
     <div className="mt-10 max-w-md border-t border-[#161310]/15 pt-8">
       <div className="mb-4 flex items-center justify-between gap-4">
-        <p className="text-sm text-[#161310]/45">Description</p>
+        <p className="text-sm text-[#161310]/90">Description</p>
       </div>
 
       <div
@@ -753,7 +929,9 @@ function ProductDescription({
           className="mt-4 inline-flex items-center cursor-pointer gap-3 text-sm text-[#161310] transition hover:opacity-60"
           aria-expanded={open}
         >
-          <span>{open ? "Hide description" : "View full description"}</span>
+          <span className="font-semibold">
+            {open ? "Hide description" : "View full description"}
+          </span>
           <span className="h-px w-8 bg-[#161310]/40" />
         </button>
       )}
@@ -764,8 +942,8 @@ function ProductDescription({
 function InfoBlock({ title, text }: { title: string; text: string }) {
   return (
     <div className="bg-[#ecebeb] p-5">
-      <p>{title}</p>
-      <p className="mt-2 text-[#161310]/45">{text}</p>
+      <p className="font-semibold">{title}</p>
+      <p className="mt-2 text-[#161310]">{text}</p>
     </div>
   );
 }
@@ -811,7 +989,7 @@ function ProductSpecs({
 
   return (
     <div className="mt-10 border-t border-[#161310]/15 pt-8">
-      <p className="mb-5 text-sm text-[#161310]/45">Product specs</p>
+      <p className="mb-5 text-sm text-[#161310]/90">Product specs</p>
 
       <div
         className={`relative overflow-hidden transition-[max-height] duration-500 ease-in-out ${
@@ -824,8 +1002,8 @@ function ProductSpecs({
               key={`${item.label}-${index}`}
               className="grid grid-cols-[1fr_1.3fr] gap-6 py-3 text-sm"
             >
-              <p className="text-[#161310]/45">{item.label}</p>
-              <p className="break-words">{item.value || "—"}</p>
+              <p className="text-[#161310]">{item.label}</p>
+              <p className="break-words font-semibold">{item.value || "—"}</p>
             </div>
           ))}
         </div>
@@ -839,10 +1017,13 @@ function ProductSpecs({
         <button
           type="button"
           onClick={onToggle}
-          className="mt-4 inline-flex items-center gap-3 text-sm text-[#161310] transition hover:opacity-60"
+          className="mt-4 inline-flex items-center gap-3 text-sm  text-[#161310] transition hover:opacity-60"
           aria-expanded={open}
         >
-          <span>{open ? "Hide specs" : "View full specs"}</span>
+          <span className="font-semibold">
+            {" "}
+            {open ? "Hide specs" : "View full specs"}
+          </span>
           <span className="h-px w-8 bg-[#161310]/40" />
         </button>
       )}

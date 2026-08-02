@@ -28,7 +28,6 @@ export default function LightingByMood() {
       id="moods"
       className="
         relative
-        z-[9999999]
         bg-[#ecebeb]
         px-6
         py-20
@@ -95,13 +94,13 @@ export default function LightingByMood() {
               ease: [0.16, 1, 0.3, 1],
             }}
             className="
-              mt-10
+              mt-4
               max-w-3xl
               font-merchant
-              text-lg
+              text-xl
               font-thin
-              leading-[1.8]
-              text-[#161310]/90
+              leading-[1.1]
+              text-[#161310]
               md:text-3xl
             "
           >
@@ -124,9 +123,9 @@ export default function LightingByMood() {
                   w-fit
                   overflow-hidden
                   pb-0.5
-                  text-2xl
-                  font-black
-                  uppercase
+                  text-3xl
+                  font-bold
+                  font-merchant
                 "
               >
                 <span>{`For ${item.label}`}</span>
@@ -136,7 +135,7 @@ export default function LightingByMood() {
                   className="
                     pointer-events-none
                     absolute
-                    bottom-0
+                    bottom-1.5
                     left-0
                     h-px
                     w-full

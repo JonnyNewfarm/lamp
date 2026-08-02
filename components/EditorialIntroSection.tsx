@@ -140,11 +140,11 @@ export default function EditorialTextAssembleSection() {
           <p
             className="
             font-merchant
-              text-[11px]
+              text-[14px]
               font-medium
               uppercase
               tracking-[0.18em]
-              text-[#161310]/55
+              text-[#161310]/90
               md:text-xs
             "
           >
@@ -154,9 +154,11 @@ export default function EditorialTextAssembleSection() {
           <p
             className="
               mt-2
-              max-w-[240px]
+              max-w-[350px]
+              md:max-w-[240px]
               font-merchant
-              text-lg
+              font-thin
+              text-3xl
               leading-[1.05]
               tracking-[-0.035em]
               text-[#161310]/75
@@ -282,7 +284,7 @@ export default function EditorialTextAssembleSection() {
               right-0
               z-20
               h-[40%]
-              w-[42%]
+              w-[50%]
               md:bottom-[4%]
               md:right-[2%]
               md:h-[46%]
@@ -306,7 +308,7 @@ export default function EditorialTextAssembleSection() {
               "
             >
               <Image
-                src="/intro-lamp-2.jpg"
+                src="/intro-lamp-3.jpg"
                 alt="Close-up of a decorative lamp"
                 fill
                 sizes="
@@ -317,44 +319,6 @@ export default function EditorialTextAssembleSection() {
                 className="object-cover"
               />
             </motion.div>
-          </motion.div>
-
-          <motion.div
-            initial={{
-              x: 20,
-              opacity: 0,
-            }}
-            animate={
-              isInView
-                ? {
-                    x: 0,
-                    opacity: 1,
-                  }
-                : {
-                    x: 20,
-                    opacity: 0,
-                  }
-            }
-            transition={{
-              duration: 1,
-              delay: 1.05,
-              ease,
-            }}
-            className="
-              absolute
-              right-0
-              top-[3%]
-              hidden
-              origin-top-right
-              items-center
-              gap-3
-              md:flex
-              md:[writing-mode:vertical-rl]
-            "
-          >
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#161310]">
-              Selected lighting and interior objects
-            </span>
           </motion.div>
         </div>
 
@@ -395,12 +359,11 @@ export default function EditorialTextAssembleSection() {
             className="
               max-w-[390px]
               font-merchant
-              text-xl
+              text-2xl
               leading-[1.1]
               tracking-[-0.035em]
-              text-[#161310]/70
+              text-[#161310]
               md:col-span-4
-              md:text-2xl
             "
           >
             A quiet collection built around warm materials, soft silhouettes and
@@ -443,11 +406,11 @@ export default function EditorialTextAssembleSection() {
     relative
     inline-flex
     overflow-hidden
-    pb-2
+    font-merchant
+    
     text-[28px]
     font-bold
     
-    uppercase
     leading-none
     tracking-[-0.025em]
     md:text-[42px]
@@ -461,7 +424,7 @@ export default function EditorialTextAssembleSection() {
                 className="
       pointer-events-none
       absolute
-      bottom-0
+      bottom-1
       left-0
       h-px
       w-full

@@ -1,11 +1,44 @@
 // components/cart/CartDrawer.tsx
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import { useCart } from "@/components/cart/CartProvider";
 import { formatPrice } from "@/lib/formatPrice";
+
+const CART_EASE = [0.76, 0, 0.24, 1] as const;
+
+const drawerVariants = {
+  closed: {
+    x: "100%",
+  },
+  open: {
+    x: 0,
+  },
+};
+
+const overlayVariants = {
+  closed: {
+    opacity: 0,
+  },
+  open: {
+    opacity: 1,
+  },
+};
+
+const contentVariants = {
+  closed: {
+    opacity: 0,
+    y: 18,
+  },
+  open: {
+    opacity: 1,
+    y: 0,
+  },
+};
 
 export default function CartDrawer() {
   const {
@@ -20,6 +53,27 @@ export default function CartDrawer() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeCart();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, closeCart]);
 
   async function handleCheckout() {
     try {
@@ -60,200 +114,626 @@ export default function CartDrawer() {
   }
 
   return (
-    <>
+    <AnimatePresence>
       {isOpen && (
-        <button
-          type="button"
-          onClick={closeCart}
-          className="fixed inset-0 z-40 bg-[#161310]/20"
-          aria-label="Close cart"
-        />
-      )}
-
-      <aside
-        className={`fixed right-0 top-0 z-50 h-dvh w-full max-w-[520px] bg-[#ecebeb] text-[#161310] transition-transform duration-500 ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="flex h-24 items-center justify-between border-b border-[#161310]/15 px-6 md:px-8">
-          <div>
-            <p className="text-xs uppercase tracking-[0.28em] font-black text-[#161310]">
-              Cart
-            </p>
-            <p className="mt-2 text-sm text-[#161310]">
-              {totalQuantity} {totalQuantity === 1 ? "item" : "items"}
-            </p>
-          </div>
-
-          <button
+        <>
+          <motion.button
             type="button"
+            aria-label="Close cart"
             onClick={closeCart}
-            className="text-sm cursor-pointer"
+            variants={overlayVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            transition={{
+              duration: 0.45,
+              ease: CART_EASE,
+            }}
+            className="
+              fixed
+              inset-0
+              z-[9998]
+              cursor-default
+              bg-[#161310]/35
+              backdrop-blur-[2px]
+            "
+          />
+
+          <motion.aside
+            role="dialog"
+            aria-modal="true"
+            aria-label="Shopping cart"
+            variants={drawerVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            transition={{
+              duration: 0.7,
+              ease: CART_EASE,
+            }}
+            className="
+              fixed
+              inset-y-0
+              right-0
+              z-[9999]
+              flex
+              h-dvh
+              w-full
+              max-w-[600px]
+              flex-col
+              overflow-hidden
+              bg-[#ecebeb]
+              text-[#161310]
+              shadow-[-24px_0_80px_rgba(22,19,16,0.12)]
+            "
           >
-            Close
-          </button>
-        </div>
-
-        {items.length === 0 ? (
-          <div className="flex h-[calc(100dvh-96px)] flex-col items-center justify-center px-6 text-center">
-            <h2 className="text-5xl font-semibold tracking-[-0.01em]">
-              Your cart is empty.
-            </h2>
-
-            <p className="mt-5 max-w-sm text-sm leading-[1.8] text-[#161310]/80">
-              Add a lamp from the shop to continue.
-            </p>
-
-            <Link
-              href="/shop"
-              onClick={closeCart}
-              className="mt-8 bg-[#161310] uppercase font-semibold px-7 py-4 text-sm text-[#ecebeb]"
+            <header
+              className="
+                flex
+                h-[90px]
+                shrink-0
+                items-center
+                justify-between
+                border-b
+                border-[#161310]/15
+                px-5
+                sm:h-[104px]
+                sm:px-8
+              "
             >
-              Shop lighting
-            </Link>
-          </div>
-        ) : (
-          <div className="flex h-[calc(100dvh-96px)] min-h-0 flex-col">
-            <div className="min-h-0 flex-1 overflow-y-auto px-6 py-7 md:px-8">
-              <div className="space-y-7">
-                {items.map((item) => {
-                  const variantLabel = getCartItemVariantLabel(item);
-                  const reachedStockLimit = item.quantity >= item.stock;
+              <div className="flex items-baseline gap-3">
+                <h2
+                  className="
+                    text-[clamp(2rem,5vw,3.4rem)]
+                    font-light
+                    leading-none
+                    tracking-[-0.055em]
+                  "
+                >
+                  Cart
+                </h2>
 
-                  return (
-                    <article
-                      key={item.variantId}
-                      className="grid grid-cols-[112px_1fr] gap-5 border-b border-[#161310]/15 pb-7"
-                    >
-                      <Link
-                        href={`/products/${item.slug}`}
-                        onClick={closeCart}
-                        className="relative aspect-square bg-[#f4f3f0]"
-                      >
-                        {item.image ? (
-                          <Image
-                            src={item.image}
-                            alt={item.title}
-                            fill
-                            sizes="112px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-full items-center justify-center text-xs text-[#161310]/35">
-                            No image
-                          </div>
-                        )}
-                      </Link>
+                <span className="text-xs text-[#161310]/45">
+                  ({totalQuantity})
+                </span>
+              </div>
 
-                      <div className="min-w-0">
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="min-w-0">
-                            <Link
-                              href={`/products/${item.slug}`}
-                              onClick={closeCart}
-                              className="block text-xl font-light leading-[1.35] tracking-[-0.05em]"
+              <motion.button
+                type="button"
+                onClick={closeCart}
+                aria-label="Close cart"
+                initial="idle"
+                whileHover="hover"
+                className="
+                  group
+                  relative
+                  flex
+                  h-11
+                  w-11
+                  cursor-pointer
+                  items-center
+                  justify-center
+                  rounded-full
+                  border
+                  border-[#161310]/20
+                  transition-colors
+                  duration-300
+                  hover:border-[#161310]
+                "
+              >
+                <span
+                  className="
+                    absolute
+                    h-px
+                    w-5
+                    rotate-45
+                    bg-current
+                  "
+                />
+
+                <span
+                  className="
+                    absolute
+                    h-px
+                    w-5
+                    -rotate-45
+                    bg-current
+                  "
+                />
+              </motion.button>
+            </header>
+
+            {items.length === 0 ? (
+              <motion.div
+                variants={contentVariants}
+                initial="closed"
+                animate="open"
+                transition={{
+                  delay: 0.18,
+                  duration: 0.7,
+                  ease: CART_EASE,
+                }}
+                className="
+                  flex
+                  min-h-0
+                  flex-1
+                  flex-col
+                  justify-between
+                  px-5
+                  py-8
+                  sm:px-8
+                  sm:py-10
+                "
+              >
+                <div className="pt-[12vh] sm:pt-[16vh]">
+                  <h3
+                    className="
+                    font-merchant
+                      max-w-[430px]
+                      text-[clamp(3rem,11vw,5.6rem)]
+                      font-light
+                      leading-[0.9]
+                      tracking-[-0.065em]
+                    "
+                  >
+                    Your cart is empty.
+                  </h3>
+
+                  <p
+                    className="
+                      mt-6
+                      max-w-[330px]
+                      text-sm
+                      leading-[1.7]
+                      text-[#161310]
+                    "
+                  >
+                    Explore the collection and add something made for slower,
+                    warmer rooms.
+                  </p>
+                </div>
+
+                <Link
+                  href="/shop"
+                  onClick={closeCart}
+                  className="
+                    group
+                    flex
+                    w-full
+                    items-center
+                    justify-between
+                    border-t
+                    border-[#161310]
+                    py-5
+                    text-sm
+                    uppercase
+                    tracking-[0.08em]
+                  "
+                >
+                  <span>Explore lighting</span>
+
+                  <span
+                    className="
+                      transition-transform
+                      duration-500
+                      ease-[cubic-bezier(0.76,0,0.24,1)]
+                      group-hover:translate-x-2
+                    "
+                  >
+                    →
+                  </span>
+                </Link>
+              </motion.div>
+            ) : (
+              <>
+                <motion.div
+                  variants={contentVariants}
+                  initial="closed"
+                  animate="open"
+                  transition={{
+                    delay: 0.14,
+                    duration: 0.7,
+                    ease: CART_EASE,
+                  }}
+                  className="
+                    min-h-0
+                    flex-1
+                    overflow-y-auto
+                    overscroll-contain
+                    px-5
+                    py-6
+                    sm:px-8
+                    sm:py-8
+                  "
+                >
+                  <div className="divide-y divide-[#161310]/15">
+                    {items.map((item) => {
+                      const variantLabel = getCartItemVariantLabel(item);
+                      const reachedStockLimit = item.quantity >= item.stock;
+
+                      return (
+                        <article
+                          key={item.variantId}
+                          className="
+                            grid
+                            grid-cols-[92px_minmax(0,1fr)]
+                            gap-4
+                            py-6
+                            first:pt-0
+                            sm:grid-cols-[126px_minmax(0,1fr)]
+                            sm:gap-6
+                            sm:py-8
+                          "
+                        >
+                          <Link
+                            href={`/products/${item.slug}`}
+                            onClick={closeCart}
+                            className="
+                              group
+                              relative
+                              aspect-[4/5]
+                              overflow-hidden
+                              bg-[#deddd9]
+                            "
+                          >
+                            {item.image ? (
+                              <Image
+                                src={item.image}
+                                alt={item.title}
+                                fill
+                                sizes="(max-width: 640px) 92px, 126px"
+                                className="
+                                  object-cover
+                                  transition-transform
+                                  duration-700
+                                  ease-[cubic-bezier(0.76,0,0.24,1)]
+                                  group-hover:scale-[1.035]
+                                "
+                              />
+                            ) : (
+                              <div
+                                className="
+                                  flex
+                                  h-full
+                                  items-center
+                                  justify-center
+                                  text-xs
+                                  text-[#161310]/35
+                                "
+                              >
+                                No image
+                              </div>
+                            )}
+                          </Link>
+
+                          <div className="flex min-w-0 flex-col">
+                            <div>
+                              <div
+                                className="
+                                  flex
+                                  items-start
+                                  justify-between
+                                  gap-3
+                                "
+                              >
+                                <Link
+                                  href={`/products/${item.slug}`}
+                                  onClick={closeCart}
+                                  className="
+                                    min-w-0
+                                    text-[clamp(1.25rem,4vw,1.75rem)]
+                                    font-light
+                                    leading-[1.05]
+                                    tracking-[-0.045em]
+                                    transition-opacity
+                                    hover:opacity-55
+                                  "
+                                >
+                                  {item.title}
+                                </Link>
+
+                                <p
+                                  className="
+                                    shrink-0
+                                    pt-1
+                                    text-xs
+                                    sm:text-sm
+                                  "
+                                >
+                                  {formatPrice(item.price, item.currency)}
+                                </p>
+                              </div>
+
+                              {variantLabel && (
+                                <p
+                                  className="
+                                    mt-3
+                                    text-xs
+                                    capitalize
+                                    text-[#161310]
+                                  "
+                                >
+                                  {variantLabel}
+                                </p>
+                              )}
+
+                              {item.stock > 0 && (
+                                <p
+                                  className="
+                                    mt-1
+                                    text-xs
+                                    text-[#161310]/60
+                                  "
+                                >
+                                  {item.stock} available
+                                </p>
+                              )}
+                            </div>
+
+                            <div
+                              className="
+                                mt-auto
+                                flex
+                                items-end
+                                justify-between
+                                gap-3
+                                pt-5
+                              "
                             >
-                              {item.title}
-                            </Link>
+                              <div
+                                className="
+                                  flex
+                                  h-10
+                                  items-center
+                                  border
+                                  border-[#161310]/20
+                                "
+                              >
+                                <button
+                                  type="button"
+                                  aria-label={`Decrease quantity of ${item.title}`}
+                                  onClick={() =>
+                                    updateQuantity(
+                                      item.variantId,
+                                      item.quantity - 1,
+                                    )
+                                  }
+                                  className="
+                                    flex
+                                    h-full
+                                    w-9
+                                    cursor-pointer
+                                    items-center
+                                    justify-center
+                                    text-base
+                                    transition-colors
+                                    hover:bg-[#161310]
+                                    hover:text-[#ecebeb]
+                                  "
+                                >
+                                  −
+                                </button>
 
-                            {variantLabel && (
-                              <p className="mt-3 text-sm capitalize text-[#161310]/50">
-                                {variantLabel}
+                                <span
+                                  className="
+                                    flex
+                                    h-full
+                                    min-w-9
+                                    items-center
+                                    justify-center
+                                    border-x
+                                    border-[#161310]/20
+                                    px-2
+                                    text-xs
+                                  "
+                                >
+                                  {item.quantity}
+                                </span>
+
+                                <button
+                                  type="button"
+                                  disabled={reachedStockLimit}
+                                  aria-label={`Increase quantity of ${item.title}`}
+                                  onClick={() =>
+                                    updateQuantity(
+                                      item.variantId,
+                                      item.quantity + 1,
+                                    )
+                                  }
+                                  className="
+                                    flex
+                                    h-full
+                                    w-9
+                                    cursor-pointer
+                                    items-center
+                                    justify-center
+                                    text-base
+                                    transition-colors
+                                    hover:bg-[#161310]
+                                    hover:text-[#ecebeb]
+                                    disabled:cursor-not-allowed
+                                    disabled:opacity-25
+                                    disabled:hover:bg-transparent
+                                    disabled:hover:text-current
+                                  "
+                                >
+                                  +
+                                </button>
+                              </div>
+
+                              <button
+                                type="button"
+                                onClick={() => removeItem(item.variantId)}
+                                className="
+                                  cursor-pointer
+                                  border-b
+                                  border-transparent
+                                  pb-0.5
+                                  text-xs
+                                  text-[#161310]/45
+                                  transition
+                                  hover:border-[#161310]
+                                  hover:text-[#161310]
+                                "
+                              >
+                                Remove
+                              </button>
+                            </div>
+
+                            {reachedStockLimit && item.stock > 0 && (
+                              <p
+                                className="
+                                  mt-3
+                                  text-[11px]
+                                  leading-relaxed
+                                  text-[#161310]/35
+                                "
+                              >
+                                Maximum available quantity reached.
                               </p>
                             )}
-
-                            <p className="mt-1 text-sm text-[#161310]/35">
-                              {item.stock} in stock
-                            </p>
                           </div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </motion.div>
 
-                          <p className="shrink-0 text-sm">
-                            {formatPrice(item.price, item.currency)}
-                          </p>
-                        </div>
+                <motion.footer
+                  initial={{
+                    opacity: 0,
+                    y: 24,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  transition={{
+                    delay: 0.22,
+                    duration: 0.7,
+                    ease: CART_EASE,
+                  }}
+                  className="
+                    shrink-0
+                    border-t
+                    border-[#161310]/15
+                    bg-[#ecebeb]
+                    px-5
+                    pb-[max(20px,env(safe-area-inset-bottom))]
+                    pt-5
+                    sm:px-8
+                    sm:pb-8
+                    sm:pt-6
+                  "
+                >
+                  <div
+                    className="
+                      mb-4
+                      flex
+                      items-end
+                      justify-between
+                      gap-5
+                    "
+                  >
+                    <div>
+                      <p
+                        className="
+                          mb-1
+                          text-xs
+                          uppercase
+                          tracking-[0.12em]
+                          text-[#161310]
+                        "
+                      >
+                        Subtotal
+                      </p>
 
-                        <div className="mt-6 flex items-center justify-between gap-4">
-                          <div className="flex items-center border border-[#161310]/15">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                updateQuantity(
-                                  item.variantId,
-                                  item.quantity - 1,
-                                )
-                              }
-                              className="h-11 w-11 text-sm transition hover:bg-[#161310]/5"
-                              aria-label="Decrease quantity"
-                            >
-                              -
-                            </button>
+                      <p className="text-xs text-[#161310]">
+                        Shipping calculated at checkout
+                      </p>
+                    </div>
 
-                            <span className="w-11 text-center text-sm">
-                              {item.quantity}
-                            </span>
+                    <p
+                      className="
+                        shrink-0
+                        text-2xl
+                        font-light
+                        tracking-[-0.04em]
+                      "
+                    >
+                      {formatPrice(subtotal, items[0]?.currency || "usd")}
+                    </p>
+                  </div>
 
-                            <button
-                              type="button"
-                              disabled={reachedStockLimit}
-                              onClick={() =>
-                                updateQuantity(
-                                  item.variantId,
-                                  item.quantity + 1,
-                                )
-                              }
-                              className="h-11 w-11 text-sm transition hover:bg-[#161310]/5 disabled:cursor-not-allowed disabled:opacity-30"
-                              aria-label="Increase quantity"
-                            >
-                              +
-                            </button>
-                          </div>
+                  {error && (
+                    <p
+                      role="alert"
+                      className="
+                        mb-4
+                        text-sm
+                        leading-relaxed
+                        text-red-700
+                      "
+                    >
+                      {error}
+                    </p>
+                  )}
 
-                          <button
-                            type="button"
-                            onClick={() => removeItem(item.variantId)}
-                            className="text-sm text-[#161310]/45 transition hover:text-[#161310]"
-                          >
-                            Remove
-                          </button>
-                        </div>
+                  <button
+                    type="button"
+                    onClick={handleCheckout}
+                    disabled={loading}
+                    className="
+    group
+    relative
+    min-h-16
+    w-full
+    cursor-pointer
+    overflow-hidden
+    border
+    border-[#161310]
+    bg-[#161310]
+    px-6
+    text-[#ecebeb]
+    disabled:cursor-not-allowed
+    disabled:opacity-35
+  "
+                  >
+                    <span
+                      className="
+      absolute
+      inset-0
+      translate-y-full
+      bg-[#ecebeb]
+      transition-transform
+      duration-500
+      ease-[cubic-bezier(0.76,0,0.24,1)]
+      group-hover:translate-y-0
+    "
+                    />
 
-                        {reachedStockLimit && item.stock > 0 && (
-                          <p className="mt-3 text-xs text-[#161310]/40">
-                            Maximum available quantity reached.
-                          </p>
-                        )}
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="shrink-0 border-t border-[#161310]/15 p-6 md:p-8">
-              <div className="mb-5 flex items-center justify-between text-sm">
-                <p className="text-[#161310]/50">Subtotal</p>
-                <p>{formatPrice(subtotal, items[0]?.currency || "usd")}</p>
-              </div>
-
-              <p className="mb-5 text-xs leading-[1.7] text-[#161310]/45">
-                Shipping and taxes are calculated at checkout.
-              </p>
-
-              {error && <p className="mb-4 text-sm text-red-700">{error}</p>}
-
-              <button
-                type="button"
-                onClick={handleCheckout}
-                disabled={loading}
-                className="w-full bg-[#161310] px-8 py-5 text-sm text-[#ecebeb] transition hover:bg-[#2a261f] disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {loading ? "Starting checkout..." : "Checkout"}
-              </button>
-            </div>
-          </div>
-        )}
-      </aside>
-    </>
+                    <span
+                      className="
+      relative
+      z-10
+      text-lg
+      transition-colors
+      duration-500
+      group-hover:text-[#161310]
+    "
+                    >
+                      {loading
+                        ? "Starting checkout..."
+                        : "Continue to checkout"}
+                    </span>
+                  </button>
+                </motion.footer>
+              </>
+            )}
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
   );
 }
 

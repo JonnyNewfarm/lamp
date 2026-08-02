@@ -29,7 +29,7 @@ export default function NavigationLink({
         relative
         inline-flex
         overflow-hidden
-        pb-[5px]
+        pb-[2px]
         transition-opacity
         duration-300
 

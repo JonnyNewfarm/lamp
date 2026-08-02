@@ -43,24 +43,19 @@ const Footer = () => {
 
   return (
     <footer className="relative noise-bg overflow-hidden bg-[#ecebeb] px-5 pb-6 pt-20 text-[#161310] md:px-8 md:pb-8 md:pt-28">
-      <div className="pointer-events-none absolute inset-x-5 top-5 flex justify-between border-t border-[#161310]/15 pt-3 text-[0.62rem] font-black uppercase tracking-[0.18em] text-[#161310]/45 md:inset-x-8">
-        <span>Calero Studio</span>
-        <span>Calm by design</span>
-      </div>
-
       <div className="grid gap-14 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-7">
           <Link href="/" aria-label="Go to home page" className="block w-fit">
-            <span className="block text-[clamp(2rem,7vw,11rem)] font-merchant font-semibold  leading-[0.80] tracking-[-0.035em]">
+            <span className="block text-[clamp(2rem,7vw,11rem)] font-merchant font-normal  leading-[0.80] tracking-[-0.045em]">
               Calero
             </span>
 
-            <span className="block text-[clamp(2rem,7vw,11rem)] font-merchant font-semibold  leading-[0.90] tracking-[-0.035em]">
+            <span className="block text-[clamp(2rem,7vw,11rem)] font-merchant font-normal  leading-[0.90] tracking-[-0.045em]">
               Studio
             </span>
           </Link>
 
-          <p className="mt-8 max-w-[560px] font-merchant font-thin text-[clamp(1.2rem,2vw,2.6rem)]   leading-[0.9] tracking-[-0.01em] text-[#161310]">
+          <p className="mt-8 max-w-[560px] md:max-w-[500px] font-merchant font-thin text-2xl md:text-3xl   leading-[0.9] tracking-[-0.01em] text-[#161310]">
             Minimal lighting curated for calm interiors, warm corners and
             everyday atmosphere.
           </p>

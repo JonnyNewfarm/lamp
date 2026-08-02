@@ -287,7 +287,16 @@ export default function CaleroHero() {
   }
 
   return (
-    <section className="noise-bg relative min-h-screen overflow-x-hidden bg-[#ecebeb] text-[#161310]">
+    <section
+      className="
+        noise-bg
+        relative
+        min-h-screen
+        overflow-x-hidden
+        bg-[#ecebeb]
+        text-[#161310]
+      "
+    >
       <motion.div
         aria-hidden="true"
         style={{
@@ -328,9 +337,8 @@ export default function CaleroHero() {
             whitespace-nowrap
             text-center
             text-[5vw]
-            font-black
-            uppercase
-            leading-none
+            font-bold
+font-merchant            leading-none
             tracking-[-0.01em]
             text-white
             mix-blend-difference
@@ -357,7 +365,16 @@ export default function CaleroHero() {
       >
         <div className="flex flex-1 items-center pt-32 sm:pt-32 md:pt-32">
           <div className="w-full">
-            <div className="relative mt-16 flex justify-start">
+            <div
+              className="
+                relative
+                mt-16
+                flex
+                w-full
+                items-end
+                justify-between
+              "
+            >
               <div
                 className="
                   overflow-hidden
@@ -371,10 +388,9 @@ export default function CaleroHero() {
                   initial="hidden"
                   animate="visible"
                   className="
-                      font-merchant
-
                     origin-bottom-left
                     whitespace-nowrap
+                    font-merchant
                     text-[13vw]
                     font-normal
                     leading-[0.9]
@@ -385,30 +401,48 @@ export default function CaleroHero() {
                   Calero Studio
                 </motion.h1>
               </div>
+
               <motion.div
                 variants={labelContainerVariants}
                 initial="hidden"
                 animate="visible"
-                className="mb-2 flex w-full flex-row items-center justify-end"
+                className="
+                  mb-[0.8vw]
+                  hidden
+                  shrink-0
+                  items-center
+                  gap-x-20
+                  sm:flex
+                "
               >
-                <div className="hidden flex-row-reverse w-full justify-between">
-                  <div className="overflow-hidden pb-[0.08em]">
-                    <motion.h1
-                      variants={labelRevealVariants}
-                      className="origin-bottom-left text-[11px] font-normal uppercase"
-                    >
-                      Calm by design
-                    </motion.h1>
-                  </div>
+                <div className="overflow-hidden pb-[0.08em]">
+                  <motion.p
+                    variants={labelRevealVariants}
+                    className="
+                      origin-bottom-left
+                      whitespace-nowrap
+                      text-[11px]
+                      font-normal
+                      uppercase
+                    "
+                  >
+                    Calm by design
+                  </motion.p>
+                </div>
 
-                  <div className="overflow-hidden pb-[0.08em]">
-                    <motion.h1
-                      variants={labelRevealVariants}
-                      className="origin-bottom-left text-[11px] font-semibold uppercase"
-                    >
-                      Categories
-                    </motion.h1>
-                  </div>
+                <div className="overflow-hidden pb-[0.08em]">
+                  <motion.p
+                    variants={labelRevealVariants}
+                    className="
+                      origin-bottom-left
+                      whitespace-nowrap
+                      text-[11px]
+                      font-semibold
+                      uppercase
+                    "
+                  >
+                    Categories
+                  </motion.p>
                 </div>
               </motion.div>
             </div>
@@ -416,10 +450,13 @@ export default function CaleroHero() {
         </div>
 
         <div className="mt-2 w-full">
-          {/* Samme fade-wrapper som bildene hadde opprinnelig */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
             transition={{
               duration: 0.8,
               ease: "easeOut",
@@ -439,7 +476,13 @@ export default function CaleroHero() {
                 delay: 0.62,
                 ease,
               }}
-              className="grid grid-cols-2 gap-2.5 md:grid-cols-4 md:gap-4"
+              className="
+                grid
+                grid-cols-2
+                gap-2.5
+                md:grid-cols-4
+                md:gap-4
+              "
             >
               {heroImages.map((image, index) => (
                 <HeroImage
@@ -536,8 +579,12 @@ function HeroImage({
         "
       >
         <motion.div
-          initial={{ scale: 1.18 }}
-          animate={{ scale: 1 }}
+          initial={{
+            scale: 1.18,
+          }}
+          animate={{
+            scale: 1,
+          }}
           transition={{
             duration: 1.6,
             delay: 0.82 + index * 0.12,

@@ -1,11 +1,12 @@
-// app/shop/page.tsx
-import { prisma } from "@/lib/prisma";
+import type { Metadata } from "next";
+import Link from "next/link";
+
+import MobileShopFilters from "@/components/shop/MobileShopFilters";
 import ProductCard from "@/components/shop/ProductCard";
 import ShopFilters from "@/components/shop/ShopFilters";
-import MobileShopFilters from "@/components/shop/MobileShopFilters";
-import Link from "next/link";
+import ShopHero from "@/components/shop/ShopClient";
 import ScrollSection from "@/components/SmoothScroll";
-import type { Metadata } from "next";
+import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Shop lamps — Modern lighting for calm interiors | Calm by Design",
@@ -65,9 +66,18 @@ const PRODUCTS_PER_PAGE = 9;
 function createPageHref(params: ShopSearchParams, page: number) {
   const searchParams = new URLSearchParams();
 
-  if (params.category) searchParams.set("category", params.category);
-  if (params.color) searchParams.set("color", params.color);
-  if (params.sort) searchParams.set("sort", params.sort);
+  if (params.category) {
+    searchParams.set("category", params.category);
+  }
+
+  if (params.color) {
+    searchParams.set("color", params.color);
+  }
+
+  if (params.sort) {
+    searchParams.set("sort", params.sort);
+  }
+
   if (params.availability) {
     searchParams.set("availability", params.availability);
   }
@@ -227,7 +237,6 @@ export default async function ShopPage({
       },
 
       orderBy,
-
       skip,
       take: PRODUCTS_PER_PAGE,
     }),
@@ -246,32 +255,23 @@ export default async function ShopPage({
   const showingTo = Math.min(skip + products.length, totalProducts);
 
   return (
-    <main className="min-h-screen bg-[#ecebeb] px-6 py-24 text-[#161310] md:px-12">
+    <main
+      className="
+        min-h-screen
+        bg-[#ecebeb]
+        px-6
+        pb-24
+        pt-20
+        text-[#161310]
+        md:px-12
+        md:pt-20
+      "
+    >
       <ScrollSection>
-        <section className="mb-12  pb-10">
-          <h1 className="mt-4 max-w-5xl font-merchant font-normal text-[17vw]  leading-[0.85] tracking-[-0.01em] md:text-[6vw]">
-            Shop lighting
-          </h1>
-
-          <p className="mt-5 max-w-xl font-merchant font-thin text-lg leading-[1.8] text-[#161310]/85 md:text-xl">
-            Minimal lighting curated for calm interiors, focused work and warm
-            everyday spaces.
-          </p>
-        </section>
-
-        <div className="mb-8 md:hidden">
-          <MobileShopFilters
-            categories={categories}
-            colors={colors}
-            currentCategory={params.category}
-            currentColor={params.color}
-            currentSort={params.sort}
-            currentAvailability={params.availability}
-          />
-        </div>
+        <ShopHero />
 
         <div className="grid gap-12 md:grid-cols-[260px_1fr]">
-          <div className="hidden md:block">
+          <aside className="hidden md:block">
             <div className="sticky top-24">
               <ShopFilters
                 categories={categories}
@@ -282,45 +282,88 @@ export default async function ShopPage({
                 currentAvailability={params.availability}
               />
             </div>
-          </div>
+          </aside>
 
           <section>
-            <div className="mb-8 flex flex-col gap-4 border-b border-[#161310]/15 pb-5 text-sm md:flex-row md:items-center md:justify-between">
-              <p className="text-[#161310]/50">
-                {totalProducts === 0
-                  ? "0 products"
-                  : `Showing ${showingFrom}-${showingTo} of ${totalProducts} ${
-                      totalProducts === 1 ? "product" : "products"
-                    }`}
-              </p>
+            <div className="mb-8">
+              <div
+                className="
+      flex
+      flex-col
+      gap-3
+      pb-5
+      md:flex-row-reverse
+      md:items-end
+      md:justify-between
+    "
+              >
+                <h1
+                  className="
+        -mb-[0.16em]
+        whitespace-nowrap
+        font-merchant
+        text-[clamp(3.25rem,4.6vw,5.75rem)]
+        font-normal
+        tracking-[-0.045em]
+      "
+                >
+                  Shop lighting
+                </h1>
 
-              <div className="flex flex-wrap items-center gap-5">
-                {params.category && (
-                  <p className="text-[#161310]/50">
-                    Category:{" "}
-                    <span className="text-[#161310]">{params.category}</span>
-                  </p>
-                )}
-
-                {params.color && (
-                  <p className="text-[#161310]/50">
-                    Color:{" "}
-                    <span className="text-[#161310]">{params.color}</span>
-                  </p>
-                )}
-
-                {hasActiveFilters && (
-                  <Link href="/shop" className="text-[#161310] underline">
-                    Clear filters
-                  </Link>
-                )}
+                <p
+                  className="
+        shrink-0
+        pb-1
+        font-montserrat
+        text-sm
+        text-[#161310]/50
+        md:text-right
+      "
+                >
+                  {totalProducts === 0
+                    ? "0 products"
+                    : `Showing ${showingFrom}-${showingTo} of ${totalProducts} ${
+                        totalProducts === 1 ? "product" : "products"
+                      }`}
+                </p>
               </div>
+
+              <div className="h-px w-full bg-[#161310]/15" />
+            </div>
+
+            <div className="mb-8 md:hidden">
+              <MobileShopFilters
+                categories={categories}
+                colors={colors}
+                currentCategory={params.category}
+                currentColor={params.color}
+                currentSort={params.sort}
+                currentAvailability={params.availability}
+              />
             </div>
 
             {products.length === 0 ? (
-              <div className="flex min-h-[420px] items-center justify-center border border-[#161310]/15 p-8 text-center">
+              <div
+                className="
+                  flex
+                  min-h-[420px]
+                  items-center
+                  justify-center
+                  border
+                  border-[#161310]/15
+                  p-8
+                  text-center
+                "
+              >
                 <div>
-                  <p className="text-3xl font-light tracking-[-0.05em]">
+                  <p
+                    className="
+                      font-merchant
+                      text-4xl
+                      font-normal
+                      tracking-[-0.04em]
+                    "
+                  >
                     No products found.
                   </p>
 
@@ -330,7 +373,15 @@ export default async function ShopPage({
 
                   <Link
                     href="/shop"
-                    className="mt-8 inline-block bg-[#161310] px-6 py-4 text-sm text-[#ecebeb]"
+                    className="
+                      mt-8
+                      inline-block
+                      bg-[#161310]
+                      px-6
+                      py-4
+                      text-sm
+                      text-[#ecebeb]
+                    "
                   >
                     Clear filters
                   </Link>
@@ -338,7 +389,15 @@ export default async function ShopPage({
               </div>
             ) : (
               <>
-                <div className="grid gap-x-5 gap-y-14 md:grid-cols-2 xl:grid-cols-3">
+                <div
+                  className="
+                    grid
+                    gap-x-5
+                    gap-y-14
+                    md:grid-cols-2
+                    xl:grid-cols-3
+                  "
+                >
                   {products.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
@@ -347,34 +406,93 @@ export default async function ShopPage({
                 {totalPages > 1 && (
                   <nav
                     aria-label="Shop pagination"
-                    className="mt-20 border-t border-[#161310]/15 pt-10"
+                    className="
+                      mt-20
+                      border-t
+                      border-[#161310]/15
+                      pt-10
+                    "
                   >
-                    <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+                    <div
+                      className="
+                        flex
+                        flex-col
+                        gap-10
+                        md:flex-row
+                        md:items-end
+                        md:justify-between
+                      "
+                    >
                       <div>
-                        <p className="text-xs uppercase tracking-[0.34em] text-[#161310]/40">
+                        <p
+                          className="
+                            text-xs
+                            uppercase
+                            tracking-[0.34em]
+                            text-[#161310]/40
+                          "
+                        >
                           Page
                         </p>
 
                         <div className="mt-3 flex items-end gap-3">
-                          <span className="text-[4.5rem] font-light leading-[0.8] tracking-[-0.08em] text-[#161310] md:text-[6rem]">
+                          <span
+                            className="
+                              font-merchant
+                              text-[4.5rem]
+                              font-light
+                              leading-[0.8]
+                              tracking-[-0.08em]
+                              text-[#161310]
+                              md:text-[6rem]
+                            "
+                          >
                             {String(currentPage).padStart(2, "0")}
                           </span>
 
-                          <span className="pb-2 text-sm tracking-[0.24em] text-[#161310]/35">
+                          <span
+                            className="
+                              pb-2
+                              text-sm
+                              tracking-[0.24em]
+                              text-[#161310]/35
+                            "
+                          >
                             / {String(totalPages).padStart(2, "0")}
                           </span>
                         </div>
 
-                        <p className="mt-5 max-w-xs text-sm leading-relaxed text-[#161310]/45">
+                        <p
+                          className="
+                            mt-5
+                            max-w-xs
+                            text-sm
+                            leading-relaxed
+                            text-[#161310]/45
+                          "
+                        >
                           Browsing {showingFrom}-{showingTo} of {totalProducts}{" "}
                           selected pieces.
                         </p>
                       </div>
 
                       <div className="flex flex-col gap-6 md:items-end">
-                        <div className="h-px w-full overflow-hidden bg-[#161310]/15 md:w-[360px]">
+                        <div
+                          className="
+                            h-px
+                            w-full
+                            overflow-hidden
+                            bg-[#161310]/15
+                            md:w-[360px]
+                          "
+                        >
                           <div
-                            className="h-px bg-[#161310] transition-all duration-500"
+                            className="
+                              h-px
+                              bg-[#161310]
+                              transition-all
+                              duration-500
+                            "
                             style={{
                               width: `${(currentPage / totalPages) * 100}%`,
                             }}
@@ -385,13 +503,26 @@ export default async function ShopPage({
                           {currentPage > 1 ? (
                             <Link
                               href={createPageHref(params, currentPage - 1)}
-                              className="group flex items-center gap-3 text-xl font-black text-[#161310]"
+                              className="
+                                group
+                                flex
+                                items-center
+                                gap-3
+                                text-xl
+                                font-bold
+                                text-[#161310]
+                              "
                             >
                               <svg
                                 aria-hidden="true"
                                 viewBox="0 0 38 18"
                                 fill="none"
-                                className="h-[16px] w-[34px] rotate-180 overflow-visible"
+                                className="
+                                  h-[16px]
+                                  w-[34px]
+                                  rotate-180
+                                  overflow-visible
+                                "
                               >
                                 <path
                                   d="M1 9H32"
@@ -407,13 +538,13 @@ export default async function ShopPage({
                                   strokeLinecap="square"
                                   pathLength="1"
                                   className="
-            [stroke-dasharray:1]
-            [stroke-dashoffset:1]
-            transition-[stroke-dashoffset]
-            duration-300
-            ease-[cubic-bezier(0.16,1,0.3,1)]
-            group-hover:[stroke-dashoffset:0]
-          "
+                                    [stroke-dasharray:1]
+                                    [stroke-dashoffset:1]
+                                    transition-[stroke-dashoffset]
+                                    duration-300
+                                    ease-[cubic-bezier(0.16,1,0.3,1)]
+                                    group-hover:[stroke-dashoffset:0]
+                                  "
                                 />
 
                                 <path
@@ -423,25 +554,39 @@ export default async function ShopPage({
                                   strokeLinecap="square"
                                   pathLength="1"
                                   className="
-            [stroke-dasharray:1]
-            [stroke-dashoffset:1]
-            transition-[stroke-dashoffset]
-            duration-300
-            ease-[cubic-bezier(0.16,1,0.3,1)]
-            group-hover:[stroke-dashoffset:0]
-          "
+                                    [stroke-dasharray:1]
+                                    [stroke-dashoffset:1]
+                                    transition-[stroke-dashoffset]
+                                    duration-300
+                                    ease-[cubic-bezier(0.16,1,0.3,1)]
+                                    group-hover:[stroke-dashoffset:0]
+                                  "
                                 />
                               </svg>
 
                               <span>Prev</span>
                             </Link>
                           ) : (
-                            <span className="flex items-center gap-3 text-xl font-black text-[#161310]/20">
+                            <span
+                              className="
+                                flex
+                                items-center
+                                gap-3
+                                text-xl
+                                font-bold
+                                text-[#161310]/20
+                              "
+                            >
                               <svg
                                 aria-hidden="true"
                                 viewBox="0 0 38 18"
                                 fill="none"
-                                className="h-[16px] w-[34px] rotate-180 overflow-visible"
+                                className="
+                                  h-[16px]
+                                  w-[34px]
+                                  rotate-180
+                                  overflow-visible
+                                "
                               >
                                 <path
                                   d="M1 9H32"
@@ -477,8 +622,18 @@ export default async function ShopPage({
                                   aria-current={isActive ? "page" : undefined}
                                   className={
                                     isActive
-                                      ? "text-lg font-black text-[#161310]"
-                                      : "text-lg text-[#161310]/35 transition-colors hover:text-[#161310]"
+                                      ? `
+                                        scale-110
+                                        text-lg
+                                        font-semibold
+                                        text-[#161310]
+                                      `
+                                      : `
+                                        text-lg
+                                        text-[#161310]/35
+                                        transition-colors
+                                        hover:text-[#161310]
+                                      `
                                   }
                                 >
                                   {String(page).padStart(2, "0")}
@@ -490,7 +645,15 @@ export default async function ShopPage({
                           {currentPage < totalPages ? (
                             <Link
                               href={createPageHref(params, currentPage + 1)}
-                              className="group flex items-center gap-3 text-xl font-black text-[#161310]"
+                              className="
+                                group
+                                flex
+                                items-center
+                                gap-3
+                                text-xl
+                                font-bold
+                                text-[#161310]
+                              "
                             >
                               <span>Next</span>
 
@@ -498,7 +661,11 @@ export default async function ShopPage({
                                 aria-hidden="true"
                                 viewBox="0 0 38 18"
                                 fill="none"
-                                className="h-[16px] w-[34px] overflow-visible"
+                                className="
+                                  h-[16px]
+                                  w-[34px]
+                                  overflow-visible
+                                "
                               >
                                 <path
                                   d="M1 9H32"
@@ -514,13 +681,13 @@ export default async function ShopPage({
                                   strokeLinecap="square"
                                   pathLength="1"
                                   className="
-            [stroke-dasharray:1]
-            [stroke-dashoffset:1]
-            transition-[stroke-dashoffset]
-            duration-300
-            ease-[cubic-bezier(0.16,1,0.3,1)]
-            group-hover:[stroke-dashoffset:0]
-          "
+                                    [stroke-dasharray:1]
+                                    [stroke-dashoffset:1]
+                                    transition-[stroke-dashoffset]
+                                    duration-300
+                                    ease-[cubic-bezier(0.16,1,0.3,1)]
+                                    group-hover:[stroke-dashoffset:0]
+                                  "
                                 />
 
                                 <path
@@ -530,25 +697,38 @@ export default async function ShopPage({
                                   strokeLinecap="square"
                                   pathLength="1"
                                   className="
-            [stroke-dasharray:1]
-            [stroke-dashoffset:1]
-            transition-[stroke-dashoffset]
-            duration-300
-            ease-[cubic-bezier(0.16,1,0.3,1)]
-            group-hover:[stroke-dashoffset:0]
-          "
+                                    [stroke-dasharray:1]
+                                    [stroke-dashoffset:1]
+                                    transition-[stroke-dashoffset]
+                                    duration-300
+                                    ease-[cubic-bezier(0.16,1,0.3,1)]
+                                    group-hover:[stroke-dashoffset:0]
+                                  "
                                 />
                               </svg>
                             </Link>
                           ) : (
-                            <span className="flex items-center gap-3 text-xl font-black text-[#161310]/20">
+                            <span
+                              className="
+                                flex
+                                items-center
+                                gap-3
+                                text-xl
+                                font-bold
+                                text-[#161310]/20
+                              "
+                            >
                               <span>Next</span>
 
                               <svg
                                 aria-hidden="true"
                                 viewBox="0 0 38 18"
                                 fill="none"
-                                className="h-[16px] w-[34px] overflow-visible"
+                                className="
+                                  h-[16px]
+                                  w-[34px]
+                                  overflow-visible
+                                "
                               >
                                 <path
                                   d="M1 9H32"
