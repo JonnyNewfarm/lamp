@@ -165,11 +165,11 @@ const Navbar = () => {
               items-center
               gap-x-6
               text-right
-              text-xl
+              text-2xl
               font-semibold
               uppercase
               leading-[0.95]
-              tracking-[-0.01em]
+              tracking-[-0.045em]
               md:flex
             "
           >

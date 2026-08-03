@@ -318,7 +318,10 @@ export default function NewProductsGallery({
   }
 
   return (
-    <section ref={sectionRef} className="relative bg-[#ecebeb] text-[#161310]">
+    <section
+      ref={sectionRef}
+      className="relative pt-20 bg-[#ecebeb] text-[#161310]"
+    >
       <motion.div
         aria-hidden="true"
         initial={false}
@@ -427,10 +430,10 @@ export default function NewProductsGallery({
                 tracking-[-0.01em]
                 sm:text-[44px]
                 md:text-[50px]
-                lg:text-[60px]
+                lg:text-[80px]
               "
             >
-              Added <br /> lately
+              Added lately
             </h2>
 
             <span

@@ -416,7 +416,7 @@ export default function ProductDetailsClient({
               {product.category.name}
             </p>
 
-            <h1 className="mt-5 max-w-2xl font-merchant text-[11vw] font-semibold leading-[0.95] tracking-[-0.035em] md:text-[7vw] lg:text-[5.2vw]">
+            <h1 className="mt-5 max-w-2xl font-merchant text-[11vw] font-extralight leading-[0.95] tracking-[-0.035em] md:text-[7vw] lg:text-[5.2vw]">
               {product.title}
             </h1>
 

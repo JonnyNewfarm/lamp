@@ -292,7 +292,7 @@ export default async function ShopPage({
       flex-col
       gap-3
       pb-5
-      md:flex-row-reverse
+      md:flex-row
       md:items-end
       md:justify-between
     "
@@ -303,11 +303,11 @@ export default async function ShopPage({
         whitespace-nowrap
         font-merchant
         text-[clamp(3.25rem,4.6vw,5.75rem)]
-        font-normal
+        font-light
         tracking-[-0.045em]
       "
                 >
-                  Shop lighting
+                  Explore lighting{" "}
                 </h1>
 
                 <p
@@ -509,7 +509,7 @@ export default async function ShopPage({
                                 items-center
                                 gap-3
                                 text-xl
-                                font-bold
+                                font-normal
                                 text-[#161310]
                               "
                             >
@@ -573,7 +573,7 @@ export default async function ShopPage({
                                 items-center
                                 gap-3
                                 text-xl
-                                font-bold
+                                font-normal
                                 text-[#161310]/20
                               "
                             >
@@ -651,7 +651,7 @@ export default async function ShopPage({
                                 items-center
                                 gap-3
                                 text-xl
-                                font-bold
+                                font-normal
                                 text-[#161310]
                               "
                             >
@@ -714,7 +714,7 @@ export default async function ShopPage({
                                 items-center
                                 gap-3
                                 text-xl
-                                font-bold
+                                font-normal
                                 text-[#161310]/20
                               "
                             >

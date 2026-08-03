@@ -21,13 +21,6 @@ export default function EditorialTextAssembleSection() {
     offset: ["start end", "end start"],
   });
 
-  /*
-   * Det lille bildet starter lavere og beveger seg oppover
-   * mens hele seksjonen scroller gjennom viewporten.
-   *
-   * Øk verdiene for mer drift:
-   * [180, -220]
-   */
   const floatingImageY = useTransform(scrollYProgress, [0, 1], [180, -220]);
 
   return (
@@ -139,7 +132,7 @@ export default function EditorialTextAssembleSection() {
         >
           <p
             className="
-            font-merchant
+              font-merchant
               text-[14px]
               font-medium
               uppercase
@@ -155,14 +148,14 @@ export default function EditorialTextAssembleSection() {
             className="
               mt-2
               max-w-[350px]
-              md:max-w-[240px]
               font-merchant
-              font-thin
               text-3xl
+              font-thin
               leading-[1.05]
               tracking-[-0.035em]
               text-[#161310]/75
               md:ml-auto
+              md:max-w-[240px]
               md:text-xl
             "
           >
@@ -183,7 +176,7 @@ export default function EditorialTextAssembleSection() {
             lg:min-h-[920px]
           "
         >
-          {/* Stort hovedbilde */}
+          {/* Stort hovedbilde – ingen scale-animasjon */}
           <motion.div
             initial={{
               clipPath: "inset(0 0 100% 0)",
@@ -227,20 +220,7 @@ export default function EditorialTextAssembleSection() {
               lg:w-[70%]
             "
           >
-            <motion.div
-              initial={{
-                scale: 1.08,
-              }}
-              animate={{
-                scale: isInView ? 1 : 1.08,
-              }}
-              transition={{
-                duration: 1.8,
-                delay: 0.35,
-                ease,
-              }}
-              className="relative h-full w-full"
-            >
+            <div className="relative h-full w-full">
               <Image
                 src="/intro-lamp.jpg"
                 alt="Interior with decorative lighting"
@@ -253,7 +233,7 @@ export default function EditorialTextAssembleSection() {
                 "
                 className="object-cover"
               />
-            </motion.div>
+            </div>
           </motion.div>
 
           {/* Lite bilde – drifter vertikalt med scroll */}
@@ -402,41 +382,39 @@ export default function EditorialTextAssembleSection() {
             <Link
               href="/shop"
               className="
-    group
-    relative
-    inline-flex
-    overflow-hidden
-    font-merchant
-    
-    text-[28px]
-    font-bold
-    
-    leading-none
-    tracking-[-0.025em]
-    md:text-[42px]
-    lg:text-[52px]
-  "
+                group
+                relative
+                inline-flex
+                overflow-hidden
+                font-merchant
+                text-[28px]
+                font-bold
+                leading-none
+                tracking-[-0.025em]
+                md:text-[42px]
+                lg:text-[52px]
+              "
             >
               <span>View all</span>
 
               <span
                 aria-hidden="true"
                 className="
-      pointer-events-none
-      absolute
-      bottom-1
-      left-0
-      h-px
-      w-full
-      origin-right
-      scale-x-0
-      bg-current
-      transition-transform
-      duration-500
-      ease-[cubic-bezier(0.76,0,0.24,1)]
-      group-hover:origin-left
-      group-hover:scale-x-100
-    "
+                  pointer-events-none
+                  absolute
+                  bottom-1
+                  left-0
+                  h-px
+                  w-full
+                  origin-right
+                  scale-x-0
+                  bg-current
+                  transition-transform
+                  duration-500
+                  ease-[cubic-bezier(0.76,0,0.24,1)]
+                  group-hover:origin-left
+                  group-hover:scale-x-100
+                "
               />
             </Link>
           </motion.div>

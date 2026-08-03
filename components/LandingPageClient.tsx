@@ -411,25 +411,9 @@ font-merchant            leading-none
                   hidden
                   shrink-0
                   items-center
-                  gap-x-20
                   sm:flex
                 "
               >
-                <div className="overflow-hidden pb-[0.08em]">
-                  <motion.p
-                    variants={labelRevealVariants}
-                    className="
-                      origin-bottom-left
-                      whitespace-nowrap
-                      text-[11px]
-                      font-normal
-                      uppercase
-                    "
-                  >
-                    Calm by design
-                  </motion.p>
-                </div>
-
                 <div className="overflow-hidden pb-[0.08em]">
                   <motion.p
                     variants={labelRevealVariants}
