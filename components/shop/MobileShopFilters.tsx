@@ -1,4 +1,3 @@
-// components/shop/MobileShopFilters.tsx
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
@@ -76,12 +75,12 @@ export default function MobileShopFilters({
           justify-between
           border
           px-4
-          border-[#161310]/15
+          border-[#1a1817]/15
           py-4
           text-sm
           transition-colors
           duration-300
-          hover:border-[#161310]/35
+          hover:border-[#1a1817]/35
         "
       >
         <span className="flex items-center gap-3">
@@ -96,11 +95,10 @@ export default function MobileShopFilters({
                 items-center
                 justify-center
                 rounded-full
-                bg-[#161310]
-                px-1.5
+        bg-[#1a1817]                px-1.5
                 text-[10px]
-                text-[#ecebeb]
-              "
+text-[#eeeeec]
+        "
             >
               {activeFilterCount}
             </span>
@@ -161,8 +159,7 @@ export default function MobileShopFilters({
                 inset-0
                 z-[998]
                 cursor-default
-                bg-[#161310]/35
-                backdrop-blur-[2px]
+        bg-[#1a1817]/35                backdrop-blur-[2px]
               "
             />
 
@@ -192,8 +189,8 @@ export default function MobileShopFilters({
                 h-[94dvh]
                 flex-col
                 overflow-hidden
-                bg-[#ecebeb]
-                text-[#161310]
+                bg-[#eeeeec]
+        text-[#1a1817]
                 shadow-[0_-24px_80px_rgba(22,19,16,0.15)]
               "
             >
@@ -205,7 +202,7 @@ export default function MobileShopFilters({
                   items-center
                   justify-between
                   border-b
-                  border-[#161310]/15
+                  border-[#1a1817]/15
                   px-5
                 "
               >
@@ -223,7 +220,7 @@ export default function MobileShopFilters({
                   </h2>
 
                   {hasActiveFilters && (
-                    <span className="text-xs text-[#161310]/40">
+                    <span className="text-xs text-[#1a1817]/40">
                       ({activeFilterCount})
                     </span>
                   )}
@@ -244,10 +241,10 @@ export default function MobileShopFilters({
                     justify-center
                     rounded-full
                     border
-                    border-[#161310]/20
+                    border-[#1a1817]/20
                     transition-colors
                     duration-300
-                    hover:border-[#161310]
+                    hover:border-[#1a1817]
                   "
                 >
                   <span
@@ -330,8 +327,8 @@ export default function MobileShopFilters({
                 className="
                   shrink-0
                   border-t
-                  border-[#161310]/15
-                  bg-[#ecebeb]
+                  border-[#eeeeec]/15
+        text-[#1a1817]
                   px-5
                   pb-[max(20px,env(safe-area-inset-bottom))]
                   pt-5
@@ -347,12 +344,12 @@ export default function MobileShopFilters({
                       items-center
                       justify-center
                       border
-                      border-[#161310]/20
+                      border-[#1a1817]/20
                       px-5
                       text-sm
                       transition-colors
                       duration-300
-                      hover:border-[#161310]
+                      hover:border-[#1a1817]
                       ${
                         hasActiveFilters
                           ? "cursor-pointer opacity-100"
@@ -373,19 +370,19 @@ export default function MobileShopFilters({
                       cursor-pointer
                       overflow-hidden
                       border
-                      border-[#161310]
-                      bg-[#161310]
+        border-[#1a1817]
+        bg-[#1a1817]
                       px-6
-                      text-[#ecebeb]
-                    "
+text-[#eeeeec]
+        "
                   >
                     <span
                       className="
                         absolute
                         inset-0
                         translate-y-full
-                        bg-[#ecebeb]
-                        transition-transform
+bg-[#eeeeec]
+        transition-transform
                         duration-500
                         ease-[cubic-bezier(0.76,0,0.24,1)]
                         group-hover:translate-y-0
@@ -399,7 +396,7 @@ export default function MobileShopFilters({
                         text-lg
                         transition-colors
                         duration-500
-                        group-hover:text-[#161310]
+                        group-hover:text-[#1a1817]
                       "
                     >
                       Show products

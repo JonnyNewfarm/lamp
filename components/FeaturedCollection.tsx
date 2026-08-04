@@ -64,7 +64,11 @@ export default async function NewProducts() {
   });
 
   return (
-    <section id="new-products" className="noise-bg bg-[#ecebeb] text-[#161310]">
+    <section
+      id="new-products"
+      className="noise-bg bg-[#eeeeec]
+        text-[#1a1817]"
+    >
       <NewProductsGallery products={productItems} />
     </section>
   );

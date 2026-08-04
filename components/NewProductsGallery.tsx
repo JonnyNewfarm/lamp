@@ -4,6 +4,7 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
 import { formatPrice } from "@/lib/formatPrice";
 import {
+  type CSSProperties,
   type MouseEvent as ReactMouseEvent,
   useCallback,
   useEffect,
@@ -46,12 +47,12 @@ const productLayouts = [
   "md:col-start-1 md:col-span-2 md:mt-0",
   "md:col-start-5 md:col-span-2 md:mt-36",
   "md:col-start-3 md:col-span-2 md:mt-12",
-  "md:col-start-6 md:col-span-2 md:mt-40 mr-5",
+  "md:col-start-6 md:col-span-2 md:mt-40",
   "md:col-start-1 md:col-span-2 md:mt-16",
   "md:col-start-4 md:col-span-2 md:mt-32",
 ];
 
-const productScales = [1, 0.82, 0.93, 0.76, 0.88, 0.8];
+const productScales = [1.06, 1, 1.03, 1, 1.04, 1.02];
 
 const productOrigins = [
   "center center",
@@ -320,52 +321,9 @@ export default function NewProductsGallery({
   return (
     <section
       ref={sectionRef}
-      className="relative pt-20 bg-[#ecebeb] text-[#161310]"
+      className="relative pt-20 bg-[#eeeeec]
+        text-[#1a1817]"
     >
-      <motion.div
-        aria-hidden="true"
-        initial={false}
-        animate={{
-          opacity: isSectionInView ? 1 : 0,
-          x: isSectionInView ? 0 : 14,
-        }}
-        transition={{
-          duration: 0.55,
-          ease,
-        }}
-        className="
-          pointer-events-none
-          fixed
-          right-2
-          top-1/2
-          z-40
-          hidden
-          -translate-y-1/2
-          mix-blend-difference
-          md:block
-          lg:right-4
-        "
-      >
-        <span
-          className="
-            hidden
-            translate-x-[42%]
-            rotate-90
-            whitespace-nowrap
-            text-[10px]
-            font-normal
-            uppercase
-            tracking-[0.2em]
-            text-white
-            mix-blend-difference
-            md:block
-            lg:text-[12px]
-          "
-        >
-          New products — 2026
-        </span>
-      </motion.div>
-
       <motion.div
         aria-hidden="true"
         style={{
@@ -419,7 +377,7 @@ export default function NewProductsGallery({
       </motion.div>
 
       <div className="px-4 pt-10 md:px-9 md:pt-14">
-        <div className="flex items-end justify-between">
+        <div className="flex items-start justify-between gap-8">
           <div className="relative inline-block">
             <h2
               className="
@@ -447,13 +405,61 @@ export default function NewProductsGallery({
                 font-normal
                 uppercase
                 tracking-[0.08em]
-                
                 md:text-[12px]
               "
             >
               {String(visibleProducts.length).padStart(2, "0")}
             </span>
           </div>
+
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: isSectionInView ? 1 : 0,
+              y: isSectionInView ? 0 : 10,
+            }}
+            transition={{
+              duration: 0.55,
+              ease,
+              delay: 0.08,
+            }}
+            className="
+              hidden
+              max-w-[300px]
+              pt-6
+              text-right
+              md:block
+              lg:max-w-[360px]
+              lg:pt-10
+            "
+          >
+            <p
+              className="
+                text-[10px]
+                font-medium
+                font-merchant
+                tracking-[0.16em]
+                lg:text-[24px]
+              "
+            >
+              Recent selection
+            </p>
+
+            <p
+              className="
+                mt-2
+                font-merchant
+                font-light
+                text-[12px]
+                leading-[1.55]
+                tracking-[0.01em]
+                lg:text-[18px]
+              "
+            >
+              A quiet edit of newly arrived lighting pieces, chosen for warm
+              interiors and softer rooms.
+            </p>
+          </motion.div>
         </div>
       </div>
 
@@ -461,8 +467,7 @@ export default function NewProductsGallery({
         <div
           className="
             grid
-            grid-cols-2
-            gap-x-4
+            grid-cols-1
             gap-y-20
             md:grid-cols-7
             md:gap-x-6
@@ -474,7 +479,6 @@ export default function NewProductsGallery({
             const title = cleanTitle(product.title);
             const displayNumber = String(index + 1).padStart(2, "0");
             const scale = productScales[index % productScales.length];
-
             const transformOrigin =
               productOrigins[index % productOrigins.length];
 
@@ -506,12 +510,14 @@ export default function NewProductsGallery({
                 ].join(" ")}
               >
                 <div
-                  style={{
-                    transform: `scale(${scale})`,
-                    transformOrigin,
-                  }}
+                  style={
+                    {
+                      transform: `scale(${scale})`,
+                      transformOrigin,
+                    } as CSSProperties
+                  }
                 >
-                  <span className="pb-1 text-lg font-merchant uppercase tracking-[0.08em]">
+                  <span className="block pb-1 text-lg font-merchant uppercase tracking-[0.08em]">
                     {displayNumber}
                   </span>
 
@@ -527,7 +533,7 @@ export default function NewProductsGallery({
                       group
                       relative
                       block
-                      w-fit
+                      w-full
                       max-w-full
                       cursor-pointer
                       overflow-hidden
@@ -542,6 +548,7 @@ export default function NewProductsGallery({
                       className="
                         block
                         h-auto
+                        w-full
                         max-w-full
                         transition-transform
                         duration-700
@@ -565,32 +572,19 @@ export default function NewProductsGallery({
                     <h2
                       className="
                         text-[17px]
-                        font-black
+                        font-bold
                         uppercase
                         leading-[0.9]
-                        tracking-[-0.055em]
+                        tracking-[-0.04em]
                         sm:text-[20px]
                       "
                     >
                       {title}
                     </h2>
-
-                    <p
-                      className="
-                        mt-3
-                        text-[9px]
-                        font-bold
-                        uppercase
-                        tracking-[0.08em]
-                        opacity-60
-                      "
-                    >
-                      {title}
-                    </p>
                   </div>
 
                   <div className="hidden justify-between pt-3 md:flex">
-                    <span className="flex flex-col text-sm font-bold tracking-[-0.55.em] md:text-lg">
+                    <span className="flex flex-col text-sm font-bold tracking-[-0.055em] md:text-lg">
                       {title}
                     </span>
 

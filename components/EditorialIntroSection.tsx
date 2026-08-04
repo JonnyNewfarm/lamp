@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useRef } from "react";
 
 const ease = [0.16, 1, 0.3, 1] as const;
-const imageEase = [0.76, 0, 0.24, 1] as const;
 
 export default function EditorialTextAssembleSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -30,10 +29,10 @@ export default function EditorialTextAssembleSection() {
         noise-bg
         relative
         overflow-hidden
-        bg-[#ecebeb]
+        bg-[#eeeeec]
         px-5
         py-20
-        text-[#161310]
+        text-[#1a1817]
         md:px-12
         md:py-28
         lg:px-16
@@ -137,7 +136,7 @@ export default function EditorialTextAssembleSection() {
               font-medium
               uppercase
               tracking-[0.18em]
-              text-[#161310]/90
+              text-[#1a1817]/90
               md:text-xs
             "
           >
@@ -153,7 +152,7 @@ export default function EditorialTextAssembleSection() {
               font-thin
               leading-[1.05]
               tracking-[-0.035em]
-              text-[#161310]/75
+              text-[#1a1817]/90
               md:ml-auto
               md:max-w-[240px]
               md:text-xl
@@ -176,34 +175,27 @@ export default function EditorialTextAssembleSection() {
             lg:min-h-[920px]
           "
         >
-          {/* Stort hovedbilde – ingen scale-animasjon */}
+          {/* Stort hovedbilde */}
           <motion.div
             initial={{
-              clipPath: "inset(0 0 100% 0)",
               y: 50,
+              opacity: 0,
             }}
             animate={
               isInView
                 ? {
-                    clipPath: "inset(0 0 0% 0)",
                     y: 0,
+                    opacity: 1,
                   }
                 : {
-                    clipPath: "inset(0 0 100% 0)",
                     y: 50,
+                    opacity: 0,
                   }
             }
             transition={{
-              clipPath: {
-                duration: 1.35,
-                delay: 0.35,
-                ease: imageEase,
-              },
-              y: {
-                duration: 1.2,
-                delay: 0.35,
-                ease,
-              },
+              duration: 1.2,
+              delay: 0.35,
+              ease,
             }}
             className="
               absolute
@@ -342,7 +334,7 @@ export default function EditorialTextAssembleSection() {
               text-2xl
               leading-[1.1]
               tracking-[-0.035em]
-              text-[#161310]
+              text-[#1a1817]
               md:col-span-4
             "
           >

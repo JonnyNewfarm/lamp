@@ -214,9 +214,9 @@ export default function TermsPage() {
     <main
       className="
         min-h-screen
-        bg-[#ecebeb]
+        bg-[#eeeeec]
         font-montserrat
-        text-[#161310]
+        text-[#1a1817]
       "
     >
       <ScrollSection>
@@ -301,7 +301,7 @@ export default function TermsPage() {
                     text-base
                     font-normal
                     leading-[1.65]
-                    text-[#161310]/60
+                    text-[#1a1817]/60
                     md:text-lg
                   "
                 >
@@ -389,7 +389,7 @@ export default function TermsPage() {
                   text-base
                   font-normal
                   leading-[1.65]
-                  text-[#161310]/60
+                  text-[#1a1817]/60
                   md:text-lg
                 "
               >
@@ -544,7 +544,7 @@ function PolicySection({
           text-base
           font-normal
           leading-[1.7]
-          text-[#161310]/65
+          text-[#1a1817]/65
           md:col-span-7
           md:col-start-6
           md:text-lg
@@ -567,7 +567,7 @@ function PolicyLink({ href, children }: { href: string; children: ReactNode }) {
         gap-1
         font-montserrat
         font-medium
-        text-[#161310]
+        text-[#1a1817]
         transition-opacity
         hover:opacity-50
       "

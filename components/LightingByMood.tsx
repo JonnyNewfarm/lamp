@@ -28,10 +28,10 @@ export default function LightingByMood() {
       id="moods"
       className="
         relative
-        bg-[#ecebeb]
         px-6
         py-20
-        text-[#161310]
+      bg-[#eeeeec]
+        text-[#1a1817]       
         md:px-12
         md:py-32
       "

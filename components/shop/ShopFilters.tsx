@@ -33,7 +33,7 @@ export default function ShopFilters({
   const hiddenColorCount = Math.max(colors.length - VISIBLE_COLOR_COUNT, 0);
 
   return (
-    <aside className="space-y-12 text-[#161310]">
+    <aside className="space-y-12 text-[#1a1817]">
       <FilterGroup title="Categories">
         <FilterLink
           href={createHref({
@@ -94,7 +94,7 @@ export default function ShopFilters({
             <button
               type="button"
               onClick={() => setShowAllColors((current) => !current)}
-              className="mt-4 text-sm text-[#161310]/45 underline underline-offset-4 transition hover:text-[#161310]"
+              className="mt-4 text-sm text-[#1a1817]/45 underline underline-offset-4 transition hover:text-[#1a1817]"
             >
               {showAllColors
                 ? "Show fewer colors"
@@ -180,6 +180,7 @@ function createHref(params: {
   if (params.category) searchParams.set("category", params.category);
   if (params.color) searchParams.set("color", params.color);
   if (params.sort) searchParams.set("sort", params.sort);
+
   if (params.availability) {
     searchParams.set("availability", params.availability);
   }
@@ -205,8 +206,9 @@ function FilterGroup({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border-t border-[#161310]/12 pt-5 first:border-t-0 first:pt-0">
-      <h2 className="mb-5 text-sm font-medium text-[#161310]/65">{title}</h2>
+    <div className="border-t border-[#1a1817]/12 pt-5 first:border-t-0 first:pt-0">
+      <h2 className="mb-5 text-sm font-medium text-[#1a1817]/65">{title}</h2>
+
       <div className="space-y-3">{children}</div>
     </div>
   );
@@ -226,15 +228,15 @@ function FilterLink({
       href={href}
       className={`group flex items-center justify-between text-sm transition ${
         active
-          ? "font-medium text-[#161310]"
-          : "text-[#161310]/55 hover:text-[#161310]"
+          ? "font-medium text-[#1a1817]"
+          : "text-[#1a1817]/55 hover:text-[#1a1817]"
       }`}
     >
       <span>{children}</span>
 
       <span
         className={`h-px transition-all duration-500 ${
-          active ? "w-7 bg-[#161310]" : "w-0 bg-[#161310]/60 group-hover:w-5"
+          active ? "w-7 bg-[#1a1817]" : "w-0 bg-[#1a1817]/60 group-hover:w-5"
         }`}
       />
     </Link>

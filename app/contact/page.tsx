@@ -78,9 +78,9 @@ export default function ContactPage() {
     <main
       className="
         min-h-screen
-        bg-[#ecebeb]
+        bg-[#eeeeec]
         font-montserrat
-        text-[#161310]
+        text-[#1a1817]
       "
     >
       <ScrollSection>
@@ -137,7 +137,7 @@ export default function ContactPage() {
                   text-base
                   font-normal
                   leading-[1.65]
-                  text-[#161310]/60
+                  text-[#1a1817]/60
                   md:text-lg
                 "
               >
@@ -347,7 +347,7 @@ export default function ContactPage() {
                   text-base
                   font-normal
                   leading-[1.7]
-                  text-[#161310]/70
+                  text-[#1a1817]/70
                 "
               >
                 For the fastest response, please contact us by email. Phone
@@ -432,7 +432,7 @@ export default function ContactPage() {
                   text-base
                   font-normal
                   leading-[1.7]
-                  text-[#161310]/72
+                  text-[#1a1817]/72
                 "
               >
                 <p>
@@ -458,7 +458,7 @@ export default function ContactPage() {
             className="
               mt-28
               border-t
-              border-[#161310]/15
+              border-[#1a1817]/15
               pt-10
               md:mt-40
               md:pt-14

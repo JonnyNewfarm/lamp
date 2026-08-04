@@ -169,9 +169,9 @@ export default function ShippingPage() {
     <main
       className="
         min-h-screen
-        bg-[#ecebeb]
+        bg-[#eeeeec]
         font-montserrat
-        text-[#161310]
+        text-[#1a1817]
       "
     >
       <ScrollSection>
@@ -256,7 +256,7 @@ export default function ShippingPage() {
                     text-base
                     font-normal
                     leading-[1.65]
-                    text-[#161310]/60
+                    text-[#1a1817]/60
                     md:text-lg
                   "
                 >
@@ -351,7 +351,7 @@ export default function ShippingPage() {
                   text-base
                   font-normal
                   leading-[1.65]
-                  text-[#161310]/60
+                  text-[#1a1817]/60
                   md:text-lg
                 "
               >
@@ -506,7 +506,7 @@ function PolicySection({
           text-base
           font-normal
           leading-[1.7]
-          text-[#161310]/65
+          text-[#1a1817]/65
           md:col-span-7
           md:col-start-6
           md:text-lg

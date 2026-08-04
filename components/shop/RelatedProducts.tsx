@@ -23,11 +23,11 @@ export default function RelatedProducts({
   }
 
   return (
-    <section className="bg-[#ecebeb] px-6 pb-24 pt-10 text-[#161310] md:px-12 md:pb-32">
-      <div className="border-t border-[#161310]/15 pt-10">
+    <section className="bg-[#eeeeec] px-6 pb-24 pt-10 text-[#1a1817] md:px-12 md:pb-32">
+      <div className="border-t border-[#1a1817]/15 pt-10">
         <div className="mb-10 flex items-end justify-between gap-8">
           <div>
-            <p className="mb-5 text-xs uppercase tracking-[0.34em] text-[#161310]/45">
+            <p className="mb-5 text-xs uppercase tracking-[0.34em] text-[#1a1817]/45">
               Related products
             </p>
 

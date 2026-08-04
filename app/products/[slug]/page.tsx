@@ -1,7 +1,7 @@
 // app/products/[slug]/page.tsx
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import ProductDetailsClient from "@/components/shop/ProductDetailsClient";
+import ProductDetailsClient from "@/components/product/ProductDetailsClient";
 import RelatedProducts from "@/components/shop/RelatedProducts";
 import ScrollSection from "@/components/SmoothScroll";
 

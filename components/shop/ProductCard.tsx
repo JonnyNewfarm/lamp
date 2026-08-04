@@ -18,16 +18,12 @@ type ProductCardType = Product & {
 export default function ProductCard({ product }: { product: ProductCardType }) {
   const firstVariant = product.variants[0];
 
-  // Finn første variant-bilde fra ALLE variants, ikke bare første variant
   const firstVariantImage = product.variants
     .flatMap((variant) => variant.images)
     .find(Boolean);
 
-  // Første lifestyle image
   const lifestyleImage = product.images[0];
 
-  // Bruk variant image som main image.
-  // Hvis produktet ikke har variant image, brukes første lifestyle image som fallback.
   const image = firstVariantImage || lifestyleImage;
 
   const price = firstVariant?.price || product.price;
@@ -83,7 +79,7 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
           )}
 
           <div className="absolute inset-x-4 bottom-4 z-20 translate-y-4 opacity-0 transition-all duration-500 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
-            <div className="flex items-center   justify-between border border-[#161310]/15 bg-[#ecebeb]/90 px-4 py-3 text-lg backdrop-blur">
+            <div className="flex items-center justify-between border border-[#161310]/15 bg-[#ecebeb]/90 px-4 py-3 text-sm backdrop-blur">
               <span>{totalStock > 0 ? "View product" : "Out of stock"}</span>
               <span className="h-px w-10 bg-[#161310]" />
             </div>

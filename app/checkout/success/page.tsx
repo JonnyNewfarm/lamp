@@ -4,11 +4,11 @@ import ClearCartOnSuccess from "@/components/cart/ClearCartOnSuccess";
 
 export default function CheckoutSuccessPage() {
   return (
-    <main className="min-h-screen bg-[#ecebeb] px-6 py-24 text-[#161310] md:px-12">
+    <main className="min-h-screen bg-[#eeeeec] px-6 py-24 text-[#1a1817] md:px-12">
       <ClearCartOnSuccess />
 
       <div className="mx-auto max-w-3xl text-center">
-        <p className="text-xs uppercase tracking-[0.34em] text-[#161310]/45">
+        <p className="text-xs uppercase tracking-[0.34em] text-[#1a1817]/45">
           Payment received
         </p>
 
@@ -16,7 +16,7 @@ export default function CheckoutSuccessPage() {
           Thank you for your order.
         </h1>
 
-        <p className="mx-auto mt-8 max-w-xl leading-[1.8] text-[#161310]/60">
+        <p className="mx-auto mt-8 max-w-xl leading-[1.8] text-[#1a1817]/60">
           Your payment was successful. You will receive an email confirmation
           shortly.
         </p>
@@ -24,14 +24,14 @@ export default function CheckoutSuccessPage() {
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link
             href="/shop"
-            className="bg-[#161310] px-8 py-5 text-sm text-[#ecebeb]"
+            className="bg-[#1a1817] px-8 py-5 text-sm text-[#eeeeec]"
           >
             Continue shopping
           </Link>
 
           <Link
             href="/"
-            className="border border-[#161310]/20 px-8 py-5 text-sm"
+            className="border border-[#1a1817]/20 px-8 py-5 text-sm"
           >
             Back home
           </Link>

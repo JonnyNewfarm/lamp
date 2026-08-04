@@ -4,7 +4,7 @@ import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
 
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/components/cart/CartProvider";
 import CartDrawer from "@/components/cart/CartDrawer";

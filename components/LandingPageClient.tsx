@@ -293,8 +293,8 @@ export default function CaleroHero() {
         relative
         min-h-screen
         overflow-x-hidden
-        bg-[#ecebeb]
-        text-[#161310]
+        bg-[#eeeeec]
+        text-[#1a1817]
       "
     >
       <motion.div
@@ -556,7 +556,7 @@ function HeroImage({
           cursor-pointer
           overflow-hidden
           border
-          border-[#161310]/10
+          border-[#1a1817]/10
           bg-[#dfddd8]
           md:aspect-[4/5]
           md:cursor-none

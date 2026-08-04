@@ -1,4 +1,3 @@
-// components/cart/CartDrawer.tsx
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
@@ -134,8 +133,8 @@ export default function CartDrawer() {
               inset-0
               z-[9998]
               cursor-default
-              bg-[#161310]/35
-              backdrop-blur-[2px]
+           bg-[#eeeeec]
+             backdrop-blur-[2px]
             "
           />
 
@@ -162,8 +161,8 @@ export default function CartDrawer() {
               max-w-[600px]
               flex-col
               overflow-hidden
-              bg-[#ecebeb]
-              text-[#161310]
+              bg-[#eeeeec]
+        text-[#1a1817]
               shadow-[-24px_0_80px_rgba(22,19,16,0.12)]
             "
           >
@@ -175,7 +174,7 @@ export default function CartDrawer() {
                 items-center
                 justify-between
                 border-b
-                border-[#161310]/15
+                border-[#1a1817]/15
                 px-5
                 sm:h-[104px]
                 sm:px-8
@@ -193,7 +192,7 @@ export default function CartDrawer() {
                   Cart
                 </h2>
 
-                <span className="text-xs text-[#161310]/45">
+                <span className="text-xs text-[#1a1817]/45">
                   ({totalQuantity})
                 </span>
               </div>
@@ -215,10 +214,10 @@ export default function CartDrawer() {
                   justify-center
                   rounded-full
                   border
-                  border-[#161310]/20
+                  border-[#1a1817]/20
                   transition-colors
                   duration-300
-                  hover:border-[#161310]
+                  hover:border-[#1a1817]
                 "
               >
                 <span
@@ -285,7 +284,7 @@ export default function CartDrawer() {
                       max-w-[330px]
                       text-sm
                       leading-[1.7]
-                      text-[#161310]
+                      text-[#1a1817]
                     "
                   >
                     Explore the collection and add something made for slower,
@@ -303,7 +302,7 @@ export default function CartDrawer() {
                     items-center
                     justify-between
                     border-t
-                    border-[#161310]
+                    border-[#1a1817]
                     py-5
                     text-sm
                     uppercase
@@ -346,7 +345,7 @@ export default function CartDrawer() {
                     sm:py-8
                   "
                 >
-                  <div className="divide-y divide-[#161310]/15">
+                  <div className="divide-y divide-[#1a1817]/15">
                     {items.map((item) => {
                       const variantLabel = getCartItemVariantLabel(item);
                       const reachedStockLimit = item.quantity >= item.stock;
@@ -398,7 +397,7 @@ export default function CartDrawer() {
                                   items-center
                                   justify-center
                                   text-xs
-                                  text-[#161310]/35
+                                  text-[#1a1817]/35
                                 "
                               >
                                 No image
@@ -450,7 +449,7 @@ export default function CartDrawer() {
                                     mt-3
                                     text-xs
                                     capitalize
-                                    text-[#161310]
+                                    text-[#1a1817]
                                   "
                                 >
                                   {variantLabel}
@@ -462,7 +461,7 @@ export default function CartDrawer() {
                                   className="
                                     mt-1
                                     text-xs
-                                    text-[#161310]/60
+                                    text-[#1a1817]/60
                                   "
                                 >
                                   {item.stock} available
@@ -486,7 +485,7 @@ export default function CartDrawer() {
                                   h-10
                                   items-center
                                   border
-                                  border-[#161310]/20
+                                  border-[#1a1817]/20
                                 "
                               >
                                 <button
@@ -507,8 +506,8 @@ export default function CartDrawer() {
                                     justify-center
                                     text-base
                                     transition-colors
-                                    hover:bg-[#161310]
-                                    hover:text-[#ecebeb]
+                                    hover:bg-[#1a1817]
+                                    hover:text-[#eeeeec]
                                   "
                                 >
                                   −
@@ -522,7 +521,7 @@ export default function CartDrawer() {
                                     items-center
                                     justify-center
                                     border-x
-                                    border-[#161310]/20
+                                    border-[#1a1817]/20
                                     px-2
                                     text-xs
                                   "
@@ -549,8 +548,8 @@ export default function CartDrawer() {
                                     justify-center
                                     text-base
                                     transition-colors
-                                    hover:bg-[#161310]
-                                    hover:text-[#ecebeb]
+                                    hover:bg-[#1a1817]
+                                    hover:text-[#eeeeec]
                                     disabled:cursor-not-allowed
                                     disabled:opacity-25
                                     disabled:hover:bg-transparent
@@ -570,10 +569,10 @@ export default function CartDrawer() {
                                   border-transparent
                                   pb-0.5
                                   text-xs
-                                  text-[#161310]/45
+                                  text-[#1a1817]/45
                                   transition
-                                  hover:border-[#161310]
-                                  hover:text-[#161310]
+                                  hover:border-[#1a1817]
+                                  hover:text-[#1a1817]
                                 "
                               >
                                 Remove
@@ -586,7 +585,7 @@ export default function CartDrawer() {
                                   mt-3
                                   text-[11px]
                                   leading-relaxed
-                                  text-[#161310]/35
+                                  text-[#1a1817]/35
                                 "
                               >
                                 Maximum available quantity reached.
@@ -616,8 +615,8 @@ export default function CartDrawer() {
                   className="
                     shrink-0
                     border-t
-                    border-[#161310]/15
-                    bg-[#ecebeb]
+                    border-[#1a1817]/15
+                    bg-[#eeeeec]
                     px-5
                     pb-[max(20px,env(safe-area-inset-bottom))]
                     pt-5
@@ -642,13 +641,13 @@ export default function CartDrawer() {
                           text-xs
                           uppercase
                           tracking-[0.12em]
-                          text-[#161310]
+                          text-[#1a1817]
                         "
                       >
                         Subtotal
                       </p>
 
-                      <p className="text-xs text-[#161310]">
+                      <p className="text-xs text-[#1a1817]">
                         Shipping calculated at checkout
                       </p>
                     </div>
@@ -691,10 +690,10 @@ export default function CartDrawer() {
     cursor-pointer
     overflow-hidden
     border
-    border-[#161310]
-    bg-[#161310]
+    border-[#1a1817]
+    bg-[#1a1817]
     px-6
-    text-[#ecebeb]
+    text-[#eeeeec]
     disabled:cursor-not-allowed
     disabled:opacity-35
   "
@@ -704,7 +703,7 @@ export default function CartDrawer() {
       absolute
       inset-0
       translate-y-full
-      bg-[#ecebeb]
+      bg-[#eeeeec]
       transition-transform
       duration-500
       ease-[cubic-bezier(0.76,0,0.24,1)]
@@ -719,7 +718,7 @@ export default function CartDrawer() {
       text-lg
       transition-colors
       duration-500
-      group-hover:text-[#161310]
+      group-hover:text-[#1a1817]
     "
                     >
                       {loading
