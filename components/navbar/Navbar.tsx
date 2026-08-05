@@ -198,11 +198,7 @@ const Navbar = () => {
               transition-colors
               duration-300
               md:hidden
-              ${
-                isMenuOpen
-                  ? "text-[#eeeeec]"
-                  : "text-[#1a1817] dark:text-[#eeeeec]"
-              }
+              ${isMenuOpen ? "text-[#eeeeec]" : "text-[#1a1817] "}
             `}
           >
             <button
@@ -350,7 +346,7 @@ const Navbar = () => {
                         uppercase
                         
                         leading-[0.9]
-                        tracking-[-0.045em]
+                        tracking-[0.01em]
                       "
                     >
                       <span>{link.label}</span>

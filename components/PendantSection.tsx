@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  AnimatePresence,
   motion,
+  MotionValue,
   useMotionValue,
   useScroll,
   useSpring,
@@ -14,6 +14,7 @@ import {
   type MouseEvent as ReactMouseEvent,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -35,16 +36,181 @@ const slides = [
 const ease = [0.16, 1, 0.3, 1] as const;
 const sliderEase = [0.76, 0, 0.24, 1] as const;
 
+const SLIDE_INTERVAL = 3200;
+const SLIDE_DURATION = 1;
+
 type ProductLinkElement = HTMLAnchorElement & {
   dataset: {
     pendantLink?: string;
   };
 };
 
+type SliderProps = {
+  sliderY: MotionValue<string>;
+};
+
+function PendantSlider({ sliderY }: SliderProps) {
+  const [position, setPosition] = useState(0);
+  const [instantReset, setInstantReset] = useState(false);
+
+  const loopedSlides = useMemo(() => {
+    return [...slides, slides[0]];
+  }, []);
+
+  const activeIndex = position % slides.length;
+
+  const trackWidth = loopedSlides.length * 100;
+  const slideWidth = 100 / loopedSlides.length;
+  const trackX = -(position * slideWidth);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setInstantReset(false);
+      setPosition((currentPosition) => currentPosition + 1);
+    }, SLIDE_INTERVAL);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  const handleAnimationComplete = () => {
+    if (position !== slides.length) {
+      return;
+    }
+
+    setInstantReset(true);
+    setPosition(0);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setInstantReset(false);
+      });
+    });
+  };
+
+  return (
+    <motion.div
+      style={{ y: sliderY }}
+      className="
+        pointer-events-none
+        absolute
+        bottom-5
+        right-5
+        z-20
+        w-[28vw]
+        min-w-[112px]
+        max-w-[150px]
+        will-change-transform
+        md:bottom-10
+        md:right-10
+        md:w-[14vw]
+        md:max-w-[190px]
+        lg:bottom-14
+        lg:right-14
+        lg:max-w-[210px]
+      "
+    >
+      <div
+        className="
+          relative
+          aspect-[4.3/4.8]
+          w-[98%]
+          overflow-hidden
+          bg-transparent
+        "
+      >
+        <motion.div
+          animate={{
+            x: `${trackX}%`,
+          }}
+          transition={
+            instantReset
+              ? {
+                  duration: 0,
+                }
+              : {
+                  duration: SLIDE_DURATION,
+                  ease: sliderEase,
+                }
+          }
+          onAnimationComplete={handleAnimationComplete}
+          style={{
+            width: `${trackWidth}%`,
+          }}
+          className="
+            absolute
+            inset-y-0
+            left-0
+            flex
+            transform-gpu
+            will-change-transform
+          "
+        >
+          {loopedSlides.map((slide, index) => (
+            <div
+              key={`${slide.src}-${index}`}
+              style={{
+                width: `${slideWidth}%`,
+              }}
+              className="
+                relative
+                h-full
+                shrink-0
+                overflow-hidden
+              "
+            >
+              <Image
+                src={slide.src}
+                alt={index === loopedSlides.length - 1 ? "" : slide.alt}
+                fill
+                priority
+                sizes="
+                  (max-width: 767px) 28vw,
+                  (max-width: 1279px) 14vw,
+                  210px
+                "
+                className="
+                  pointer-events-none
+                  scale-[1.005]
+                  select-none
+                  object-cover
+                  object-center
+                "
+              />
+            </div>
+          ))}
+        </motion.div>
+      </div>
+
+      <div
+        className="
+          mt-3
+          flex
+          items-center
+          justify-end
+          font-montserrat
+          text-[8px]
+          font-medium
+          uppercase
+          tracking-[0.15em]
+          text-white
+          md:text-[9px]
+        "
+      >
+        <span>
+          {String(activeIndex + 1).padStart(2, "0")} /{" "}
+          {String(slides.length).padStart(2, "0")}
+        </span>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function PendantImageSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const frameRef = useRef<number | null>(null);
 
-  const [activeIndex, setActiveIndex] = useState(0);
   const [isHoveringSection, setIsHoveringSection] = useState(false);
 
   const mouseX = useMotionValue(0);
@@ -56,7 +222,6 @@ export default function PendantImageSection() {
   });
 
   const hasPointerPosition = useRef(false);
-  const frameRef = useRef<number | null>(null);
 
   const cursorX = useSpring(mouseX, {
     stiffness: 220,
@@ -89,7 +254,10 @@ export default function PendantImageSection() {
 
     const { x, y } = pointerPosition.current;
 
-    if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) {
+    const isOutsideViewport =
+      x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight;
+
+    if (isOutsideViewport) {
       setIsHoveringSection(false);
       return;
     }
@@ -113,20 +281,8 @@ export default function PendantImageSection() {
     });
   }, [updateHoverAtPointer]);
 
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setActiveIndex((currentIndex) => {
-        return (currentIndex + 1) % slides.length;
-      });
-    }, 3200);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, []);
-
-  useEffect(() => {
-    const updatePointerPosition = (x: number, y: number) => {
+  const updatePointerPosition = useCallback(
+    (x: number, y: number) => {
       hasPointerPosition.current = true;
 
       pointerPosition.current = {
@@ -136,24 +292,23 @@ export default function PendantImageSection() {
 
       mouseX.set(x);
       mouseY.set(y);
+    },
+    [mouseX, mouseY],
+  );
 
-      scheduleHoverCheck();
-    };
-
+  useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
       if (event.pointerType && event.pointerType !== "mouse") {
         return;
       }
 
       updatePointerPosition(event.clientX, event.clientY);
-    };
-
-    const handleMouseMove = (event: globalThis.MouseEvent) => {
-      updatePointerPosition(event.clientX, event.clientY);
+      scheduleHoverCheck();
     };
 
     const handleWheel = (event: WheelEvent) => {
       updatePointerPosition(event.clientX, event.clientY);
+      scheduleHoverCheck();
     };
 
     const handleViewportChange = () => {
@@ -167,10 +322,6 @@ export default function PendantImageSection() {
     };
 
     window.addEventListener("pointermove", handlePointerMove, {
-      passive: true,
-    });
-
-    window.addEventListener("mousemove", handleMouseMove, {
       passive: true,
     });
 
@@ -191,44 +342,28 @@ export default function PendantImageSection() {
 
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("mousemove", handleMouseMove);
+
       window.removeEventListener("wheel", handleWheel);
+
       window.removeEventListener("resize", handleViewportChange);
 
       document.removeEventListener("scroll", handleViewportChange, true);
+
       document.removeEventListener("mouseleave", handleMouseLeaveWindow);
 
       if (frameRef.current !== null) {
         cancelAnimationFrame(frameRef.current);
       }
     };
-  }, [mouseX, mouseY, scheduleHoverCheck]);
+  }, [scheduleHoverCheck, updatePointerPosition]);
 
   function handleSectionMouseMove(event: ReactMouseEvent<HTMLAnchorElement>) {
-    hasPointerPosition.current = true;
-
-    pointerPosition.current = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-
-    mouseX.set(event.clientX);
-    mouseY.set(event.clientY);
-
+    updatePointerPosition(event.clientX, event.clientY);
     setIsHoveringSection(true);
   }
 
   function handleSectionMouseEnter(event: ReactMouseEvent<HTMLAnchorElement>) {
-    hasPointerPosition.current = true;
-
-    pointerPosition.current = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-
-    mouseX.set(event.clientX);
-    mouseY.set(event.clientY);
-
+    updatePointerPosition(event.clientX, event.clientY);
     setIsHoveringSection(true);
   }
 
@@ -238,7 +373,6 @@ export default function PendantImageSection() {
 
   return (
     <>
-      {/* Cursor text */}
       <motion.div
         aria-hidden="true"
         style={{
@@ -319,7 +453,6 @@ export default function PendantImageSection() {
             md:cursor-none
           "
         >
-          {/* Background */}
           <motion.div
             style={{ y: backgroundY }}
             className="
@@ -344,7 +477,6 @@ export default function PendantImageSection() {
             />
           </motion.div>
 
-          {/* Overlays */}
           <div className="pointer-events-none absolute inset-0 bg-black/15" />
 
           <div
@@ -371,7 +503,6 @@ export default function PendantImageSection() {
             "
           />
 
-          {/* Main text */}
           <motion.div
             style={{ y: textY }}
             className="
@@ -419,91 +550,8 @@ export default function PendantImageSection() {
             </p>
           </motion.div>
 
-          {/* Slider */}
-          <motion.div
-            style={{ y: sliderY }}
-            className="
-              pointer-events-none
-              absolute
-              bottom-5
-              right-5
-              z-20
-              w-[28vw]
-              min-w-[112px]
-              max-w-[150px]
-              will-change-transform
-              md:bottom-10
-              md:right-10
-              md:w-[14vw]
-              md:max-w-[190px]
-              lg:bottom-14
-              lg:right-14
-              lg:max-w-[210px]
-            "
-          >
-            <div
-              className="
-                relative
-                aspect-[4/5]
-                overflow-hidden
-                bg-[#eeeeec]
-              "
-            >
-              <AnimatePresence initial={false}>
-                <motion.div
-                  key={slides[activeIndex].src}
-                  initial={{ x: "-100%" }}
-                  animate={{ x: "0%" }}
-                  exit={{ x: "100%" }}
-                  transition={{
-                    duration: 1,
-                    ease: sliderEase,
-                  }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={slides[activeIndex].src}
-                    alt={slides[activeIndex].alt}
-                    fill
-                    sizes="
-                      (max-width: 767px) 28vw,
-                      (max-width: 1279px) 14vw,
-                      210px
-                    "
-                    className="
-                      pointer-events-none
-                      select-none
-                      object-cover
-                      object-center
-                    "
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
+          <PendantSlider sliderY={sliderY} />
 
-            <div
-              className="
-                mt-3
-                flex
-                items-center
-                justify-end
-                font-montserrat
-                text-[8px]
-                font-medium
-                uppercase
-                tracking-[0.15em]
-                text-white
-                md:text-[9px]
-              "
-            >
-              <span>
-                {String(activeIndex + 1).padStart(2, "0")} /{" "}
-                {String(slides.length).padStart(2, "0")}
-              </span>
-            </div>
-          </motion.div>
-
-          {/* Mobile */}
           <div
             className="
               pointer-events-none
