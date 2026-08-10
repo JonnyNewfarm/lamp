@@ -26,32 +26,35 @@ export default function ProductEditorialDetails() {
           <h2
             className="
               max-w-4xl
-              font-merchant
-              text-5xl
-              font-light
-              leading-[0.95]
-              tracking-[-0.02em]
-              md:text-7xl
+font-morganite              text-7xl
+              font-semibold
+              leading-[0.8]
+              md:text-9xl
             "
           >
             A quiet object for everyday atmosphere.
           </h2>
 
-          <p
+          <div
             className="
-              mt-8
-              max-w-2xl
-              font-merchant
-              text-xl
-              font-light
-              leading-[1.8]
-              text-[#1a1817]
-            "
+    mt-6
+    max-w-2xl
+    text-xl
+    leading-[1]
+    text-[#1a1817]
+  "
           >
-            Selected by Calero Studio for soft interiors, calm lighting and
-            everyday use. Each available variant may differ in finish, color,
-            plug type and supplier details.
-          </p>
+            <span className=" flex flex-col gap-y-2 md:text-xl">
+              <p>
+                Selected by Calero Studio for soft interiors, calm lighting and
+                everyday use.
+              </p>
+              <p>
+                Each available variant may differ in finish, color, plug type
+                and supplier details.
+              </p>
+            </span>
+          </div>
         </div>
       </div>
     </section>

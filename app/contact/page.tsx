@@ -88,15 +88,13 @@ export default function ContactPage() {
           <h1
             className="
               mt-16
-              font-merchant
-              text-[15vw]
-              font-normal
+font-morganite              text-[15vw]
+              font-bold
               leading-[0.76]
-              tracking-[-0.045em]
               sm:text-[17vw]
               md:mt-24
-              md:text-[13vw]
-              lg:text-[11.5vw]
+              md:text-[14vw]
+              lg:text-[13.5vw]
             "
           >
             Get In Touch
@@ -117,12 +115,10 @@ export default function ContactPage() {
                 className="
                   mt-6
                   max-w-sm
-                  font-merchant
-                  text-[32px]
+font-morganite                  text-[32px]
                   font-normal
                   leading-[0.95]
-                  tracking-[-0.025em]
-                  md:text-[42px]
+                  md:text-[60px]
                 "
               >
                 How can we help?
@@ -154,17 +150,15 @@ export default function ContactPage() {
                   inline-flex
                   items-center
                   gap-4
-                  font-merchant
-                  text-[6.5vw]
+font-morganite                  text-[6.5vw]
                   font-thin
                   leading-[0.9]
-                  tracking-[-0.025em]
                   transition-opacity
                   hover:opacity-55
                   sm:text-[5vw]
                   md:mt-14
-                  md:text-[3.5vw]
-                  lg:text-[3vw]
+                  md:text-[5.5vw]
+                  lg:text-[6vw]
                 "
               >
                 support@calero.studio
@@ -215,12 +209,10 @@ export default function ContactPage() {
               <div className="flex items-start justify-between">
                 <h2
                   className="
-                    font-merchant
-                    text-[32px]
-                    font-normal
+font-morganite                    text-[32px]
+                    font-semibold
                     leading-[0.95]
-                    tracking-[-0.025em]
-                    md:text-[42px]
+                    md:text-[60px]
                   "
                 >
                   Support
@@ -359,12 +351,11 @@ export default function ContactPage() {
               <div className="flex items-start justify-between">
                 <h2
                   className="
-                    font-merchant
-                    text-[32px]
+font-morganite                    text-[32px]
                     font-normal
                     leading-[0.95]
-                    tracking-[-0.025em]
-                    md:text-[42px]
+                    font-semibold
+                    md:text-[60px]
                   "
                 >
                   Studio
@@ -483,12 +474,10 @@ export default function ContactPage() {
                 <h2
                   className="
                     mt-5
-                    font-merchant
-                    text-[32px]
-                    font-normal
+font-morganite                    text-[32px]
+                    font-semibold
                     leading-[0.95]
-                    tracking-[-0.025em]
-                    md:text-[42px]
+                    md:text-[60px]
                   "
                 >
                   Helpful pages

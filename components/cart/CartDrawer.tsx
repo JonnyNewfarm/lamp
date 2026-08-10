@@ -183,16 +183,16 @@ export default function CartDrawer() {
               <div className="flex items-baseline gap-3">
                 <h2
                   className="
-                    text-[clamp(2rem,5vw,3.4rem)]
+                    text-[clamp(4rem,7vw,5.4rem)]
                     font-light
+                    font-morganite
                     leading-none
-                    tracking-[-0.055em]
                   "
                 >
                   Cart
                 </h2>
 
-                <span className="text-xs text-[#1a1817]/45">
+                <span className="text-sm text-[#1a1817]/45">
                   ({totalQuantity})
                 </span>
               </div>
@@ -267,12 +267,11 @@ export default function CartDrawer() {
                 <div className="pt-[12vh] sm:pt-[16vh]">
                   <h3
                     className="
-                    font-merchant
-                      max-w-[430px]
+font-morganite                      max-w-[430px]
                       text-[clamp(3rem,11vw,5.6rem)]
                       font-light
                       leading-[0.9]
-                      tracking-[-0.065em]
+                      font-semibold
                     "
                   >
                     Your cart is empty.

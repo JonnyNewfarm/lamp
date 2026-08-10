@@ -24,11 +24,11 @@ const PRODUCT_URL =
 
 const slides = [
   {
-    src: "/ceramic-03.jpg",
+    src: "/ceramic-01.jpg",
     alt: "Red hand-painted ceramic pendant light",
   },
   {
-    src: "/ceramic-04.jpg",
+    src: "/ceramic-02.jpg",
     alt: "Blue hand-painted ceramic pendant light",
   },
 ];
@@ -412,11 +412,10 @@ export default function PendantImageSection() {
           className="
             whitespace-nowrap
             text-center
-            font-merchant
-            text-[clamp(1.5rem,3vw,4rem)]
-            font-normal
+font-morganite
+uppercase            text-[clamp(3.5rem,5vw,6rem)]
+            font-black
             leading-[0.8]
-            tracking-[-0.045em]
             text-white
             mix-blend-difference
           "
@@ -521,12 +520,11 @@ export default function PendantImageSection() {
           >
             <h2
               className="
-                font-merchant
-                text-[clamp(4rem,9vw,10rem)]
-                font-light
+font-morganite                text-[clamp(6rem,11vw,12rem)]
+                font-black
                 leading-[0.76]
-                tracking-[-0.055em]
                 text-white
+                uppercase
               "
             >
               Ceramic
@@ -537,11 +535,10 @@ export default function PendantImageSection() {
             <p
               className="
                 mt-5
-                font-merchant
-                text-[clamp(1.55rem,2.8vw,3.25rem)]
-                font-light
+                font-morganite
+                text-[clamp(2.55rem,3.8vw,4.25rem)]
+                font-semibold
                 leading-none
-                tracking-[-0.04em]
                 text-white/80
                 md:mt-8
               "
@@ -559,11 +556,9 @@ export default function PendantImageSection() {
               bottom-5
               left-5
               z-30
-              font-merchant
-              text-[1.7rem]
-              font-light
+font-morganite              text-[3.7rem]
+              
               leading-none
-              tracking-[-0.04em]
               text-white
               md:hidden
             "

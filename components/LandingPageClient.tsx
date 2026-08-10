@@ -336,9 +336,10 @@ export default function CaleroHero() {
           className="
             whitespace-nowrap
             text-center
-            text-[5vw]
+            text-[7vw]
             font-bold
-font-merchant            leading-none
+font-morganite 
+uppercase           leading-none
             tracking-[-0.01em]
             text-white
             mix-blend-difference
@@ -390,12 +391,11 @@ font-merchant            leading-none
                   className="
                     origin-bottom-left
                     whitespace-nowrap
-                    font-merchant
-                    text-[13vw]
-                    font-normal
+font-morganite font-black 
+
+                    text-[19vw]
                     leading-[0.9]
-                    tracking-[-0.04em]
-                    md:text-[11.5vw]
+                    md:text-[18.5vw]
                   "
                 >
                   Calero Studio

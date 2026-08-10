@@ -134,15 +134,13 @@ export default function ReturnsPage() {
             <h1
               className="
                 mt-16
-                font-merchant
-                text-[19vw]
-                font-normal
+font-morganite                text-[19vw]
+                font-bold
                 leading-[0.76]
-                tracking-[-0.045em]
                 sm:text-[17vw]
                 md:mt-24
                 md:text-[13vw]
-                lg:text-[11.5vw]
+                lg:text-[13.5vw]
               "
             >
               Returns
@@ -176,12 +174,10 @@ export default function ReturnsPage() {
                   className="
                     mt-6
                     max-w-sm
-                    font-merchant
-                    text-[32px]
-                    font-normal
+font-morganite                    text-[32px]
+                    font-semibold
                     leading-[0.95]
-                    tracking-[-0.025em]
-                    md:text-[42px]
+                    md:text-[60px]
                   "
                 >
                   Not quite right?
@@ -268,12 +264,10 @@ export default function ReturnsPage() {
                 className="
                   mt-6
                   max-w-sm
-                  font-merchant
-                  text-[32px]
-                  font-normal
+font-morganite                  text-[32px]
+                  font-semibold
                   leading-[0.95]
-                  tracking-[-0.025em]
-                  md:text-[42px]
+                  md:text-[60px]
                 "
               >
                 Need to send something back?
@@ -305,17 +299,16 @@ export default function ReturnsPage() {
                   inline-flex
                   items-center
                   gap-4
-                  font-merchant
-                  text-[9vw]
-                  font-thin
+font-morganite                  text-[9vw]
+                  
                   leading-[0.85]
-                  tracking-[-0.035em]
+                  font-bold
                   transition-opacity
                   hover:opacity-55
                   sm:text-[7vw]
                   md:mt-14
-                  md:text-[4vw]
-                  lg:text-[3.5vw]
+                  md:text-[5vw]
+                  lg:text-[5.5vw]
                 "
               >
                 Start return

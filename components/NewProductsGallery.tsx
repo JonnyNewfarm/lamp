@@ -365,11 +365,9 @@ export default function NewProductsGallery({
           className="
             max-w-[34vw]
             text-center
-            text-[3.6vw]
-            font-merchant
-            font-bold
+            text-[5.6vw]
+font-morganite uppercase            font-black
             leading-[0.9]
-            tracking-[-0.01em]
           "
         >
           {hoverText}
@@ -381,14 +379,12 @@ export default function NewProductsGallery({
           <div className="relative inline-block">
             <h2
               className="
-                font-merchant
-                text-[36px]
-                font-normal
+font-morganite                text-2xl
+                font-bold
                 leading-[0.85]
-                tracking-[-0.01em]
-                sm:text-[44px]
-                md:text-[50px]
-                lg:text-[80px]
+                sm:tex-3xl
+                md:text-5xl
+                lg:text-9xl
               "
             >
               Added lately
@@ -396,70 +392,19 @@ export default function NewProductsGallery({
 
             <span
               className="
-                font-merchant
-                absolute
-                -right-4
-                top-0
+font-morganite                absolute
+                -right-6
+                top-4
                 -translate-y-[115%]
                 text-[8px]
-                font-normal
+                font-semibold
                 uppercase
-                tracking-[0.08em]
-                md:text-[12px]
+                md:text-4xl
               "
             >
               {String(visibleProducts.length).padStart(2, "0")}
             </span>
           </div>
-
-          <motion.div
-            initial={false}
-            animate={{
-              opacity: isSectionInView ? 1 : 0,
-              y: isSectionInView ? 0 : 10,
-            }}
-            transition={{
-              duration: 0.55,
-              ease,
-              delay: 0.08,
-            }}
-            className="
-              hidden
-              max-w-[300px]
-              pt-6
-              text-right
-              md:block
-              lg:max-w-[360px]
-              lg:pt-10
-            "
-          >
-            <p
-              className="
-                text-[10px]
-                font-medium
-                font-merchant
-                tracking-[0.16em]
-                lg:text-[24px]
-              "
-            >
-              Recent selection
-            </p>
-
-            <p
-              className="
-                mt-2
-                font-merchant
-                font-light
-                text-[12px]
-                leading-[1.55]
-                tracking-[0.01em]
-                lg:text-[18px]
-              "
-            >
-              A quiet edit of newly arrived lighting pieces, chosen for warm
-              interiors and softer rooms.
-            </p>
-          </motion.div>
         </div>
       </div>
 
@@ -517,7 +462,7 @@ export default function NewProductsGallery({
                     } as CSSProperties
                   }
                 >
-                  <span className="block pb-1 text-lg font-merchant uppercase tracking-[0.08em]">
+                  <span className="block pb-1 text-2xl uppercase tracking-[0.08em]">
                     {displayNumber}
                   </span>
 

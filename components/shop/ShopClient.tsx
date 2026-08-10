@@ -30,10 +30,8 @@ export default function ShopHero() {
           ease,
         }}
         className="
-          max-w-[600px]
-          font-merchant
-          text-[clamp(1.5rem,1.8vw,2.1rem)]
-          font-light
+          max-w-[500px]
+          text-[clamp(1em,1.3vw,1.6rem)]
           leading-[1.2]
           tracking-[-0.025em]
           text-[#161310]

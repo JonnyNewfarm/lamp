@@ -239,15 +239,13 @@ export default function TermsPage() {
             <h1
               className="
                 mt-16
-                font-merchant
-                text-[19vw]
-                font-normal
+font-morganite                text-[19vw]
+                font-semibold
                 leading-[0.76]
-                tracking-[-0.045em]
                 sm:text-[17vw]
                 md:mt-24
-                md:text-[13vw]
-                lg:text-[11.5vw]
+                md:text-[14vw]
+                lg:text-[13.5vw]
               "
             >
               Terms
@@ -281,12 +279,10 @@ export default function TermsPage() {
                   className="
                     mt-6
                     max-w-sm
-                    font-merchant
-                    text-[32px]
-                    font-normal
+font-morganite                    text-[32px]
+                    font-semibold
                     leading-[0.95]
-                    tracking-[-0.025em]
-                    md:text-[42px]
+                    md:text-[60px]
                   "
                 >
                   The terms behind every order
@@ -369,12 +365,10 @@ export default function TermsPage() {
                 className="
                   mt-6
                   max-w-sm
-                  font-merchant
-                  text-[32px]
-                  font-normal
+font-morganite                  text-[32px]
+                  font-semibold
                   leading-[0.95]
-                  tracking-[-0.025em]
-                  md:text-[42px]
+                  md:text-[60px]
                 "
               >
                 Something unclear?
@@ -405,17 +399,15 @@ export default function TermsPage() {
                   inline-flex
                   items-center
                   gap-4
-                  font-merchant
-                  text-[9vw]
-                  font-thin
+font-morganite                  text-[9vw]
+                  font-bold
                   leading-[0.85]
-                  tracking-[-0.035em]
                   transition-opacity
                   hover:opacity-55
                   sm:text-[7vw]
                   md:mt-14
-                  md:text-[4vw]
-                  lg:text-[3.5vw]
+                  md:text-[6vw]
+                  lg:text-[5.5vw]
                 "
               >
                 Contact us
@@ -510,12 +502,10 @@ function PolicySection({
         <h2
           className="
             max-w-sm
-            font-merchant
-            text-[32px]
+font-morganite            text-[32px]
             font-normal
             leading-[0.95]
-            tracking-[-0.025em]
-            md:text-[42px]
+            md:text-[60px]
           "
         >
           {title}

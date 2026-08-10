@@ -28,10 +28,9 @@ export default function ShopHeader({
           className="
             -mb-[0.16em]
             whitespace-nowrap
-            font-merchant
-            text-[clamp(3.25rem,4.6vw,5.75rem)]
-            font-light
-            tracking-[-0.045em]
+            font-morganite
+            text-[clamp(6rem,7vw,8rem)]
+            font-bold
           "
         >
           Explore lighting

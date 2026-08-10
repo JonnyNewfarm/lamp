@@ -1,16 +1,92 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Morganite";
+  src: url("/fonts/MorganitePro-Thin.woff2") format("woff2");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Morganite";
+  src: url("/fonts/MorganitePro-ExtraLight.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Morganite";
+  src: url("/fonts/MorganitePro-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Morganite";
+  src: url("/fonts/MorganitePro-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Morganite";
+  src: url("/fonts/MorganitePro-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Morganite";
+  src: url("/fonts/MorganitePro-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Morganite";
+  src: url("/fonts/MorganitePro-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Morganite";
+  src: url("/fonts/MorganitePro-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Morganite";
+  src: url("/fonts/MorganitePro-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-morganite {
+  font-family: "Morganite", Arial, Helvetica, sans-serif;
+}
 /* =========================================
-   TAILWIND FONT UTILITIES
+TAILWIND FONT UTILITIES
 ========================================= */
 
 @theme inline {
   --font-sans: var(--font-montserrat);
   --font-display: var(--font-merchant);
+  --font-morganite: "Morganite", Arial, Helvetica, sans-serif;
 }
 
 /* =========================================
-   GLOBAL
+GLOBAL
 ========================================= */
 
 html {
@@ -70,7 +146,7 @@ svg {
 }
 
 /* =========================================
-   SCROLLBAR
+SCROLLBAR
 ========================================= */
 
 ::-webkit-scrollbar {
@@ -78,7 +154,7 @@ svg {
 }
 
 /* =========================================
-   FONT UTILITIES
+FONT UTILITIES
 ========================================= */
 
 .font-merchant,
@@ -92,6 +168,10 @@ svg {
 }
 
 
+
+/* =========================================
+SHOP SKELETON
+========================================= */
 
 @keyframes shop-card-skeleton-shimmer {
   0% {
@@ -129,11 +209,3 @@ svg {
     animation: none;
   }
 }
-
-
-
-
-
-
-
-

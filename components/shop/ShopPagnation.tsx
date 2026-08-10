@@ -200,11 +200,10 @@ export default function ShopPagination({
           <div className="mt-3 flex items-end gap-3">
             <span
               className="
-                font-merchant
+                font-morganite
                 text-[4.5rem]
-                font-light
+                font-semibold
                 leading-[0.8]
-                tracking-[-0.08em]
                 text-[#1a1817]
                 md:text-[6rem]
               "
@@ -215,27 +214,16 @@ export default function ShopPagination({
             <span
               className="
                 pb-2
-                text-sm
-                tracking-[0.24em]
-                text-[#1a1817]/35
+                text-5xl
+                leading-[0.68]
+                font-semibold
+                font-morganite
+                text-[#1a1817]
               "
             >
               / {String(totalPages).padStart(2, "0")}
             </span>
           </div>
-
-          <p
-            className="
-              mt-5
-              max-w-xs
-              text-sm
-              leading-relaxed
-              text-[#1a1817]/45
-            "
-          >
-            Browsing {showingFrom}-{showingTo} of {totalProducts} selected
-            pieces.
-          </p>
         </div>
 
         <div className="flex flex-col gap-6 md:items-end">

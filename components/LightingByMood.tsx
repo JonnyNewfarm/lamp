@@ -65,10 +65,8 @@ export default function LightingByMood() {
               ease: [0.16, 1, 0.3, 1],
             }}
             className="
-              font-merchant
-              text-4xl
+font-morganite              text-7xl
               font-semibold
-              tracking-[-0.034em]
               text-[#161310]
             "
           >
@@ -94,14 +92,12 @@ export default function LightingByMood() {
               ease: [0.16, 1, 0.3, 1],
             }}
             className="
-              mt-4
+            
               max-w-3xl
-              font-merchant
               text-xl
-              font-thin
-              leading-[1.1]
               text-[#161310]
-              md:text-3xl
+              md:text-2xl
+              tracking-[-0.7] 
             "
           >
             Calero Studio curates minimal lighting for calm interiors — from
@@ -123,10 +119,10 @@ export default function LightingByMood() {
                   w-fit
                   overflow-hidden
                   pb-0.5
-                  text-3xl
+                  text-6xl
                   font-bold
-                  font-merchant
-                "
+                  uppercase
+font-morganite                "
               >
                 <span>{`For ${item.label}`}</span>
 

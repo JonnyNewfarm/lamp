@@ -209,11 +209,10 @@ text-[#eeeeec]
                 <div className="flex items-baseline gap-3">
                   <h2
                     className="
-                      font-merchant
-                      text-[2.4rem]
-                      font-light
+                      font-morganite
+                      text-[3.4rem]
+                      font-bold
                       leading-none
-                      tracking-[-0.045em]
                     "
                   >
                     Filter

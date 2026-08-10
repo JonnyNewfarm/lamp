@@ -31,7 +31,7 @@ export default function RelatedProducts({
               Related products
             </p>
 
-            <h2 className="max-w-2xl font-merchant text-5xl font-light leading-[0.95] tracking-[-0.01em] md:text-7xl">
+            <h2 className=" font-morganite text-6xl  leading-[0.95]  md:text-8xl">
               You may also like.
             </h2>
           </div>

@@ -398,7 +398,7 @@ const Navbar = () => {
                   text-white/90
                 "
               >
-                <span className="font-merchant text-4xl">Calero</span>
+                <span className="font-morganite text-6xl">Calero</span>
               </motion.div>
             </div>
           </motion.div>

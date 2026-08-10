@@ -86,79 +86,15 @@ export default function EditorialTextAssembleSection() {
           <p
             className="
               max-w-[1150px]
-              font-merchant
-              text-[clamp(2.75rem,7vw,8.5rem)]
-              font-light
+font-morganite              text-[clamp(3.75rem,8vw,9.5rem)]
+              font-regular
               leading-[0.9]
-              tracking-[-0.055em]
-              text-[#28311f]
+              tracking-[-0.001em]
+              text-[#131412]
             "
           >
             Lighting and objects selected for rooms that feel slower, softer,
             and more intentional.
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{
-            y: 24,
-            opacity: 0,
-          }}
-          animate={
-            isInView
-              ? {
-                  y: 0,
-                  opacity: 1,
-                }
-              : {
-                  y: 24,
-                  opacity: 0,
-                }
-          }
-          transition={{
-            duration: 0.9,
-            delay: 0.3,
-            ease,
-          }}
-          className="
-            relative
-            z-30
-            self-start
-            md:col-span-3
-            md:col-start-10
-            md:text-right
-          "
-        >
-          <p
-            className="
-              font-merchant
-              text-[14px]
-              font-medium
-              uppercase
-              tracking-[0.18em]
-              text-[#1a1817]/90
-              md:text-xs
-            "
-          >
-            Calero collection
-          </p>
-
-          <p
-            className="
-              mt-2
-              max-w-[350px]
-              font-merchant
-              text-3xl
-              font-thin
-              leading-[1.05]
-              tracking-[-0.035em]
-              text-[#1a1817]/90
-              md:ml-auto
-              md:max-w-[240px]
-              md:text-xl
-            "
-          >
-            Objects chosen for atmosphere, not noise.
           </p>
         </motion.div>
 
@@ -330,11 +266,10 @@ export default function EditorialTextAssembleSection() {
             }}
             className="
               max-w-[390px]
-              font-merchant
-              text-2xl
+font-morganite              text-5xl
               leading-[1.1]
-              tracking-[-0.035em]
-              text-[#1a1817]
+              tracking-[-0.001em]
+              text-[#0e0d0c]
               md:col-span-4
             "
           >
@@ -378,13 +313,12 @@ export default function EditorialTextAssembleSection() {
                 relative
                 inline-flex
                 overflow-hidden
-                font-merchant
-                text-[28px]
+font-morganite                text-5xl
                 font-bold
                 leading-none
-                tracking-[-0.025em]
-                md:text-[42px]
-                lg:text-[52px]
+                md:text-6xl
+                lg:text-7xl
+                uppercase
               "
             >
               <span>View all</span>

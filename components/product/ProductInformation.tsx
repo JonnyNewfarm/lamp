@@ -75,13 +75,11 @@ export default function ProductInformation({
           className="
             mt-5
             max-w-2xl
-            font-merchant
-            text-[11vw]
-            font-extralight
+font-morganite   
+font-semibold         text-[12vw]
             leading-[0.95]
-            tracking-[-0.035em]
             md:text-[7vw]
-            lg:text-[5.2vw]
+            lg:text-[7.2vw]
           "
         >
           {product.title}
@@ -90,7 +88,6 @@ export default function ProductInformation({
         <div className="mt-8 flex items-baseline gap-4">
           <p
             className="
-              font-merchant
               text-4xl
               font-light
               tracking-[-0.05em]
@@ -103,7 +100,6 @@ export default function ProductInformation({
           {product.compareAtPrice && (
             <p
               className="
-                font-merchant
                 text-xl
                 text-[#1a1817]/35
                 line-through

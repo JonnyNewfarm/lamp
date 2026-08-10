@@ -82,13 +82,8 @@ export default function RootLayout({
           ${montserrat.className}
           ${montserrat.variable}
           ${merchant.variable}
-        `}
+s        `}
       >
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18147507684"
-          strategy="afterInteractive"
-        />
-
         <Script
           id="google-ads-tag"
           strategy="afterInteractive"
