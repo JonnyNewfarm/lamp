@@ -56,7 +56,8 @@ export default function ProductGallery({
                 right-4
                 px-4
                 py-2
-                text-sm
+                text-xs
+                sm:text-sm
                 uppercase
                 tracking-[0.18em]
                 text-[#1a1817]/60
