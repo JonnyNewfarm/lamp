@@ -14,7 +14,6 @@ import {
   type MouseEvent as ReactMouseEvent,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -22,22 +21,7 @@ import {
 const PRODUCT_URL =
   "/products/vintage-ceramic-pendant-light-hand-painted-copper-hanging-lamp";
 
-const slides = [
-  {
-    src: "/ceramic-01.jpg",
-    alt: "Red hand-painted ceramic pendant light",
-  },
-  {
-    src: "/ceramic-02.jpg",
-    alt: "Blue hand-painted ceramic pendant light",
-  },
-];
-
 const ease = [0.16, 1, 0.3, 1] as const;
-const sliderEase = [0.76, 0, 0.24, 1] as const;
-
-const SLIDE_INTERVAL = 3200;
-const SLIDE_DURATION = 1;
 
 type ProductLinkElement = HTMLAnchorElement & {
   dataset: {
@@ -45,53 +29,16 @@ type ProductLinkElement = HTMLAnchorElement & {
   };
 };
 
-type SliderProps = {
-  sliderY: MotionValue<string>;
+type FloatingImageProps = {
+  imageY: MotionValue<string>;
 };
 
-function PendantSlider({ sliderY }: SliderProps) {
-  const [position, setPosition] = useState(0);
-  const [instantReset, setInstantReset] = useState(false);
-
-  const loopedSlides = useMemo(() => {
-    return [...slides, slides[0]];
-  }, []);
-
-  const activeIndex = position % slides.length;
-
-  const trackWidth = loopedSlides.length * 100;
-  const slideWidth = 100 / loopedSlides.length;
-  const trackX = -(position * slideWidth);
-
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setInstantReset(false);
-      setPosition((currentPosition) => currentPosition + 1);
-    }, SLIDE_INTERVAL);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, []);
-
-  const handleAnimationComplete = () => {
-    if (position !== slides.length) {
-      return;
-    }
-
-    setInstantReset(true);
-    setPosition(0);
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setInstantReset(false);
-      });
-    });
-  };
-
+function FloatingImage({ imageY }: FloatingImageProps) {
   return (
     <motion.div
-      style={{ y: sliderY }}
+      style={{
+        y: imageY,
+      }}
       className="
         pointer-events-none
         absolute
@@ -102,10 +49,12 @@ function PendantSlider({ sliderY }: SliderProps) {
         min-w-[112px]
         max-w-[150px]
         will-change-transform
+
         md:bottom-10
         md:right-10
         md:w-[14vw]
         md:max-w-[190px]
+
         lg:bottom-14
         lg:right-14
         lg:max-w-[210px]
@@ -115,93 +64,27 @@ function PendantSlider({ sliderY }: SliderProps) {
         className="
           relative
           aspect-[4.3/4.8]
-          w-[98%]
+          w-full
           overflow-hidden
-          bg-transparent
         "
       >
-        <motion.div
-          animate={{
-            x: `${trackX}%`,
-          }}
-          transition={
-            instantReset
-              ? {
-                  duration: 0,
-                }
-              : {
-                  duration: SLIDE_DURATION,
-                  ease: sliderEase,
-                }
-          }
-          onAnimationComplete={handleAnimationComplete}
-          style={{
-            width: `${trackWidth}%`,
-          }}
-          className="
-            absolute
-            inset-y-0
-            left-0
-            flex
-            transform-gpu
-            will-change-transform
+        <Image
+          src="/ceramic-03.jpg"
+          alt="Red hand-painted ceramic pendant light"
+          fill
+          priority
+          sizes="
+            (max-width: 767px) 28vw,
+            (max-width: 1279px) 14vw,
+            210px
           "
-        >
-          {loopedSlides.map((slide, index) => (
-            <div
-              key={`${slide.src}-${index}`}
-              style={{
-                width: `${slideWidth}%`,
-              }}
-              className="
-                relative
-                h-full
-                shrink-0
-                overflow-hidden
-              "
-            >
-              <Image
-                src={slide.src}
-                alt={index === loopedSlides.length - 1 ? "" : slide.alt}
-                fill
-                priority
-                sizes="
-                  (max-width: 767px) 28vw,
-                  (max-width: 1279px) 14vw,
-                  210px
-                "
-                className="
-                  pointer-events-none
-                  scale-[1.005]
-                  select-none
-                  object-cover
-                  object-center
-                "
-              />
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
-      <div
-        className="
-          mt-3
-          flex
-          items-center
-          justify-end
-          font-montserrat
-          text-[8px]
-          font-medium
-          uppercase
-          tracking-[0.15em]
-          text-white
-          md:text-[9px]
-        "
-      >
-        <span>
-          {String(activeIndex + 1).padStart(2, "0")} /{" "}
-          {String(slides.length).padStart(2, "0")}
-        </span>
+          className="
+            pointer-events-none
+            select-none
+            object-cover
+            object-center
+          "
+        />
       </div>
     </motion.div>
   );
@@ -244,7 +127,7 @@ export default function PendantImageSection() {
 
   const textY = useTransform(scrollYProgress, [0, 1], ["7%", "-7%"]);
 
-  const sliderY = useTransform(scrollYProgress, [0, 1], ["4%", "-4%"]);
+  const floatingImageY = useTransform(scrollYProgress, [0, 1], ["18%", "-18%"]);
 
   const updateHoverAtPointer = useCallback(() => {
     if (!hasPointerPosition.current) {
@@ -303,11 +186,13 @@ export default function PendantImageSection() {
       }
 
       updatePointerPosition(event.clientX, event.clientY);
+
       scheduleHoverCheck();
     };
 
     const handleWheel = (event: WheelEvent) => {
       updatePointerPosition(event.clientX, event.clientY);
+
       scheduleHoverCheck();
     };
 
@@ -359,11 +244,13 @@ export default function PendantImageSection() {
 
   function handleSectionMouseMove(event: ReactMouseEvent<HTMLAnchorElement>) {
     updatePointerPosition(event.clientX, event.clientY);
+
     setIsHoveringSection(true);
   }
 
   function handleSectionMouseEnter(event: ReactMouseEvent<HTMLAnchorElement>) {
     updatePointerPosition(event.clientX, event.clientY);
+
     setIsHoveringSection(true);
   }
 
@@ -389,6 +276,7 @@ export default function PendantImageSection() {
             duration: 0.15,
             ease: "easeOut",
           },
+
           scale: {
             duration: 0.35,
             ease,
@@ -412,9 +300,10 @@ export default function PendantImageSection() {
           className="
             whitespace-nowrap
             text-center
-font-morganite
-uppercase            text-[clamp(3.5rem,5vw,6rem)]
+            font-morganite
+            text-[clamp(3.5rem,5vw,6rem)]
             font-black
+            uppercase
             leading-[0.8]
             text-white
             mix-blend-difference
@@ -433,6 +322,7 @@ uppercase            text-[clamp(3.5rem,5vw,6rem)]
           w-full
           overflow-hidden
           bg-[#1a1817]
+
           md:h-[92svh]
           md:min-h-[720px]
         "
@@ -453,7 +343,9 @@ uppercase            text-[clamp(3.5rem,5vw,6rem)]
           "
         >
           <motion.div
-            style={{ y: backgroundY }}
+            style={{
+              y: backgroundY,
+            }}
             className="
               absolute
               inset-x-0
@@ -476,7 +368,14 @@ uppercase            text-[clamp(3.5rem,5vw,6rem)]
             />
           </motion.div>
 
-          <div className="pointer-events-none absolute inset-0 bg-black/15" />
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+              bg-black/15
+            "
+          />
 
           <div
             className="
@@ -503,7 +402,9 @@ uppercase            text-[clamp(3.5rem,5vw,6rem)]
           />
 
           <motion.div
-            style={{ y: textY }}
+            style={{
+              y: textY,
+            }}
             className="
               pointer-events-none
               absolute
@@ -514,17 +415,19 @@ uppercase            text-[clamp(3.5rem,5vw,6rem)]
               -translate-y-1/2
               text-white
               will-change-transform
+
               md:left-10
               lg:left-14
             "
           >
             <h2
               className="
-font-morganite                text-[clamp(6rem,11vw,12rem)]
+                font-morganite
+                text-[clamp(6rem,11vw,12rem)]
                 font-black
+                uppercase
                 leading-[0.76]
                 text-white
-                uppercase
               "
             >
               Ceramic
@@ -540,6 +443,7 @@ font-morganite                text-[clamp(6rem,11vw,12rem)]
                 font-semibold
                 leading-none
                 text-white/80
+
                 md:mt-8
               "
             >
@@ -547,7 +451,7 @@ font-morganite                text-[clamp(6rem,11vw,12rem)]
             </p>
           </motion.div>
 
-          <PendantSlider sliderY={sliderY} />
+          <FloatingImage imageY={floatingImageY} />
 
           <div
             className="
@@ -556,10 +460,11 @@ font-morganite                text-[clamp(6rem,11vw,12rem)]
               bottom-5
               left-5
               z-30
-font-morganite              text-[3.7rem]
-              
+              font-morganite
+              text-[3.7rem]
               leading-none
               text-white
+
               md:hidden
             "
           >
