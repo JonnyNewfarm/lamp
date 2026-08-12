@@ -379,31 +379,15 @@ font-morganite uppercase            font-black
           <div className="relative inline-block">
             <h2
               className="
-font-morganite                text-5xl
+font-morganite                text-7xl
                 font-bold
                 leading-[0.85]
-                sm:text-5xl
-                md:text-6xl
+                sm:text-6xl
                 lg:text-9xl
               "
             >
               Added lately
             </h2>
-
-            <span
-              className="
-font-morganite                absolute
-                -right-6
-                top-4
-                -translate-y-[115%]
-                text-2xl
-                font-semibold
-                uppercase
-                md:text-4xl
-              "
-            >
-              {String(visibleProducts.length).padStart(2, "0")}
-            </span>
           </div>
         </div>
       </div>
@@ -462,7 +446,7 @@ font-morganite                absolute
                     } as CSSProperties
                   }
                 >
-                  <span className="block pb-1 text-2xl uppercase tracking-[0.08em]">
+                  <span className="block pb-1 text-xl uppercase tracking-[0.08em]">
                     {displayNumber}
                   </span>
 
