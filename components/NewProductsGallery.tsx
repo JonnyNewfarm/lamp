@@ -379,11 +379,11 @@ font-morganite uppercase            font-black
           <div className="relative inline-block">
             <h2
               className="
-font-morganite                text-2xl
+font-morganite                text-5xl
                 font-bold
                 leading-[0.85]
-                sm:tex-3xl
-                md:text-5xl
+                sm:text-5xl
+                md:text-6xl
                 lg:text-9xl
               "
             >
@@ -396,7 +396,7 @@ font-morganite                absolute
                 -right-6
                 top-4
                 -translate-y-[115%]
-                text-[8px]
+                text-2xl
                 font-semibold
                 uppercase
                 md:text-4xl
