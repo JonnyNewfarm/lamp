@@ -72,16 +72,14 @@
   font-display: swap;
 }
 
-.font-morganite {
-  font-family: "Morganite", Arial, Helvetica, sans-serif;
-}
 /* =========================================
 TAILWIND FONT UTILITIES
 ========================================= */
 
 @theme inline {
   --font-sans: var(--font-montserrat);
-  --font-display: var(--font-merchant);
+  --font-display: var(--font-bueno);
+  --font-bueno: var(--font-bueno);
   --font-morganite: "Morganite", Arial, Helvetica, sans-serif;
 }
 
@@ -157,9 +155,9 @@ SCROLLBAR
 FONT UTILITIES
 ========================================= */
 
-.font-merchant,
+.font-bueno,
 .font-display {
-  font-family: var(--font-merchant), Georgia, "Times New Roman", serif;
+  font-family: var(--font-bueno), Georgia, "Times New Roman", serif;
 }
 
 .font-montserrat,
@@ -167,7 +165,9 @@ FONT UTILITIES
   font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
 }
 
-
+.font-morganite {
+  font-family: "Morganite", Arial, Helvetica, sans-serif;
+}
 
 /* =========================================
 SHOP SKELETON

@@ -134,13 +134,15 @@ export default function ReturnsPage() {
             <h1
               className="
                 mt-16
-font-morganite                text-[19vw]
+                font-bueno
+                text-[14vw]
                 font-bold
-                leading-[0.76]
-                sm:text-[17vw]
+                uppercase
+                leading-[0.82]
+                sm:text-[13vw]
                 md:mt-24
-                md:text-[13vw]
-                lg:text-[13.5vw]
+                md:text-[11vw]
+                lg:text-[10vw]
               "
             >
               Returns
@@ -174,10 +176,12 @@ font-morganite                text-[19vw]
                   className="
                     mt-6
                     max-w-sm
-font-morganite                    text-[32px]
-                    font-semibold
-                    leading-[0.95]
-                    md:text-[60px]
+                    font-bueno
+                    text-3xl
+                    font-bold
+                    uppercase
+                    leading-[0.9]
+                    md:text-5xl
                   "
                 >
                   Not quite right?
@@ -264,10 +268,12 @@ font-morganite                    text-[32px]
                 className="
                   mt-6
                   max-w-sm
-font-morganite                  text-[32px]
-                  font-semibold
-                  leading-[0.95]
-                  md:text-[60px]
+                  font-bueno
+                  text-3xl
+                  font-bold
+                  uppercase
+                  leading-[0.9]
+                  md:text-5xl
                 "
               >
                 Need to send something back?
@@ -299,16 +305,15 @@ font-morganite                  text-[32px]
                   inline-flex
                   items-center
                   gap-4
-font-morganite                  text-[9vw]
-                  
-                  leading-[0.85]
+                  font-bueno
+                  text-[clamp(2.75rem,4.5vw,5rem)]
                   font-bold
+                  uppercase
+                  leading-[0.85]
+                  tracking-[-0.02em]
                   transition-opacity
                   hover:opacity-55
-                  sm:text-[7vw]
                   md:mt-14
-                  md:text-[5vw]
-                  lg:text-[5.5vw]
                 "
               >
                 Start return
@@ -403,12 +408,12 @@ function PolicySection({
         <h2
           className="
             max-w-sm
-            font-merchant
-            text-[32px]
-            font-normal
-            leading-[0.95]
-            tracking-[-0.025em]
-            md:text-[42px]
+            font-bueno
+            text-3xl
+            font-bold
+            uppercase
+            leading-[0.9]
+            md:text-5xl
           "
         >
           {title}

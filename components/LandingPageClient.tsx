@@ -332,21 +332,40 @@ export default function CaleroHero() {
           md:flex
         "
       >
-        <span
+        <motion.div
+          initial={false}
+          animate={{
+            scale: isHoveringImage ? 1 : 0,
+          }}
+          transition={{
+            scale: {
+              duration: 0.45,
+              ease: [0.16, 1, 0.3, 1],
+            },
+          }}
           className="
-            whitespace-nowrap
-            text-center
-            text-[7vw]
-            font-bold
-font-morganite 
-uppercase           leading-none
-            tracking-[-0.01em]
-            text-white
-            mix-blend-difference
-          "
+    origin-center
+    bg-[#954728]
+    px-10
+    py-6
+  "
         >
-          {hoverText}
-        </span>
+          <span
+            className="
+      whitespace-nowrap
+      text-center
+      font-bueno
+      text-[clamp(2rem,4vw,5.5rem)]
+      font-bold
+      uppercase
+      leading-[0.8]
+      tracking-[-0.025em]
+      text-white
+    "
+          >
+            {hoverText}
+          </span>
+        </motion.div>
       </motion.div>
 
       <div
@@ -391,11 +410,11 @@ uppercase           leading-none
                   className="
                     origin-bottom-left
                     whitespace-nowrap
-font-morganite font-black 
+font-bueno font-bold 
 
-                    text-[19vw]
+                    text-[15vw]
                     leading-[0.9]
-                    md:text-[18.5vw]
+                    md:text-[13.5vw]
                   "
                 >
                   Calero Studio

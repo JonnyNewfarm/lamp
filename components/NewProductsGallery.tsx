@@ -333,45 +333,61 @@ export default function NewProductsGallery({
         initial={false}
         animate={{
           opacity: isHoveringImage ? 1 : 0,
-          scale: isHoveringImage ? 1 : 0.7,
         }}
         transition={{
           opacity: {
             duration: 0.15,
             ease: "easeOut",
           },
-          scale: {
-            duration: 0.3,
-            ease,
-          },
         }}
         className="
-          pointer-events-none
-          fixed
-          left-0
-          top-0
-          z-[9999]
-          hidden
-          -translate-x-1/2
-          -translate-y-1/2
-          items-center
-          justify-center
-          text-white
-          mix-blend-difference
-          md:flex
-        "
+    pointer-events-none
+    fixed
+    left-0
+    top-0
+    z-[9999]
+    hidden
+    -translate-x-1/2
+    -translate-y-1/2
+    items-center
+    justify-center
+    md:flex
+  "
       >
-        <span
+        <motion.div
+          initial={false}
+          animate={{
+            scale: isHoveringImage ? 1 : 0,
+          }}
+          transition={{
+            scale: {
+              duration: 0.45,
+              ease: [0.16, 1, 0.3, 1],
+            },
+          }}
           className="
-            max-w-[34vw]
-            text-center
-            text-[5.6vw]
-font-morganite uppercase            font-black
-            leading-[0.9]
-          "
+      origin-center
+      bg-[#954728]
+      px-10
+      py-6
+    "
         >
-          {hoverText}
-        </span>
+          <span
+            className="
+        whitespace-nowrap
+        text-center
+        font-bueno
+        text-[clamp(1.5rem,3.5vw,5rem)]
+        font-bold
+        uppercase
+        leading-[0.8]
+        tracking-[-0.025em]
+        text-white
+      "
+          >
+            {hoverText}
+          </span>
+        </motion.div>
       </motion.div>
 
       <div className="px-4 pt-10 md:px-9 md:pt-14">
@@ -379,11 +395,12 @@ font-morganite uppercase            font-black
           <div className="relative inline-block">
             <h2
               className="
-font-morganite                text-7xl
+font-bueno          text-5xl
                 font-bold
                 leading-[0.85]
-                sm:text-6xl
-                lg:text-9xl
+                sm:text-5xl
+                lg:text-7xl
+                uppercase
               "
             >
               Added lately
@@ -446,7 +463,7 @@ font-morganite                text-7xl
                     } as CSSProperties
                   }
                 >
-                  <span className="block pb-1 text-xl uppercase tracking-[0.08em]">
+                  <span className="block pb-1 text-xl font-bueno font-semibold uppercase tracking-[0.08em]">
                     {displayNumber}
                   </span>
 

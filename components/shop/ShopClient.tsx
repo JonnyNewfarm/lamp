@@ -31,9 +31,10 @@ export default function ShopHero() {
         }}
         className="
           max-w-[500px]
-          text-[clamp(1em,1.3vw,1.6rem)]
+          text-[clamp(2em,2.3vw,2.6rem)]
           leading-[1.2]
-          tracking-[-0.025em]
+          font-bueno
+          tracking-[-0.01em]
           text-[#161310]
         "
       >

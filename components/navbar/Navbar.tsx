@@ -165,11 +165,12 @@ const Navbar = () => {
               items-center
               gap-x-6
               text-right
-              text-2xl
+              text-4xl
               font-semibold
+              font-bueno
               uppercase
               leading-[0.95]
-              tracking-[-0.045em]
+              tracking-[-0.01em]
               md:flex
             "
           >
@@ -306,7 +307,7 @@ const Navbar = () => {
                   -translate-y-1/2
                 "
               >
-                <h1 className="uppercase mb-4">Navigation</h1>
+                <h1 className="uppercase mb-4 ">Navigation</h1>
                 {mobileLinks.map((link, index) => (
                   <motion.div
                     key={link.href}
@@ -341,9 +342,10 @@ const Navbar = () => {
                         flex
                         items-center
                         justify-between
-                        text-[11vw]
+                        text-[14vw]
                         font-medium
                         uppercase
+                        font-bueno
                         
                         leading-[0.9]
                         tracking-[0.01em]
@@ -398,7 +400,7 @@ const Navbar = () => {
                   text-white/90
                 "
               >
-                <span className="font-morganite text-6xl">Calero</span>
+                <span className="font-bueno text-4xl">Calero</span>
               </motion.div>
             </div>
           </motion.div>

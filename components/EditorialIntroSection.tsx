@@ -86,8 +86,7 @@ export default function EditorialTextAssembleSection() {
           <p
             className="
               max-w-[1150px]
-font-morganite              text-[clamp(3.75rem,8vw,9.5rem)]
-              font-regular
+font-bueno text-[clamp(3.25rem,7vw,8.5rem)]              font-regular
               leading-[0.9]
               tracking-[-0.001em]
               text-[#131412]
@@ -266,11 +265,11 @@ font-morganite              text-[clamp(3.75rem,8vw,9.5rem)]
             }}
             className="
               max-w-[390px]
-font-morganite              text-5xl
+font-bueno          text-4xl
               leading-[1.1]
               tracking-[-0.001em]
               text-[#0e0d0c]
-              md:col-span-4
+              md:col-span-5
             "
           >
             A quiet collection built around warm materials, soft silhouettes and
@@ -313,7 +312,7 @@ font-morganite              text-5xl
                 relative
                 inline-flex
                 overflow-hidden
-font-morganite                text-5xl
+font-bueno             text-5xl
                 font-bold
                 leading-none
                 md:text-6xl

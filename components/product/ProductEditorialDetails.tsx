@@ -26,10 +26,10 @@ export default function ProductEditorialDetails() {
           <h2
             className="
               max-w-4xl
-font-morganite              text-7xl
+font-bueno            text-5xl
               font-semibold
               leading-[0.8]
-              md:text-9xl
+              md:text-7xl
             "
           >
             A quiet object for everyday atmosphere.

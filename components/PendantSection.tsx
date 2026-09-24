@@ -269,48 +269,61 @@ export default function PendantImageSection() {
         initial={false}
         animate={{
           opacity: isHoveringSection ? 1 : 0,
-          scale: isHoveringSection ? 1 : 0.72,
         }}
         transition={{
           opacity: {
             duration: 0.15,
             ease: "easeOut",
           },
-
-          scale: {
-            duration: 0.35,
-            ease,
-          },
         }}
         className="
-          pointer-events-none
-          fixed
-          left-0
-          top-0
-          z-[9999]
-          hidden
-          -translate-x-1/2
-          -translate-y-1/2
-          items-center
-          justify-center
-          md:flex
-        "
+    pointer-events-none
+    fixed
+    left-0
+    top-0
+    z-[9999]
+    hidden
+    -translate-x-1/2
+    -translate-y-1/2
+    items-center
+    justify-center
+    md:flex
+  "
       >
-        <span
+        <motion.div
+          initial={false}
+          animate={{
+            scale: isHoveringSection ? 1 : 0,
+          }}
+          transition={{
+            scale: {
+              duration: 0.45,
+              ease: [0.16, 1, 0.3, 1],
+            },
+          }}
           className="
-            whitespace-nowrap
-            text-center
-            font-morganite
-            text-[clamp(3.5rem,5vw,6rem)]
-            font-black
-            uppercase
-            leading-[0.8]
-            text-white
-            mix-blend-difference
-          "
+      origin-center
+      bg-[#954728]
+      px-10
+      py-6
+    "
         >
-          View lamp
-        </span>
+          <span
+            className="
+        whitespace-nowrap
+        text-center
+        font-bueno
+        text-[clamp(2rem,4vw,5.5rem)]
+        font-bold
+        uppercase
+        leading-[0.8]
+        tracking-[-0.025em]
+        text-white
+      "
+          >
+            View lamp
+          </span>
+        </motion.div>
       </motion.div>
 
       <section
@@ -422,9 +435,9 @@ export default function PendantImageSection() {
           >
             <h2
               className="
-                font-morganite
-                text-[clamp(6rem,11vw,12rem)]
-                font-black
+                font-bueno
+                text-5xl
+sm:text-[clamp(4.25rem,9vw,10rem)]                font-bold
                 uppercase
                 leading-[0.76]
                 text-white
@@ -438,8 +451,9 @@ export default function PendantImageSection() {
             <p
               className="
                 mt-5
-                font-morganite
-                text-[clamp(2.55rem,3.8vw,4.25rem)]
+                font-bueno
+                text-2xl
+                sm:text-[clamp(2.55rem,3.8vw,4.25rem)]
                 font-semibold
                 leading-none
                 text-white/80
@@ -452,24 +466,6 @@ export default function PendantImageSection() {
           </motion.div>
 
           <FloatingImage imageY={floatingImageY} />
-
-          <div
-            className="
-              pointer-events-none
-              absolute
-              bottom-5
-              left-5
-              z-30
-              font-morganite
-              text-[3.7rem]
-              leading-none
-              text-white
-
-              md:hidden
-            "
-          >
-            View lamp →
-          </div>
         </Link>
       </section>
     </>

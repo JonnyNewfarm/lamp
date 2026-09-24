@@ -88,13 +88,15 @@ export default function ContactPage() {
           <h1
             className="
               mt-16
-font-morganite              text-[15vw]
+              font-bueno
+              text-[12vw]
               font-bold
-              leading-[0.76]
-              sm:text-[17vw]
+              uppercase
+              leading-[0.82]
+              sm:text-[13vw]
               md:mt-24
-              md:text-[14vw]
-              lg:text-[13.5vw]
+              md:text-[11vw]
+              lg:text-[10vw]
             "
           >
             Get In Touch
@@ -115,10 +117,12 @@ font-morganite              text-[15vw]
                 className="
                   mt-6
                   max-w-sm
-font-morganite                  text-[32px]
-                  font-normal
-                  leading-[0.95]
-                  md:text-[60px]
+                  font-bueno
+                  text-3xl
+                  font-bold
+                  uppercase
+                  leading-[0.9]
+                  md:text-5xl
                 "
               >
                 How can we help?
@@ -150,15 +154,15 @@ font-morganite                  text-[32px]
                   inline-flex
                   items-center
                   gap-4
-font-morganite                  text-[6.5vw]
-                  font-thin
-                  leading-[0.9]
+                  font-bueno
+                  text-[clamp(2.4rem,4.2vw,5rem)]
+                  font-bold
+                  uppercase
+                  leading-[0.86]
+                  tracking-[-0.02em]
                   transition-opacity
                   hover:opacity-55
-                  sm:text-[5vw]
                   md:mt-14
-                  md:text-[5.5vw]
-                  lg:text-[6vw]
                 "
               >
                 support@calero.studio
@@ -209,10 +213,12 @@ font-morganite                  text-[6.5vw]
               <div className="flex items-start justify-between">
                 <h2
                   className="
-font-morganite                    text-[32px]
-                    font-semibold
-                    leading-[0.95]
-                    md:text-[60px]
+                    font-bueno
+                    text-3xl
+                    font-bold
+                    uppercase
+                    leading-[0.9]
+                    md:text-5xl
                   "
                 >
                   Support
@@ -351,11 +357,12 @@ font-morganite                    text-[32px]
               <div className="flex items-start justify-between">
                 <h2
                   className="
-font-morganite                    text-[32px]
-                    font-normal
-                    leading-[0.95]
-                    font-semibold
-                    md:text-[60px]
+                    font-bueno
+                    text-3xl
+                    font-bold
+                    uppercase
+                    leading-[0.9]
+                    md:text-5xl
                   "
                 >
                   Studio
@@ -474,10 +481,12 @@ font-morganite                    text-[32px]
                 <h2
                   className="
                     mt-5
-font-morganite                    text-[32px]
-                    font-semibold
-                    leading-[0.95]
-                    md:text-[60px]
+                    font-bueno
+                    text-3xl
+                    font-bold
+                    uppercase
+                    leading-[0.9]
+                    md:text-5xl
                   "
                 >
                   Helpful pages

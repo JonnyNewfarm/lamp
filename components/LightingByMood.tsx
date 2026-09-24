@@ -65,7 +65,7 @@ export default function LightingByMood() {
               ease: [0.16, 1, 0.3, 1],
             }}
             className="
-font-morganite              text-7xl
+font-bueno            text-7xl
               font-semibold
               text-[#161310]
             "
@@ -119,10 +119,10 @@ font-morganite              text-7xl
                   w-fit
                   overflow-hidden
                   pb-0.5
-                  text-6xl
+                  text-4xl
                   font-bold
                   uppercase
-font-morganite                "
+font-bueno             "
               >
                 <span>{`For ${item.label}`}</span>
 

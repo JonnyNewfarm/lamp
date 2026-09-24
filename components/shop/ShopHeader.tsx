@@ -28,8 +28,10 @@ export default function ShopHeader({
           className="
             -mb-[0.16em]
             whitespace-nowrap
-            font-morganite
-            text-[clamp(6rem,7vw,8rem)]
+            font-bueno
+            uppercase
+            text-5xl
+            md:text-[clamp(4rem,5vw,6rem)]
             font-bold
           "
         >

@@ -75,11 +75,11 @@ export default function ProductInformation({
           className="
             mt-5
             max-w-2xl
-font-morganite   
-font-semibold         text-[12vw]
+font-bueno
+font-semibold         text-[10vw]
             leading-[0.95]
-            md:text-[7vw]
-            lg:text-[7.2vw]
+            md:text-[5vw]
+            lg:text-[6.2vw]
           "
         >
           {product.title}

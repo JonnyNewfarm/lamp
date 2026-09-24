@@ -46,11 +46,11 @@ const Footer = () => {
       <div className="grid gap-14 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-7">
           <Link href="/" aria-label="Go to home page" className="block w-fit">
-            <span className="block uppercase font-morganite text-9xl font-semibold leading-[0.80] ">
+            <span className="block uppercase font-bueno text-8xl font-semibold leading-[0.80] ">
               Calero
             </span>
 
-            <span className="block uppercase font-morganite text-9xl font-semibold leading-[0.75] ">
+            <span className="block uppercase font-bueno text-8xl font-semibold leading-[0.75] ">
               Studio
             </span>
           </Link>

@@ -15,50 +15,55 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
-const merchant = localFont({
+const bueno = localFont({
   src: [
     {
-      path: "../public/fonts/Merchant-Thin.woff2",
+      path: "../public/fonts/Bueno-Thin.woff2",
       weight: "100",
       style: "normal",
     },
     {
-      path: "../public/fonts/Merchant-ExtraLight.woff2",
+      path: "../public/fonts/Bueno-ExtraLight.woff2",
       weight: "200",
       style: "normal",
     },
     {
-      path: "../public/fonts/Merchant-Regular.woff2",
+      path: "../public/fonts/Bueno-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Bueno-Regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../public/fonts/Merchant-Medium.woff2",
+      path: "../public/fonts/Bueno-Medium.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../public/fonts/Merchant-SemiBold.woff2",
+      path: "../public/fonts/Bueno-SemiBold.woff2",
       weight: "600",
       style: "normal",
     },
     {
-      path: "../public/fonts/Merchant-Bold.woff2",
+      path: "../public/fonts/Bueno-Bold.woff2",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../public/fonts/Merchant-ExtraBold.woff2",
+      path: "../public/fonts/Bueno-ExtraBold.woff2",
       weight: "800",
       style: "normal",
     },
     {
-      path: "../public/fonts/Merchant-Black.woff2",
+      path: "../public/fonts/Bueno-Black.woff2",
       weight: "900",
       style: "normal",
     },
   ],
-  variable: "--font-merchant",
+  variable: "--font-bueno",
   display: "swap",
 });
 
@@ -81,8 +86,8 @@ export default function RootLayout({
         className={`
           ${montserrat.className}
           ${montserrat.variable}
-          ${merchant.variable}
-s        `}
+          ${bueno.variable}
+        `}
       >
         <Script
           id="google-ads-tag"

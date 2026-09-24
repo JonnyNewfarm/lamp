@@ -15,70 +15,6 @@ type ShopPaginationProps = {
 
 type PaginationDirection = "previous" | "next";
 
-type PaginationArrowProps = {
-  direction: PaginationDirection;
-  animated?: boolean;
-};
-
-function PaginationArrow({ direction, animated = true }: PaginationArrowProps) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 38 18"
-      fill="none"
-      className={`
-        h-[16px]
-        w-[34px]
-        overflow-visible
-        ${direction === "previous" ? "rotate-180" : ""}
-      `}
-    >
-      <path
-        d="M1 9H32"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="square"
-      />
-
-      {animated && (
-        <>
-          <path
-            d="M32 9L25 2"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="square"
-            pathLength="1"
-            className="
-              [stroke-dasharray:1]
-              [stroke-dashoffset:1]
-              transition-[stroke-dashoffset]
-              duration-300
-              ease-[cubic-bezier(0.16,1,0.3,1)]
-              group-hover:[stroke-dashoffset:0]
-            "
-          />
-
-          <path
-            d="M32 9L25 16"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="square"
-            pathLength="1"
-            className="
-              [stroke-dasharray:1]
-              [stroke-dashoffset:1]
-              transition-[stroke-dashoffset]
-              duration-300
-              ease-[cubic-bezier(0.16,1,0.3,1)]
-              group-hover:[stroke-dashoffset:0]
-            "
-          />
-        </>
-      )}
-    </svg>
-  );
-}
-
 type PaginationButtonProps = {
   direction: PaginationDirection;
   href?: string;
@@ -92,34 +28,19 @@ function PaginationButton({
 }: PaginationButtonProps) {
   const label = direction === "previous" ? "Prev" : "Next";
 
-  const content =
-    direction === "previous" ? (
-      <>
-        <PaginationArrow direction="previous" animated={!disabled} />
-
-        <span>{label}</span>
-      </>
-    ) : (
-      <>
-        <span>{label}</span>
-
-        <PaginationArrow direction="next" animated={!disabled} />
-      </>
-    );
-
   if (disabled || !href) {
     return (
       <span
         className="
-          flex
-          items-center
-          gap-3
-          text-xl
-          font-normal
-          text-[#1a1817]/20
+          font-bueno
+          text-[clamp(2.75rem,4.3vw,5rem)]
+          font-bold
+          uppercase
+          leading-none
+          text-[#1a1817]/15
         "
       >
-        {content}
+        {label}
       </span>
     );
   }
@@ -128,16 +49,18 @@ function PaginationButton({
     <Link
       href={href}
       className="
-        group
-        flex
-        items-center
-        gap-3
-        text-xl
-        font-normal
+        font-bueno
+        text-[clamp(2.75rem,4.3vw,5rem)]
+        font-bold
+        uppercase
+        leading-none
         text-[#1a1817]
+        transition-opacity
+        duration-300
+        hover:opacity-45
       "
     >
-      {content}
+      {label}
     </Link>
   );
 }
@@ -200,7 +123,7 @@ export default function ShopPagination({
           <div className="mt-3 flex items-end gap-3">
             <span
               className="
-                font-morganite
+                font-bueno
                 text-[4.5rem]
                 font-semibold
                 leading-[0.8]
@@ -214,10 +137,10 @@ export default function ShopPagination({
             <span
               className="
                 pb-2
+                font-bueno
                 text-5xl
-                leading-[0.68]
                 font-semibold
-                font-morganite
+                leading-[0.68]
                 text-[#1a1817]
               "
             >
@@ -226,14 +149,78 @@ export default function ShopPagination({
           </div>
         </div>
 
-        <div className="flex flex-col gap-6 md:items-end">
+        <div
+          className="
+            flex
+            w-full
+            flex-col
+            md:w-[450px]
+          "
+        >
+          <div
+            className="
+              flex
+              items-center
+              justify-start
+              gap-5
+              pb-1
+            "
+          >
+            {visiblePages.map((page, index) => {
+              if (page === "...") {
+                return (
+                  <span
+                    key={`ellipsis-${index}`}
+                    className="
+                      font-bueno
+                      text-xl
+                      font-medium
+                      text-[#1a1817]/30
+                    "
+                  >
+                    …
+                  </span>
+                );
+              }
+
+              const isActive = page === currentPage;
+
+              return (
+                <Link
+                  key={page}
+                  href={createPageHref(params, page)}
+                  aria-current={isActive ? "page" : undefined}
+                  className={
+                    isActive
+                      ? `
+                          font-bueno
+                          text-2xl
+                          font-semibold
+                          text-[#1a1817]
+                        `
+                      : `
+                          font-bueno
+                          text-2xl
+                          font-medium
+                          text-[#1a1817]/35
+                          transition-colors
+                          duration-300
+                          hover:text-[#1a1817]
+                        `
+                  }
+                >
+                  {String(page).padStart(2, "0")}
+                </Link>
+              );
+            })}
+          </div>
+
           <div
             className="
               h-px
               w-full
               overflow-hidden
               bg-[#1a1817]/15
-              md:w-[360px]
             "
           >
             <div
@@ -242,6 +229,7 @@ export default function ShopPagination({
                 bg-[#1a1817]
                 transition-all
                 duration-500
+                ease-[cubic-bezier(0.16,1,0.3,1)]
               "
               style={{
                 width: `${progress}%`,
@@ -249,54 +237,19 @@ export default function ShopPagination({
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-6">
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              pt-3
+            "
+          >
             <PaginationButton
               direction="previous"
               href={previousHref}
               disabled={currentPage <= 1}
             />
-
-            <div className="flex items-center gap-4">
-              {visiblePages.map((page, index) => {
-                if (page === "...") {
-                  return (
-                    <span
-                      key={`ellipsis-${index}`}
-                      className="text-base text-[#1a1817]/30"
-                    >
-                      …
-                    </span>
-                  );
-                }
-
-                const isActive = page === currentPage;
-
-                return (
-                  <Link
-                    key={page}
-                    href={createPageHref(params, page)}
-                    aria-current={isActive ? "page" : undefined}
-                    className={
-                      isActive
-                        ? `
-                            scale-110
-                            text-lg
-                            font-semibold
-                            text-[#1a1817]
-                          `
-                        : `
-                            text-lg
-                            text-[#1a1817]/35
-                            transition-colors
-                            hover:text-[#1a1817]
-                          `
-                    }
-                  >
-                    {String(page).padStart(2, "0")}
-                  </Link>
-                );
-              })}
-            </div>
 
             <PaginationButton
               direction="next"

@@ -183,9 +183,9 @@ export default function CartDrawer() {
               <div className="flex items-baseline gap-3">
                 <h2
                   className="
-                    text-[clamp(4rem,7vw,5.4rem)]
+                    text-[clamp(3rem,6vw,4.4rem)]
                     font-light
-                    font-morganite
+                    font-bueno
                     leading-none
                   "
                 >
@@ -267,7 +267,7 @@ export default function CartDrawer() {
                 <div className="pt-[12vh] sm:pt-[16vh]">
                   <h3
                     className="
-font-morganite                      max-w-[430px]
+font-bueno              max-w-[430px]
                       text-[clamp(3rem,11vw,5.6rem)]
                       font-light
                       leading-[0.9]
