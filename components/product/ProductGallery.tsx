@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Image from "next/image";
 
 import type { GalleryImage } from "./product.types";
@@ -12,6 +13,8 @@ type ProductGalleryProps = {
   onOpenFullscreen: () => void;
 };
 
+const ease = [0.16, 1, 0.3, 1] as const;
+
 export default function ProductGallery({
   productTitle,
   images,
@@ -21,72 +24,135 @@ export default function ProductGallery({
 }: ProductGalleryProps) {
   return (
     <section className="min-w-0 lg:col-span-7">
-      <button
-        type="button"
-        onClick={onOpenFullscreen}
-        disabled={!selectedImage}
-        aria-label="Open product image fullscreen"
-        className="
-          relative
-          aspect-[4/5]
-          w-full
-          cursor-pointer
-          overflow-hidden
-          bg-[#f4f3f0]
-          text-left
-          disabled:cursor-default
-        "
+      <motion.div
+        initial={{
+          opacity: 0,
+          x: -36,
+          clipPath: "inset(0 8% 0 0)",
+        }}
+        animate={{
+          opacity: 1,
+          x: 0,
+          clipPath: "inset(0 0% 0 0)",
+        }}
+        transition={{
+          duration: 1.05,
+          ease,
+        }}
       >
-        {selectedImage ? (
-          <>
-            <Image
-              src={selectedImage.url}
-              alt={selectedImage.alt || productTitle}
-              fill
-              priority
-              quality={75}
-              sizes="(min-width: 1024px) 58vw, 100vw"
-              className="object-cover"
-            />
+        <button
+          type="button"
+          onClick={onOpenFullscreen}
+          disabled={!selectedImage}
+          aria-label="Open product image fullscreen"
+          className="
+            relative
+            aspect-[4/5]
+            w-full
+            cursor-pointer
+            overflow-hidden
+            bg-[#f4f3f0]
+            text-left
+            disabled:cursor-default
+          "
+        >
+          {selectedImage ? (
+            <>
+              <motion.div
+                key={selectedImage.id}
+                initial={{
+                  opacity: 0,
+                  scale: 1.035,
+                  filter: "blur(5px)",
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  filter: "blur(0px)",
+                }}
+                transition={{
+                  duration: 0.9,
+                  ease,
+                }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={selectedImage.url}
+                  alt={selectedImage.alt || productTitle}
+                  fill
+                  priority
+                  quality={75}
+                  sizes="(min-width: 1024px) 58vw, 100vw"
+                  className="object-cover"
+                />
+              </motion.div>
 
-            <span
+              <motion.span
+                initial={{
+                  opacity: 0,
+                  y: 10,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  duration: 0.7,
+                  delay: 0.55,
+                  ease,
+                }}
+                className="
+                  absolute
+                  bottom-4
+                  right-4
+                  z-20
+                  px-4
+                  py-2
+                  text-xs
+                  uppercase
+                  tracking-[0.18em]
+                  text-[#1a1817]/60
+                  sm:text-sm
+                "
+              >
+                View fullscreen
+              </motion.span>
+            </>
+          ) : (
+            <div
               className="
-                absolute
-                bottom-4
-                right-4
-                px-4
-                py-2
-                text-xs
-                sm:text-sm
-                uppercase
-                tracking-[0.18em]
-                text-[#1a1817]/60
+                flex
+                h-full
+                items-center
+                justify-center
+                px-8
+                text-center
+                text-sm
+                leading-[1.7]
+                text-[#1a1817]/40
               "
             >
-              View fullscreen
-            </span>
-          </>
-        ) : (
-          <div
-            className="
-              flex
-              h-full
-              items-center
-              justify-center
-              px-8
-              text-center
-              text-sm
-              leading-[1.7]
-              text-[#1a1817]/40
-            "
-          >
-            Add product images to this variant in admin.
-          </div>
-        )}
-      </button>
+              Add product images to this variant in admin.
+            </div>
+          )}
+        </button>
+      </motion.div>
 
       {images.length > 1 && (
-        <div
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 18,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.8,
+            delay: 0.4,
+            ease,
+          }}
           className="
             no-scrollbar
             mt-5
@@ -100,11 +166,24 @@ export default function ProductGallery({
               const active = selectedImage?.id === image.id;
 
               return (
-                <button
+                <motion.button
                   key={`${image.imageType}-${image.id}`}
                   type="button"
                   onClick={() => onSelectImage(image.id)}
                   aria-label={`View image ${index + 1}`}
+                  initial={{
+                    opacity: 0,
+                    y: 12,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  transition={{
+                    duration: 0.65,
+                    delay: 0.45 + index * 0.05,
+                    ease,
+                  }}
                   className={`
                     relative
                     h-24
@@ -113,7 +192,8 @@ export default function ProductGallery({
                     cursor-pointer
                     overflow-hidden
                     bg-[#f4f3f0]
-                    transition
+                    transition-opacity
+                    duration-300
                     md:h-28
                     md:w-24
                     ${active ? "opacity-100" : "opacity-45 hover:opacity-100"}
@@ -150,7 +230,12 @@ export default function ProductGallery({
                   </span>
 
                   {active && (
-                    <span
+                    <motion.span
+                      layoutId="active-product-image"
+                      transition={{
+                        duration: 0.45,
+                        ease,
+                      }}
                       className="
                         absolute
                         bottom-0
@@ -161,11 +246,11 @@ export default function ProductGallery({
                       "
                     />
                   )}
-                </button>
+                </motion.button>
               );
             })}
           </div>
-        </div>
+        </motion.div>
       )}
     </section>
   );

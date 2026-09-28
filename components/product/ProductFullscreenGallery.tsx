@@ -135,7 +135,7 @@ export default function ProductFullscreenGallery({
             bg-[#1a1817]/70
             p-0
             text-[#eeeeec]
-            backdrop-blur-[3px]
+            backdrop-blur-[10px]
             md:p-10
             lg:p-14
           "
@@ -252,11 +252,12 @@ export default function ProductFullscreenGallery({
 
               <span
                 className="
-                  text-xl
+                  text-2xl
                   transition-transform
                   duration-500
                   ease-[cubic-bezier(0.22,1,0.36,1)]
                   group-hover:translate-x-1
+                  font-bueno
                 "
               >
                 Close
