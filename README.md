@@ -54,19 +54,21 @@ From the custom storefront and interactive product galleries to checkout, produc
 
 ## Tech Stack
 
-| Technology        | Purpose                           |
-| ----------------- | --------------------------------- |
-| Next.js           | React framework and App Router    |
-| React             | Component-based user interface    |
-| TypeScript        | Type safety                       |
-| Tailwind CSS      | Styling and responsive layouts    |
-| Framer Motion     | UI animations and transitions     |
-| Lenis             | Smooth scrolling                  |
-| Prisma            | Database access and data modeling |
-| PostgreSQL / Neon | Database                          |
-| Stripe            | Payment processing                |
-| Zustand           | Client-side shopping cart state   |
-| Vercel            | Hosting and deployment            |
+| Technology        | Purpose                                             |
+| ----------------- | --------------------------------------------------- |
+| Next.js           | React framework and App Router                      |
+| React             | Component-based user interface                      |
+| TypeScript        | Type safety                                         |
+| Tailwind CSS      | Styling and responsive layouts                      |
+| Framer Motion     | UI animations and transitions                       |
+| Lenis             | Smooth scrolling                                    |
+| Prisma            | Database access and data modeling                   |
+| PostgreSQL / Neon | Database                                            |
+| Stripe            | Payment processing                                  |
+| React Context API | Global shopping cart state management               |
+| React Hooks       | Cart state, derived totals and lifecycle management |
+| localStorage      | Persistent shopping cart between sessions           |
+| Vercel            | Hosting and deployment                              |
 
 ## Design & Interaction
 
