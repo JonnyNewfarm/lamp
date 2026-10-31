@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 
 const FOLLOW_SPEED = 10;
 const MAX_TILT_DEG = 2.5;
-const MAX_EXTRA_SPACING_EM = 0.35;
+const MAX_EXTRA_SPACING_EM = 0.25;
 const SPREAD_AT_SPEED = 15;
 const KINETIC_DAMPING = 11;
 const BASE_SPACING_EM = 0.11;
