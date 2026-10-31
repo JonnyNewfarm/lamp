@@ -1,4 +1,3 @@
-// components/cart/CartProvider.tsx
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";

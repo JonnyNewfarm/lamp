@@ -12,13 +12,13 @@ const heroImages = [
     hoverText: "Table",
   },
   {
-    src: "/images/grain-lamp2.jpg",
+    src: "/images/pend-1.jpg",
     href: "/shop?category=pendant-lighting",
     alt: "Explore pendant lighting",
     hoverText: "Pendant",
   },
   {
-    src: "/images/grain-lamp9.jpg",
+    src: "/images/wall-2.jpg",
     href: "/shop?category=wall-lights",
     alt: "Explore wall lights",
     hoverText: "Wall",
