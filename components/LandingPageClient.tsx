@@ -1,15 +1,8 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  type MouseEvent as ReactMouseEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
 
 const heroImages = [
   {
@@ -84,206 +77,7 @@ const labelRevealVariants = {
   },
 };
 
-type HeroLinkElement = HTMLAnchorElement & {
-  dataset: {
-    heroImage?: string;
-    hoverText?: string;
-  };
-};
-
 export default function CaleroHero() {
-  const [hoverText, setHoverText] = useState("");
-  const [isHoveringImage, setIsHoveringImage] = useState(false);
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const pointerPosition = useRef({
-    x: 0,
-    y: 0,
-  });
-
-  const hasPointerPosition = useRef(false);
-  const frameRef = useRef<number | null>(null);
-
-  const cursorX = useSpring(mouseX, {
-    stiffness: 220,
-    damping: 25,
-    mass: 0.35,
-  });
-
-  const cursorY = useSpring(mouseY, {
-    stiffness: 220,
-    damping: 25,
-    mass: 0.35,
-  });
-
-  const updateHoverAtPointer = useCallback(() => {
-    if (!hasPointerPosition.current) {
-      setIsHoveringImage(false);
-      return;
-    }
-
-    const { x, y } = pointerPosition.current;
-
-    if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) {
-      setIsHoveringImage(false);
-      return;
-    }
-
-    const element = document.elementFromPoint(x, y);
-
-    const heroLink =
-      element?.closest<HeroLinkElement>("[data-hero-image]") ?? null;
-
-    if (!heroLink) {
-      setIsHoveringImage(false);
-      return;
-    }
-
-    const nextHoverText = heroLink.dataset.hoverText;
-
-    if (!nextHoverText) {
-      setIsHoveringImage(false);
-      return;
-    }
-
-    mouseX.set(x);
-    mouseY.set(y);
-
-    setHoverText(nextHoverText);
-    setIsHoveringImage(true);
-  }, [mouseX, mouseY]);
-
-  const scheduleHoverCheck = useCallback(() => {
-    if (frameRef.current !== null) {
-      cancelAnimationFrame(frameRef.current);
-    }
-
-    frameRef.current = requestAnimationFrame(() => {
-      updateHoverAtPointer();
-      frameRef.current = null;
-    });
-  }, [updateHoverAtPointer]);
-
-  useEffect(() => {
-    const updatePointerPosition = (x: number, y: number) => {
-      hasPointerPosition.current = true;
-
-      pointerPosition.current = {
-        x,
-        y,
-      };
-
-      mouseX.set(x);
-      mouseY.set(y);
-
-      scheduleHoverCheck();
-    };
-
-    const handlePointerMove = (event: PointerEvent) => {
-      if (event.pointerType && event.pointerType !== "mouse") {
-        return;
-      }
-
-      updatePointerPosition(event.clientX, event.clientY);
-    };
-
-    const handleMouseMove = (event: globalThis.MouseEvent) => {
-      updatePointerPosition(event.clientX, event.clientY);
-    };
-
-    const handleWheel = (event: WheelEvent) => {
-      updatePointerPosition(event.clientX, event.clientY);
-    };
-
-    const handleViewportChange = () => {
-      scheduleHoverCheck();
-    };
-
-    const handleMouseLeaveWindow = (event: globalThis.MouseEvent) => {
-      if (event.relatedTarget === null) {
-        setIsHoveringImage(false);
-      }
-    };
-
-    window.addEventListener("pointermove", handlePointerMove, {
-      passive: true,
-    });
-
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-
-    window.addEventListener("wheel", handleWheel, { passive: true });
-
-    window.addEventListener("resize", handleViewportChange, { passive: true });
-
-    document.addEventListener("scroll", handleViewportChange, {
-      passive: true,
-      capture: true,
-    });
-
-    document.addEventListener("mouseleave", handleMouseLeaveWindow);
-
-    return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-
-      window.removeEventListener("mousemove", handleMouseMove);
-
-      window.removeEventListener("wheel", handleWheel);
-
-      window.removeEventListener("resize", handleViewportChange);
-
-      document.removeEventListener("scroll", handleViewportChange, true);
-
-      document.removeEventListener("mouseleave", handleMouseLeaveWindow);
-
-      if (frameRef.current !== null) {
-        cancelAnimationFrame(frameRef.current);
-      }
-    };
-  }, [mouseX, mouseY, scheduleHoverCheck]);
-
-  function handleImageMouseMove(event: ReactMouseEvent<HTMLAnchorElement>) {
-    hasPointerPosition.current = true;
-
-    pointerPosition.current = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-
-    mouseX.set(event.clientX);
-    mouseY.set(event.clientY);
-
-    const text = event.currentTarget.dataset.hoverText;
-
-    if (text) {
-      setHoverText(text);
-      setIsHoveringImage(true);
-    }
-  }
-
-  function handleImageMouseEnter(
-    event: ReactMouseEvent<HTMLAnchorElement>,
-    text: string,
-  ) {
-    hasPointerPosition.current = true;
-
-    pointerPosition.current = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-
-    mouseX.set(event.clientX);
-    mouseY.set(event.clientY);
-
-    setHoverText(text);
-    setIsHoveringImage(true);
-  }
-
-  function handleImageMouseLeave() {
-    scheduleHoverCheck();
-  }
-
   return (
     <section
       className="
@@ -295,58 +89,6 @@ export default function CaleroHero() {
         text-[#1a1817]
       "
     >
-      {/* CUSTOM TEXT CURSOR */}
-      <motion.div
-        aria-hidden="true"
-        style={{
-          x: cursorX,
-          y: cursorY,
-        }}
-        initial={false}
-        animate={{
-          opacity: isHoveringImage ? 1 : 0,
-          scale: isHoveringImage ? 1 : 0.8,
-        }}
-        transition={{
-          opacity: {
-            duration: 0.2,
-            ease: "easeOut",
-          },
-          scale: {
-            duration: 0.45,
-            ease,
-          },
-        }}
-        className="
-          pointer-events-none
-          fixed
-          left-0
-          top-0
-          z-[9999]
-          hidden
-          mix-blend-difference
-          md:block
-        "
-      >
-        <span
-          className="
-            block
-            -translate-x-1/2
-            -translate-y-1/2
-            whitespace-nowrap
-            text-[clamp(1.5rem,2vw,2rem)]
-            font-bold
-            uppercase
-            leading-none
-            tracking-[-0.025em]
-            text-white
-          "
-        >
-          {hoverText}
-        </span>
-      </motion.div>
-
-      {/* HERO CONTENT */}
       <div
         className="
           flex
@@ -362,7 +104,16 @@ export default function CaleroHero() {
           md:pt-14
         "
       >
-        <div className="flex flex-1 items-center pt-32 sm:pt-32 md:pt-32">
+        <div
+          className="
+            flex
+            flex-1
+            items-center
+            pt-32
+            sm:pt-32
+            md:pt-32
+          "
+        >
           <div className="w-full">
             <div
               className="
@@ -413,7 +164,12 @@ export default function CaleroHero() {
                   sm:flex
                 "
               >
-                <div className="overflow-hidden pb-[0.08em]">
+                <div
+                  className="
+                    overflow-hidden
+                    pb-[0.08em]
+                  "
+                >
                   <motion.p
                     variants={labelRevealVariants}
                     className="
@@ -477,9 +233,6 @@ export default function CaleroHero() {
                   hoverText={image.hoverText}
                   index={index}
                   priority={index < 2}
-                  onMouseMove={handleImageMouseMove}
-                  onMouseEnter={handleImageMouseEnter}
-                  onMouseLeave={handleImageMouseLeave}
                 />
               ))}
             </motion.div>
@@ -497,9 +250,6 @@ function HeroImage({
   hoverText,
   index,
   priority = false,
-  onMouseMove,
-  onMouseEnter,
-  onMouseLeave,
 }: {
   src: string;
   href: string;
@@ -507,12 +257,6 @@ function HeroImage({
   hoverText: string;
   index: number;
   priority?: boolean;
-  onMouseMove: (event: ReactMouseEvent<HTMLAnchorElement>) => void;
-  onMouseEnter: (
-    event: ReactMouseEvent<HTMLAnchorElement>,
-    text: string,
-  ) => void;
-  onMouseLeave: () => void;
 }) {
   return (
     <motion.div
@@ -542,11 +286,7 @@ function HeroImage({
       <Link
         href={href}
         aria-label={alt}
-        data-hero-image="true"
-        data-hover-text={hoverText}
-        onMouseMove={onMouseMove}
-        onMouseEnter={(event) => onMouseEnter(event, hoverText)}
-        onMouseLeave={onMouseLeave}
+        data-calero-cursor={hoverText}
         className="
           group
           relative
@@ -559,7 +299,6 @@ function HeroImage({
           border-[#1a1817]/10
           bg-[#dfddd8]
           md:aspect-[4/5]
-          md:cursor-none
         "
       >
         {/* IMAGE */}

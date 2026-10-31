@@ -1,16 +1,8 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
+import { type CSSProperties } from "react";
 import { formatPrice } from "@/lib/formatPrice";
-import {
-  type CSSProperties,
-  type MouseEvent as ReactMouseEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
 
 type ProductVariantItem = {
   id: string;
@@ -32,13 +24,6 @@ type ProductItem = {
 
 type NewProductsGalleryProps = {
   products: ProductItem[];
-};
-
-type ProductLinkElement = HTMLAnchorElement & {
-  dataset: {
-    productImage?: string;
-    hoverText?: string;
-  };
 };
 
 const productLayouts = [
@@ -70,254 +55,8 @@ export default function NewProductsGallery({
 }: NewProductsGalleryProps) {
   const visibleProducts = products.slice(0, 6);
 
-  const [hoverText, setHoverText] = useState("");
-  const [isHoveringImage, setIsHoveringImage] = useState(false);
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const pointerPosition = useRef({
-    x: 0,
-    y: 0,
-  });
-
-  const hasPointerPosition = useRef(false);
-  const frameRef = useRef<number | null>(null);
-
-  const cursorX = useSpring(mouseX, {
-    stiffness: 220,
-    damping: 25,
-    mass: 0.35,
-  });
-
-  const cursorY = useSpring(mouseY, {
-    stiffness: 220,
-    damping: 25,
-    mass: 0.35,
-  });
-
-  const updateHoverAtPointer = useCallback(() => {
-    if (!hasPointerPosition.current) {
-      setIsHoveringImage(false);
-      return;
-    }
-
-    const { x, y } = pointerPosition.current;
-
-    const outsideViewport =
-      x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight;
-
-    if (outsideViewport) {
-      setIsHoveringImage(false);
-      return;
-    }
-
-    const element = document.elementFromPoint(x, y);
-
-    const productLink =
-      element?.closest<ProductLinkElement>("[data-product-image]") ?? null;
-
-    if (!productLink) {
-      setIsHoveringImage(false);
-      return;
-    }
-
-    const nextHoverText = productLink.dataset.hoverText;
-
-    if (!nextHoverText) {
-      setIsHoveringImage(false);
-      return;
-    }
-
-    mouseX.set(x);
-    mouseY.set(y);
-
-    setHoverText(nextHoverText);
-    setIsHoveringImage(true);
-  }, [mouseX, mouseY]);
-
-  const scheduleHoverCheck = useCallback(() => {
-    if (frameRef.current !== null) {
-      cancelAnimationFrame(frameRef.current);
-    }
-
-    frameRef.current = requestAnimationFrame(() => {
-      updateHoverAtPointer();
-      frameRef.current = null;
-    });
-  }, [updateHoverAtPointer]);
-
-  useEffect(() => {
-    const updatePointerPosition = (x: number, y: number) => {
-      hasPointerPosition.current = true;
-
-      pointerPosition.current = {
-        x,
-        y,
-      };
-
-      mouseX.set(x);
-      mouseY.set(y);
-
-      scheduleHoverCheck();
-    };
-
-    const handlePointerMove = (event: PointerEvent) => {
-      if (event.pointerType && event.pointerType !== "mouse") {
-        return;
-      }
-
-      updatePointerPosition(event.clientX, event.clientY);
-    };
-
-    const handleMouseMove = (event: globalThis.MouseEvent) => {
-      updatePointerPosition(event.clientX, event.clientY);
-    };
-
-    const handleWheel = (event: WheelEvent) => {
-      updatePointerPosition(event.clientX, event.clientY);
-    };
-
-    const handleViewportChange = () => {
-      scheduleHoverCheck();
-    };
-
-    const handleMouseLeaveWindow = (event: globalThis.MouseEvent) => {
-      if (event.relatedTarget === null) {
-        setIsHoveringImage(false);
-      }
-    };
-
-    window.addEventListener("pointermove", handlePointerMove, {
-      passive: true,
-    });
-
-    window.addEventListener("mousemove", handleMouseMove, {
-      passive: true,
-    });
-
-    window.addEventListener("wheel", handleWheel, {
-      passive: true,
-    });
-
-    window.addEventListener("resize", handleViewportChange, {
-      passive: true,
-    });
-
-    document.addEventListener("scroll", handleViewportChange, {
-      passive: true,
-      capture: true,
-    });
-
-    document.addEventListener("mouseleave", handleMouseLeaveWindow);
-
-    return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("resize", handleViewportChange);
-      document.removeEventListener("scroll", handleViewportChange, true);
-      document.removeEventListener("mouseleave", handleMouseLeaveWindow);
-
-      if (frameRef.current !== null) {
-        cancelAnimationFrame(frameRef.current);
-      }
-    };
-  }, [mouseX, mouseY, scheduleHoverCheck]);
-
-  function handleImageMouseMove(event: ReactMouseEvent<HTMLAnchorElement>) {
-    hasPointerPosition.current = true;
-
-    pointerPosition.current = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-
-    mouseX.set(event.clientX);
-    mouseY.set(event.clientY);
-
-    const text = event.currentTarget.dataset.hoverText;
-
-    if (text) {
-      setHoverText(text);
-      setIsHoveringImage(true);
-    }
-  }
-
-  function handleImageMouseEnter(event: ReactMouseEvent<HTMLAnchorElement>) {
-    hasPointerPosition.current = true;
-
-    pointerPosition.current = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-
-    mouseX.set(event.clientX);
-    mouseY.set(event.clientY);
-
-    setHoverText("View lamp");
-    setIsHoveringImage(true);
-  }
-
-  function handleImageMouseLeave() {
-    scheduleHoverCheck();
-  }
-
   return (
     <section className="relative bg-[#eeeeec] pt-20 text-[#1a1817]">
-      {/* CUSTOM TEXT CURSOR */}
-      <motion.div
-        aria-hidden="true"
-        style={{
-          x: cursorX,
-          y: cursorY,
-        }}
-        initial={false}
-        animate={{
-          opacity: isHoveringImage ? 1 : 0,
-          scale: isHoveringImage ? 1 : 0.8,
-        }}
-        transition={{
-          opacity: {
-            duration: 0.2,
-            ease: "easeOut",
-          },
-          scale: {
-            duration: 0.45,
-            ease: [0.16, 1, 0.3, 1],
-          },
-        }}
-        className="
-          pointer-events-none
-          fixed
-          left-0
-          top-0
-          z-[9999]
-          hidden
-          mix-blend-difference
-          md:block
-        "
-      >
-        <span
-          className="
-            block
-            -translate-x-1/2
-            -translate-y-1/2
-            whitespace-nowrap
-            font-bueno
-            text-[clamp(1.05rem,1.6vw,1.75rem)]
-            font-bold
-            uppercase
-            leading-none
-            tracking-[-0.025em]
-            text-white
-          "
-        >
-          {hoverText}
-        </span>
-      </motion.div>
-
-      {/* SECTION HEADING */}
       <div className="px-4 pt-10 md:px-9 md:pt-14">
         <div className="flex items-start justify-between gap-8">
           <div className="relative inline-block">
@@ -338,7 +77,6 @@ export default function NewProductsGallery({
         </div>
       </div>
 
-      {/* PRODUCT GRID */}
       <div className="px-4 pb-36 pt-16 md:px-9 md:pb-56 md:pt-24">
         <div
           className="
@@ -374,15 +112,10 @@ export default function NewProductsGallery({
                     } as CSSProperties
                   }
                 >
-                  {/* PRODUCT IMAGE */}
                   <Link
                     href={`/products/${product.slug}`}
                     aria-label={`View ${title}`}
-                    data-product-image="true"
-                    data-hover-text="View lamp"
-                    onMouseMove={handleImageMouseMove}
-                    onMouseEnter={handleImageMouseEnter}
-                    onMouseLeave={handleImageMouseLeave}
+                    data-calero-cursor="VIEW LAMP"
                     className="
                       group
                       relative
@@ -392,7 +125,6 @@ export default function NewProductsGallery({
                       cursor-pointer
                       overflow-hidden
                       bg-[#d7d6d4]
-                      md:cursor-none
                     "
                   >
                     <img
@@ -411,7 +143,6 @@ export default function NewProductsGallery({
                       "
                     />
 
-                    {/* NUMBER LEFT / NEW RIGHT */}
                     <div
                       className="
                         pointer-events-none
@@ -427,17 +158,30 @@ export default function NewProductsGallery({
                         mix-blend-difference
                       "
                     >
-                      <span className="text-[10px] font-black uppercase md:text-xs">
+                      <span
+                        className="
+                          text-[10px]
+                          font-black
+                          uppercase
+                          md:text-xs
+                        "
+                      >
                         {displayNumber}
                       </span>
 
-                      <span className="text-[10px] font-black uppercase md:text-xs">
+                      <span
+                        className="
+                          text-[10px]
+                          font-black
+                          uppercase
+                          md:text-xs
+                        "
+                      >
                         New
                       </span>
                     </div>
                   </Link>
 
-                  {/* MOBILE TITLE */}
                   <div className="pt-3 md:hidden">
                     <h2
                       className="
@@ -453,13 +197,30 @@ export default function NewProductsGallery({
                     </h2>
                   </div>
 
-                  {/* DESKTOP TITLE + PRICE */}
                   <div className="hidden justify-between pt-3 md:flex">
-                    <span className="flex flex-col text-sm font-bold tracking-[-0.055em] md:text-lg">
+                    <span
+                      className="
+                        flex
+                        flex-col
+                        text-sm
+                        font-bold
+                        tracking-[-0.055em]
+                        md:text-lg
+                      "
+                    >
                       {title}
                     </span>
 
-                    <span className="flex flex-col text-xs font-bold tracking-[0.08em] md:text-sm">
+                    <span
+                      className="
+                        flex
+                        flex-col
+                        text-xs
+                        font-bold
+                        tracking-[0.08em]
+                        md:text-sm
+                      "
+                    >
                       {formatPrice(product.price)}
                     </span>
                   </div>
