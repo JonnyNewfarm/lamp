@@ -65,7 +65,9 @@ export default function LightingByMood() {
               ease: [0.16, 1, 0.3, 1],
             }}
             className="
-font-bueno            text-7xl
+            text-5xl
+            md:text-6xl
+            mb-4
               font-semibold
               text-[#161310]
             "
@@ -119,7 +121,7 @@ font-bueno            text-7xl
                   w-fit
                   overflow-hidden
                   pb-0.5
-                  text-4xl
+                  text-2xl
                   font-bold
                   uppercase
 font-bueno             "

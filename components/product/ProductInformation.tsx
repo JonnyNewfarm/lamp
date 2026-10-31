@@ -118,9 +118,9 @@ export default function ProductInformation({
               font-bueno
               font-semibold
               text-[10vw]
-              leading-[0.95]
+              leading-[1]
               md:text-[5vw]
-              lg:text-[6.2vw]
+              lg:text-[5vw]
             "
           >
             {product.title}

@@ -69,14 +69,15 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!isMenuOpen) {
-      document.body.style.removeProperty("overflow");
       return;
     }
+
+    const previousOverflow = document.body.style.overflow;
 
     document.body.style.overflow = "hidden";
 
     return () => {
-      document.body.style.removeProperty("overflow");
+      document.body.style.overflow = previousOverflow;
     };
   }, [isMenuOpen]);
 
@@ -117,28 +118,23 @@ const Navbar = () => {
         "
       >
         <nav className="flex items-start justify-between">
+          {/* LOGO */}
           <Link
             href="/"
             aria-label="Calero home"
-            className={`
+            className="
               relative
               z-10
               flex
-              flex-col
+              shrink-0
               items-center
-              transition-colors
-              duration-300
-              ${
-                isMenuOpen
-                  ? "text-[#eeeeec]"
-                  : "text-[#1a1817] dark:text-[#eeeeec]"
-              }
-            `}
+              justify-center
+            "
           >
-            <CaleroLogo className="h-12  w-12 md:h-14 md:w-14" />
+            <CaleroLogo className="h-8 w-8 md:h-12 md:w-12" />
           </Link>
 
-          {/* Desktop navigation */}
+          {/* DESKTOP NAVIGATION */}
           <motion.div
             initial={{
               opacity: 0,
@@ -165,12 +161,12 @@ const Navbar = () => {
               items-center
               gap-x-6
               text-right
-              text-4xl
-              font-semibold
               font-bueno
+              text-xl
+              font-semibold
               uppercase
               leading-[0.95]
-              tracking-[-0.01em]
+              tracking-[-0.03em]
               md:flex
             "
           >
@@ -183,7 +179,7 @@ const Navbar = () => {
             <CartButton />
           </motion.div>
 
-          {/* Mobile controls */}
+          {/* MOBILE CONTROLS */}
           <div
             className={`
               relative
@@ -199,9 +195,10 @@ const Navbar = () => {
               transition-colors
               duration-300
               md:hidden
-              ${isMenuOpen ? "text-[#eeeeec]" : "text-[#1a1817] "}
+              ${isMenuOpen ? "text-[#eeeeec]" : "text-[#1a1817]"}
             `}
           >
+            {/* ANIMATED MENU / CLOSE */}
             <button
               type="button"
               onClick={() => {
@@ -210,60 +207,52 @@ const Navbar = () => {
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
               className="
+                relative
                 flex
+                h-8
+                min-w-[3.5rem]
                 cursor-pointer
                 items-center
-                gap-2
+                justify-start
+                [perspective:600px]
               "
             >
-              <span aria-hidden="true" className="relative block h-4 w-4">
+              <AnimatePresence mode="wait" initial={false}>
                 <motion.span
+                  key={isMenuOpen ? "close" : "menu"}
+                  initial={{
+                    rotateX: -90,
+                    y: 8,
+                    opacity: 0,
+                  }}
                   animate={{
-                    rotate: isMenuOpen ? 45 : 0,
-                    y: 7.5,
+                    rotateX: 0,
+                    y: 0,
+                    opacity: 1,
+                  }}
+                  exit={{
+                    rotateX: 90,
+                    y: -8,
+                    opacity: 0,
                   }}
                   transition={{
-                    duration: 0.5,
-                    ease: NAVIGATION_EASE,
+                    duration: 0.24,
+                    ease: MENU_EASE,
                   }}
                   className="
-      absolute
-      left-0
-      top-0
-      block
-      h-[1px]
-      w-4
-      origin-center
-      bg-current
-      will-change-transform
-    "
-                />
-
-                <motion.span
-                  animate={{
-                    rotate: isMenuOpen ? -45 : 0,
-                    y: 7.5,
-                    opacity: isMenuOpen ? 1 : 0,
-                  }}
-                  transition={{
-                    duration: 0.5,
-                    ease: NAVIGATION_EASE,
-                  }}
-                  className="
-      absolute
-      left-0
-      top-0
-      block
-      h-[1px]
-      w-4
-      origin-center
-      bg-current
-      will-change-transform
-    "
-                />
-              </span>
-
-              <span className="uppercase">Menu</span>
+                    block
+                    origin-center
+                    font-bueno
+                    text-base
+                    font-semibold
+                    uppercase
+                    leading-none
+                    [backface-visibility:hidden]
+                  "
+                >
+                  {isMenuOpen ? "Close" : "Menu"}
+                </motion.span>
+              </AnimatePresence>
             </button>
 
             <CartButton />
@@ -271,6 +260,7 @@ const Navbar = () => {
         </nav>
       </motion.header>
 
+      {/* MOBILE FULLSCREEN MENU */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -297,8 +287,9 @@ const Navbar = () => {
             "
           >
             <div className="relative h-full w-full px-4">
-              {/* Vertically centered mobile links */}
+              {/* NAVIGATION LINKS */}
               <nav
+                aria-label="Mobile navigation"
                 className="
                   absolute
                   left-4
@@ -307,101 +298,77 @@ const Navbar = () => {
                   -translate-y-1/2
                 "
               >
-                <h1 className="uppercase mb-4 ">Navigation</h1>
-                {mobileLinks.map((link, index) => (
-                  <motion.div
-                    key={link.href}
-                    initial={{
-                      opacity: 0,
-                      y: 50,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: 20,
-                    }}
-                    transition={{
-                      duration: 0.7,
-                      delay: 0.18 + index * 0.07,
-                      ease: MENU_EASE,
-                    }}
-                    className="
-                      border-white/20
-                      py-5
-                    "
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={() => {
-                        setIsMenuOpen(false);
+                <h2 className="mb-4 ">Navigation:</h2>
+
+                {mobileLinks.map((link, index) => {
+                  const isActive =
+                    link.href === "/"
+                      ? pathname === "/"
+                      : pathname === link.href ||
+                        pathname.startsWith(`${link.href}/`) ||
+                        (link.href === "/shop" &&
+                          pathname.startsWith("/products/"));
+
+                  return (
+                    <motion.div
+                      key={link.href}
+                      initial={{
+                        opacity: 0,
+                        y: 50,
                       }}
-                      className="
-                        flex
-                        items-center
-                        justify-between
-                        text-[14vw]
-                        font-medium
-                        uppercase
-                        font-bueno
-                        
-                        leading-[0.9]
-                        tracking-[0.01em]
-                      "
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        y: 20,
+                      }}
+                      transition={{
+                        duration: 0.7,
+                        delay: 0.18 + index * 0.07,
+                        ease: MENU_EASE,
+                      }}
+                      className="py-5"
                     >
-                      <span>{link.label}</span>
-
-                      <span
-                        className="
-                          text-sm
-                          font-semibold
-                          tracking-normal
-                          text-white/50
-                        "
+                      <Link
+                        href={link.href}
+                        aria-current={isActive ? "page" : undefined}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={`
+          flex
+          items-center
+          justify-between
+          font-bueno
+          text-[11vw]
+          font-medium
+          uppercase
+          leading-[0.9]
+          tracking-[0.01em]
+          text-[#eeeeec]
+          transition-opacity
+          duration-500
+          ease-[cubic-bezier(0.16,1,0.3,1)]
+          hover:opacity-100
+          ${isActive ? "opacity-100" : "opacity-35"}
+        `}
                       >
-                        0{index + 1}
-                      </span>
-                    </Link>
-                  </motion.div>
-                ))}
-              </nav>
+                        <span>{link.label}</span>
 
-              {/* Bottom information */}
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  y: 20,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  y: 10,
-                }}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.42,
-                  ease: MENU_EASE,
-                }}
-                className="
-                  absolute
-                  bottom-6
-                  right-4
-                  flex
-                  items-end
-                  justify-between
-                  pt-5
-                  font-medium
-                  tracking-[0.08em]
-                  text-white/90
-                "
-              >
-                <span className="font-bueno text-4xl">Calero</span>
-              </motion.div>
+                        <span
+                          className="
+            text-sm
+            font-semibold
+            tracking-normal
+          "
+                        >
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </nav>
             </div>
           </motion.div>
         )}

@@ -211,17 +211,11 @@ export default function CaleroHero() {
       passive: true,
     });
 
-    window.addEventListener("mousemove", handleMouseMove, {
-      passive: true,
-    });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
-    window.addEventListener("wheel", handleWheel, {
-      passive: true,
-    });
+    window.addEventListener("wheel", handleWheel, { passive: true });
 
-    window.addEventListener("resize", handleViewportChange, {
-      passive: true,
-    });
+    window.addEventListener("resize", handleViewportChange, { passive: true });
 
     document.addEventListener("scroll", handleViewportChange, {
       passive: true,
@@ -232,11 +226,15 @@ export default function CaleroHero() {
 
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
+
       window.removeEventListener("mousemove", handleMouseMove);
+
       window.removeEventListener("wheel", handleWheel);
+
       window.removeEventListener("resize", handleViewportChange);
 
       document.removeEventListener("scroll", handleViewportChange, true);
+
       document.removeEventListener("mouseleave", handleMouseLeaveWindow);
 
       if (frameRef.current !== null) {
@@ -297,6 +295,7 @@ export default function CaleroHero() {
         text-[#1a1817]
       "
     >
+      {/* CUSTOM TEXT CURSOR */}
       <motion.div
         aria-hidden="true"
         style={{
@@ -306,15 +305,15 @@ export default function CaleroHero() {
         initial={false}
         animate={{
           opacity: isHoveringImage ? 1 : 0,
-          scale: isHoveringImage ? 1 : 0.7,
+          scale: isHoveringImage ? 1 : 0.8,
         }}
         transition={{
           opacity: {
-            duration: 0.15,
+            duration: 0.2,
             ease: "easeOut",
           },
           scale: {
-            duration: 0.3,
+            duration: 0.45,
             ease,
           },
         }}
@@ -325,49 +324,29 @@ export default function CaleroHero() {
           top-0
           z-[9999]
           hidden
-          -translate-x-1/2
-          -translate-y-1/2
-          items-center
-          justify-center
-          md:flex
+          mix-blend-difference
+          md:block
         "
       >
-        <motion.div
-          initial={false}
-          animate={{
-            scale: isHoveringImage ? 1 : 0,
-          }}
-          transition={{
-            scale: {
-              duration: 0.45,
-              ease: [0.16, 1, 0.3, 1],
-            },
-          }}
+        <span
           className="
-    origin-center
-    bg-[#954728]
-    px-10
-    py-6
-  "
+            block
+            -translate-x-1/2
+            -translate-y-1/2
+            whitespace-nowrap
+            text-[clamp(1.5rem,2vw,2rem)]
+            font-bold
+            uppercase
+            leading-none
+            tracking-[-0.025em]
+            text-white
+          "
         >
-          <span
-            className="
-      whitespace-nowrap
-      text-center
-      font-bueno
-      text-[clamp(2rem,4vw,5.5rem)]
-      font-bold
-      uppercase
-      leading-[0.8]
-      tracking-[-0.025em]
-      text-white
-    "
-          >
-            {hoverText}
-          </span>
-        </motion.div>
+          {hoverText}
+        </span>
       </motion.div>
 
+      {/* HERO CONTENT */}
       <div
         className="
           flex
@@ -410,11 +389,12 @@ export default function CaleroHero() {
                   className="
                     origin-bottom-left
                     whitespace-nowrap
-font-bueno font-bold 
-
-                    text-[15vw]
+                    font-bueno
+                    font-bold
+                    text-[12vw]
                     leading-[0.9]
-                    md:text-[13.5vw]
+                    tracking-[-2]
+                    md:text-[10.5vw]
                   "
                 >
                   Calero Studio
@@ -452,7 +432,8 @@ font-bueno font-bold
           </div>
         </div>
 
-        <div className="mt-2 w-full">
+        {/* CATEGORY IMAGES */}
+        <div className="mt-3 w-full">
           <motion.div
             initial={{
               opacity: 0,
@@ -581,6 +562,7 @@ function HeroImage({
           md:cursor-none
         "
       >
+        {/* IMAGE */}
         <motion.div
           initial={{
             scale: 1.18,
@@ -612,6 +594,7 @@ function HeroImage({
           />
         </motion.div>
 
+        {/* HOVER OVERLAY */}
         <div
           className="
             pointer-events-none
@@ -625,6 +608,7 @@ function HeroImage({
           "
         />
 
+        {/* IMAGE NUMBER */}
         <motion.span
           initial={{
             opacity: 0,
@@ -654,6 +638,7 @@ function HeroImage({
           {String(index + 1).padStart(2, "0")}
         </motion.span>
 
+        {/* MOBILE CATEGORY LABEL */}
         <motion.span
           initial={{
             opacity: 0,
@@ -674,7 +659,7 @@ function HeroImage({
             bottom-3
             left-3
             z-30
-            text-[0.7rem]
+            text-[0.5rem]
             font-black
             uppercase
             leading-none

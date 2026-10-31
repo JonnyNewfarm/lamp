@@ -116,6 +116,7 @@ export default function CartDrawer() {
     <AnimatePresence>
       {isOpen && (
         <>
+          {/* OVERLAY */}
           <motion.button
             type="button"
             aria-label="Close cart"
@@ -133,11 +134,12 @@ export default function CartDrawer() {
               inset-0
               z-[9998]
               cursor-default
-           bg-[#eeeeec]
-             backdrop-blur-[2px]
+              bg-[#0f0e0d]/42
+              backdrop-blur-[10px]
             "
           />
 
+          {/* DRAWER */}
           <motion.aside
             role="dialog"
             aria-modal="true"
@@ -161,11 +163,14 @@ export default function CartDrawer() {
               max-w-[600px]
               flex-col
               overflow-hidden
-              bg-[#eeeeec]
-        text-[#1a1817]
-              shadow-[-24px_0_80px_rgba(22,19,16,0.12)]
+              border-l
+              border-white/8
+              bg-[#171513]
+              text-[#ece8e1]
+              shadow-[-24px_0_80px_rgba(0,0,0,0.28)]
             "
           >
+            {/* HEADER */}
             <header
               className="
                 flex
@@ -173,8 +178,6 @@ export default function CartDrawer() {
                 shrink-0
                 items-center
                 justify-between
-                border-b
-                border-[#1a1817]/15
                 px-5
                 sm:h-[104px]
                 sm:px-8
@@ -183,63 +186,39 @@ export default function CartDrawer() {
               <div className="flex items-baseline gap-3">
                 <h2
                   className="
-                    text-[clamp(3rem,6vw,4.4rem)]
-                    font-light
                     font-bueno
+                    text-[clamp(2rem,4vw,2.4rem)]
+                    font-light
                     leading-none
                   "
                 >
                   Cart
                 </h2>
 
-                <span className="text-sm text-[#1a1817]/45">
+                <span className="text-sm text-[#ece8e1]/35">
                   ({totalQuantity})
                 </span>
               </div>
 
-              <motion.button
+              <button
                 type="button"
                 onClick={closeCart}
                 aria-label="Close cart"
-                initial="idle"
-                whileHover="hover"
                 className="
-                  group
-                  relative
-                  flex
-                  h-11
-                  w-11
                   cursor-pointer
-                  items-center
-                  justify-center
-                  rounded-full
-                  border
-                  border-[#1a1817]/20
-                  transition-colors
+                  font-bueno
+                  text-sm
+                  font-semibold
+                  uppercase
+                  tracking-[0.03em]
+                  text-[#ece8e1]
+                  transition-opacity
                   duration-300
-                  hover:border-[#1a1817]
+                  hover:opacity-45
                 "
               >
-                <span
-                  className="
-                    absolute
-                    h-px
-                    w-5
-                    rotate-45
-                    bg-current
-                  "
-                />
-
-                <span
-                  className="
-                    absolute
-                    h-px
-                    w-5
-                    -rotate-45
-                    bg-current
-                  "
-                />
-              </motion.button>
+                Close
+              </button>
             </header>
 
             {items.length === 0 ? (
@@ -264,14 +243,16 @@ export default function CartDrawer() {
                   sm:py-10
                 "
               >
-                <div className="pt-[12vh] sm:pt-[16vh]">
+                <div className="pt-[11vh] sm:pt-[15vh]">
                   <h3
                     className="
-font-bueno              max-w-[430px]
-                      text-[clamp(3rem,11vw,5.6rem)]
-                      font-light
-                      leading-[0.9]
+                      max-w-[420px]
+                      font-bueno
+                      text-[clamp(2rem,10vw,4.4rem)]
                       font-semibold
+                      leading-[0.88]
+                      tracking-[-0.01em]
+                      text-[#ece8e1]
                     "
                   >
                     Your cart is empty.
@@ -279,11 +260,11 @@ font-bueno              max-w-[430px]
 
                   <p
                     className="
-                      mt-6
-                      max-w-[330px]
+                      mt-5
+                      max-w-[340px]
                       text-sm
-                      leading-[1.7]
-                      text-[#1a1817]
+                      leading-[1.75]
+                      text-[#ece8e1]/58
                     "
                   >
                     Explore the collection and add something made for slower,
@@ -295,35 +276,46 @@ font-bueno              max-w-[430px]
                   href="/shop"
                   onClick={closeCart}
                   className="
-                    group
-                    flex
-                    w-full
-                    items-center
-                    justify-between
-                    border-t
-                    border-[#1a1817]
-                    py-5
-                    text-sm
-                    uppercase
-                    tracking-[0.08em]
-                  "
+    group
+    flex
+    w-fit
+    items-center
+    gap-2
+    border-t-0
+    py-5
+    text-sm
+    font-medium
+    uppercase
+    tracking-[0.08em]
+    text-[#ece8e1]
+    transition-opacity
+    duration-300
+    hover:opacity-60
+  "
                 >
                   <span>Explore lighting</span>
 
                   <span
                     className="
-                      transition-transform
-                      duration-500
-                      ease-[cubic-bezier(0.76,0,0.24,1)]
-                      group-hover:translate-x-2
-                    "
+      inline-block
+      -mt-3
+      text-lg
+      leading-none
+      transition-transform
+      duration-500
+      ease-[cubic-bezier(0.16,1,0.3,1)]
+      group-hover:translate-x-1
+      group-hover:-translate-y-1
+    "
+                    aria-hidden="true"
                   >
-                    →
+                    ↗
                   </span>
                 </Link>
               </motion.div>
             ) : (
               <>
+                {/* ITEMS */}
                 <motion.div
                   variants={contentVariants}
                   initial="closed"
@@ -344,7 +336,7 @@ font-bueno              max-w-[430px]
                     sm:py-8
                   "
                 >
-                  <div className="divide-y divide-[#1a1817]/15">
+                  <div className="divide-y divide-white/8">
                     {items.map((item) => {
                       const variantLabel = getCartItemVariantLabel(item);
                       const reachedStockLimit = item.quantity >= item.stock;
@@ -371,7 +363,7 @@ font-bueno              max-w-[430px]
                               relative
                               aspect-[4/5]
                               overflow-hidden
-                              bg-[#deddd9]
+                              bg-[#23201d]
                             "
                           >
                             {item.image ? (
@@ -396,7 +388,7 @@ font-bueno              max-w-[430px]
                                   items-center
                                   justify-center
                                   text-xs
-                                  text-[#1a1817]/35
+                                  text-[#ece8e1]/30
                                 "
                               >
                                 No image
@@ -423,6 +415,7 @@ font-bueno              max-w-[430px]
                                     font-light
                                     leading-[1.05]
                                     tracking-[-0.045em]
+                                    text-[#ece8e1]
                                     transition-opacity
                                     hover:opacity-55
                                   "
@@ -435,6 +428,7 @@ font-bueno              max-w-[430px]
                                     shrink-0
                                     pt-1
                                     text-xs
+                                    text-[#ece8e1]
                                     sm:text-sm
                                   "
                                 >
@@ -448,7 +442,7 @@ font-bueno              max-w-[430px]
                                     mt-3
                                     text-xs
                                     capitalize
-                                    text-[#1a1817]
+                                    text-[#ece8e1]/58
                                   "
                                 >
                                   {variantLabel}
@@ -460,7 +454,7 @@ font-bueno              max-w-[430px]
                                   className="
                                     mt-1
                                     text-xs
-                                    text-[#1a1817]/60
+                                    text-[#ece8e1]/38
                                   "
                                 >
                                   {item.stock} available
@@ -484,7 +478,7 @@ font-bueno              max-w-[430px]
                                   h-10
                                   items-center
                                   border
-                                  border-[#1a1817]/20
+                                  border-white/14
                                 "
                               >
                                 <button
@@ -504,9 +498,10 @@ font-bueno              max-w-[430px]
                                     items-center
                                     justify-center
                                     text-base
+                                    text-[#ece8e1]
                                     transition-colors
-                                    hover:bg-[#1a1817]
-                                    hover:text-[#eeeeec]
+                                    hover:bg-[#ece8e1]
+                                    hover:text-[#171513]
                                   "
                                 >
                                   −
@@ -520,9 +515,10 @@ font-bueno              max-w-[430px]
                                     items-center
                                     justify-center
                                     border-x
-                                    border-[#1a1817]/20
+                                    border-white/14
                                     px-2
                                     text-xs
+                                    text-[#ece8e1]
                                   "
                                 >
                                   {item.quantity}
@@ -546,13 +542,14 @@ font-bueno              max-w-[430px]
                                     items-center
                                     justify-center
                                     text-base
+                                    text-[#ece8e1]
                                     transition-colors
-                                    hover:bg-[#1a1817]
-                                    hover:text-[#eeeeec]
+                                    hover:bg-[#ece8e1]
+                                    hover:text-[#171513]
                                     disabled:cursor-not-allowed
                                     disabled:opacity-25
                                     disabled:hover:bg-transparent
-                                    disabled:hover:text-current
+                                    disabled:hover:text-[#ece8e1]
                                   "
                                 >
                                   +
@@ -568,10 +565,10 @@ font-bueno              max-w-[430px]
                                   border-transparent
                                   pb-0.5
                                   text-xs
-                                  text-[#1a1817]/45
+                                  text-[#ece8e1]/42
                                   transition
-                                  hover:border-[#1a1817]
-                                  hover:text-[#1a1817]
+                                  hover:border-[#ece8e1]
+                                  hover:text-[#ece8e1]
                                 "
                               >
                                 Remove
@@ -584,7 +581,7 @@ font-bueno              max-w-[430px]
                                   mt-3
                                   text-[11px]
                                   leading-relaxed
-                                  text-[#1a1817]/35
+                                  text-[#ece8e1]/30
                                 "
                               >
                                 Maximum available quantity reached.
@@ -597,6 +594,7 @@ font-bueno              max-w-[430px]
                   </div>
                 </motion.div>
 
+                {/* FOOTER */}
                 <motion.footer
                   initial={{
                     opacity: 0,
@@ -614,8 +612,8 @@ font-bueno              max-w-[430px]
                   className="
                     shrink-0
                     border-t
-                    border-[#1a1817]/15
-                    bg-[#eeeeec]
+                    border-white/8
+                    bg-[#171513]
                     px-5
                     pb-[max(20px,env(safe-area-inset-bottom))]
                     pt-5
@@ -640,13 +638,13 @@ font-bueno              max-w-[430px]
                           text-xs
                           uppercase
                           tracking-[0.12em]
-                          text-[#1a1817]
+                          text-[#ece8e1]/52
                         "
                       >
                         Subtotal
                       </p>
 
-                      <p className="text-xs text-[#1a1817]">
+                      <p className="text-xs text-[#ece8e1]/40">
                         Shipping calculated at checkout
                       </p>
                     </div>
@@ -657,6 +655,7 @@ font-bueno              max-w-[430px]
                         text-2xl
                         font-light
                         tracking-[-0.04em]
+                        text-[#ece8e1]
                       "
                     >
                       {formatPrice(subtotal, items[0]?.currency || "usd")}
@@ -670,7 +669,7 @@ font-bueno              max-w-[430px]
                         mb-4
                         text-sm
                         leading-relaxed
-                        text-red-700
+                        text-red-300
                       "
                     >
                       {error}
@@ -682,43 +681,44 @@ font-bueno              max-w-[430px]
                     onClick={handleCheckout}
                     disabled={loading}
                     className="
-    group
-    relative
-    min-h-16
-    w-full
-    cursor-pointer
-    overflow-hidden
-    border
-    border-[#1a1817]
-    bg-[#1a1817]
-    px-6
-    text-[#eeeeec]
-    disabled:cursor-not-allowed
-    disabled:opacity-35
-  "
+                      group
+                      relative
+                      min-h-16
+                      w-full
+                      cursor-pointer
+                      overflow-hidden
+                      border
+                      border-[#ece8e1]
+                      bg-[#ece8e1]
+                      px-6
+                      text-[#171513]
+                      disabled:cursor-not-allowed
+                      disabled:opacity-35
+                    "
                   >
                     <span
                       className="
-      absolute
-      inset-0
-      translate-y-full
-      bg-[#eeeeec]
-      transition-transform
-      duration-500
-      ease-[cubic-bezier(0.76,0,0.24,1)]
-      group-hover:translate-y-0
-    "
+                        absolute
+                        inset-0
+                        translate-y-full
+                        bg-[#2a2623]
+                        transition-transform
+                        duration-500
+                        ease-[cubic-bezier(0.76,0,0.24,1)]
+                        group-hover:translate-y-0
+                      "
                     />
 
                     <span
                       className="
-      relative
-      z-10
-      text-lg
-      transition-colors
-      duration-500
-      group-hover:text-[#1a1817]
-    "
+                        relative
+                        z-10
+                        text-lg
+                        transition-colors
+                        duration-500
+                        font-semibold
+                        group-hover:text-[#ece8e1]
+                      "
                     >
                       {loading
                         ? "Starting checkout..."

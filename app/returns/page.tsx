@@ -117,32 +117,18 @@ export default function ReturnsPage() {
       <ScrollSection>
         <section className="px-4 pb-28 pt-36 md:px-9 md:pb-40">
           <header>
-            <p
-              className="
-                font-montserrat
-                text-[10px]
-                font-medium
-                uppercase
-                tracking-[0.07em]
-                opacity-45
-                md:text-xs
-              "
-            >
-              Calero Studio / Returns
-            </p>
-
             <h1
               className="
                 mt-16
                 font-bueno
-                text-[14vw]
+                text-[13vw]
                 font-bold
                 uppercase
                 leading-[0.82]
-                sm:text-[13vw]
+                sm:text-[12vw]
                 md:mt-24
-                md:text-[11vw]
-                lg:text-[10vw]
+                md:text-[10vw]
+                lg:text-[9vw]
               "
             >
               Returns

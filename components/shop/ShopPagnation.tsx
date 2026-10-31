@@ -21,6 +21,9 @@ type PaginationButtonProps = {
   disabled?: boolean;
 };
 
+const paginationTextClass =
+  "font-bueno text-[1.35rem] md:text-[clamp(1.75rem,2.3vw,3rem)] font-bold uppercase leading-none";
+
 function PaginationButton({
   direction,
   href,
@@ -31,14 +34,11 @@ function PaginationButton({
   if (disabled || !href) {
     return (
       <span
-        className="
-          font-bueno
-          text-[clamp(2.75rem,4.3vw,5rem)]
-          font-bold
-          uppercase
-          leading-none
+        className={`
+          ${paginationTextClass}
+          whitespace-nowrap
           text-[#1a1817]/15
-        "
+        `}
       >
         {label}
       </span>
@@ -48,17 +48,14 @@ function PaginationButton({
   return (
     <Link
       href={href}
-      className="
-        font-bueno
-        text-[clamp(2.75rem,4.3vw,5rem)]
-        font-bold
-        uppercase
-        leading-none
+      className={`
+        ${paginationTextClass}
+        whitespace-nowrap
         text-[#1a1817]
         transition-opacity
         duration-300
         hover:opacity-45
-      "
+      `}
     >
       {label}
     </Link>
@@ -88,6 +85,10 @@ export default function ShopPagination({
 
   const progress = totalPages > 0 ? (currentPage / totalPages) * 100 : 0;
 
+  const formattedCurrentPage = String(currentPage).padStart(2, "0");
+
+  const formattedTotalPages = String(totalPages).padStart(2, "0");
+
   return (
     <nav
       aria-label="Shop pagination"
@@ -108,7 +109,8 @@ export default function ShopPagination({
           md:justify-between
         "
       >
-        <div>
+        {/* DESKTOP PAGE COUNTER */}
+        <div className="hidden md:block">
           <p
             className="
               text-xs
@@ -124,31 +126,32 @@ export default function ShopPagination({
             <span
               className="
                 font-bueno
-                text-[4.5rem]
+                text-[3.5rem]
                 font-semibold
                 leading-[0.8]
                 text-[#1a1817]
-                md:text-[6rem]
+                md:text-[4rem]
               "
             >
-              {String(currentPage).padStart(2, "0")}
+              {formattedCurrentPage}
             </span>
 
             <span
               className="
                 pb-2
                 font-bueno
-                text-5xl
+                text-3xl
                 font-semibold
                 leading-[0.68]
                 text-[#1a1817]
               "
             >
-              / {String(totalPages).padStart(2, "0")}
+              / {formattedTotalPages}
             </span>
           </div>
         </div>
 
+        {/* PAGINATION CONTROLS */}
         <div
           className="
             flex
@@ -157,13 +160,15 @@ export default function ShopPagination({
             md:w-[450px]
           "
         >
+          {/* DESKTOP PAGE LINKS */}
           <div
             className="
-              flex
+              hidden
               items-center
               justify-start
               gap-5
               pb-1
+              md:flex
             "
           >
             {visiblePages.map((page, index) => {
@@ -193,20 +198,22 @@ export default function ShopPagination({
                   className={
                     isActive
                       ? `
-                          font-bueno
-                          text-2xl
-                          font-semibold
-                          text-[#1a1817]
-                        `
+                        font-bueno
+                        text-xl
+                        sm:text-2xl
+                        font-semibold
+                        text-[#1a1817]
+                      `
                       : `
-                          font-bueno
-                          text-2xl
-                          font-medium
-                          text-[#1a1817]/35
-                          transition-colors
-                          duration-300
-                          hover:text-[#1a1817]
-                        `
+                        font-bueno
+                        text-xl
+                        sm:text-2xl
+                        font-medium
+                        text-[#1a1817]/35
+                        transition-colors
+                        duration-300
+                        hover:text-[#1a1817]
+                      `
                   }
                 >
                   {String(page).padStart(2, "0")}
@@ -215,6 +222,7 @@ export default function ShopPagination({
             })}
           </div>
 
+          {/* PROGRESS LINE */}
           <div
             className="
               h-px
@@ -237,11 +245,13 @@ export default function ShopPagination({
             />
           </div>
 
+          {/* PREV / PAGE / NEXT */}
           <div
             className="
               flex
               items-center
               justify-between
+              gap-2
               pt-3
             "
           >
@@ -250,6 +260,21 @@ export default function ShopPagination({
               href={previousHref}
               disabled={currentPage <= 1}
             />
+
+            {/* MOBILE PAGE COUNTER */}
+            <span
+              className={`
+                ${paginationTextClass}
+                whitespace-nowrap
+                tabular-nums
+                text-[#1a1817]
+                md:hidden
+              `}
+            >
+              {formattedCurrentPage}
+              {" / "}
+              {formattedTotalPages}
+            </span>
 
             <PaginationButton
               direction="next"

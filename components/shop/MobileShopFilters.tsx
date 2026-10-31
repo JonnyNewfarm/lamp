@@ -60,6 +60,7 @@ export default function MobileShopFilters({
 
   return (
     <div className="md:hidden">
+      {/* FILTER TRIGGER */}
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -67,82 +68,73 @@ export default function MobileShopFilters({
         aria-expanded={open}
         className="
           group
-          flex
-          min-h-14
-          w-full
+          inline-flex
+          min-h-11
           cursor-pointer
           items-center
-          justify-between
-          border
-          px-4
-          border-[#1a1817]/15
-          py-4
+          gap-2.5
+          py-2
           text-sm
-          transition-colors
+          font-medium
+          text-[#1a1817]
+          transition-opacity
           duration-300
-          hover:border-[#1a1817]/35
+          hover:opacity-55
         "
       >
-        <span className="flex items-center gap-3">
-          <span>Filter & sort</span>
+        <span className="whitespace-nowrap">Filter & sort</span>
 
-          {hasActiveFilters && (
-            <span
-              className="
-                flex
-                h-5
-                min-w-5
-                items-center
-                justify-center
-                rounded-full
-        bg-[#1a1817]                px-1.5
-                text-[10px]
-text-[#eeeeec]
-        "
-            >
-              {activeFilterCount}
-            </span>
-          )}
-        </span>
+        {/* FILTER ICON */}
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+          className="
+            shrink-0
+            transition-transform
+            duration-500
+            ease-[cubic-bezier(0.16,1,0.3,1)]
+            group-hover:rotate-[-8deg]
+          "
+        >
+          <path d="M4 7h16" />
+          <path d="M4 17h16" />
+          <circle cx="9" cy="7" r="2" fill="#eeeeec" />
+          <circle cx="15" cy="17" r="2" fill="#eeeeec" />
+        </svg>
 
-        <span className="relative block h-4 w-5">
+        {hasActiveFilters && (
           <span
             className="
-              absolute
-              left-0
-              top-1/2
-              h-px
-              w-full
-              -translate-y-1/2
-              bg-current
-              transition-transform
-              duration-500
-              ease-[cubic-bezier(0.76,0,0.24,1)]
-              group-hover:scale-x-75
+              flex
+              h-5
+              min-w-5
+              items-center
+              justify-center
+              rounded-full
+              bg-[#1a1817]
+              px-1.5
+              text-[10px]
+              font-medium
+              text-[#eeeeec]
             "
-          />
-
-          <span
-            className="
-              absolute
-              left-1/2
-              top-0
-              h-full
-              w-px
-              -translate-x-1/2
-              bg-current
-              transition-transform
-              duration-500
-              ease-[cubic-bezier(0.76,0,0.24,1)]
-              group-hover:scale-y-75
-            "
-          />
-        </span>
+          >
+            {activeFilterCount}
+          </span>
+        )}
       </button>
 
+      {/* FILTER PANEL */}
       <AnimatePresence>
         {open && (
           <>
+            {/* BACKDROP */}
             <motion.button
               type="button"
               aria-label="Close filters"
@@ -159,10 +151,12 @@ text-[#eeeeec]
                 inset-0
                 z-[998]
                 cursor-default
-        bg-[#1a1817]/35                backdrop-blur-[2px]
+                bg-[#1a1817]/35
+                backdrop-blur-[2px]
               "
             />
 
+            {/* DRAWER */}
             <motion.div
               role="dialog"
               aria-modal="true"
@@ -190,10 +184,11 @@ text-[#eeeeec]
                 flex-col
                 overflow-hidden
                 bg-[#eeeeec]
-        text-[#1a1817]
+                text-[#1a1817]
                 shadow-[0_-24px_80px_rgba(22,19,16,0.15)]
               "
             >
+              {/* HEADER */}
               <header
                 className="
                   flex
@@ -210,7 +205,7 @@ text-[#eeeeec]
                   <h2
                     className="
                       font-morganite
-                      text-[3.4rem]
+                      text-[2.5rem]
                       font-bold
                       leading-none
                     "
@@ -225,57 +220,30 @@ text-[#eeeeec]
                   )}
                 </div>
 
+                {/* CLOSE BUTTON */}
+
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label="Close filters"
                   className="
-                    group
-                    relative
-                    flex
-                    h-11
-                    w-11
-                    cursor-pointer
-                    items-center
-                    justify-center
-                    rounded-full
-                    border
-                    border-[#1a1817]/20
-                    transition-colors
-                    duration-300
-                    hover:border-[#1a1817]
-                  "
+    cursor-pointer
+    font-bueno
+    text-xs
+    font-semibold
+    uppercase
+    tracking-[0.02em]
+    text-[#1a1817]
+    transition-opacity
+    duration-300
+    hover:opacity-40
+  "
                 >
-                  <span
-                    className="
-                      absolute
-                      h-px
-                      w-5
-                      rotate-45
-                      bg-current
-                      transition-transform
-                      duration-500
-                      ease-[cubic-bezier(0.76,0,0.24,1)]
-                      group-hover:rotate-[135deg]
-                    "
-                  />
-
-                  <span
-                    className="
-                      absolute
-                      h-px
-                      w-5
-                      -rotate-45
-                      bg-current
-                      transition-transform
-                      duration-500
-                      ease-[cubic-bezier(0.76,0,0.24,1)]
-                      group-hover:rotate-45
-                    "
-                  />
+                  Close
                 </button>
               </header>
 
+              {/* FILTER CONTENT */}
               <motion.div
                 initial={{
                   opacity: 0,
@@ -309,6 +277,7 @@ text-[#eeeeec]
                 />
               </motion.div>
 
+              {/* FOOTER */}
               <motion.footer
                 initial={{
                   opacity: 0,
@@ -326,14 +295,15 @@ text-[#eeeeec]
                 className="
                   shrink-0
                   border-t
-                  border-[#eeeeec]/15
-        text-[#1a1817]
+                  border-[#1a1817]/15
                   px-5
                   pb-[max(20px,env(safe-area-inset-bottom))]
                   pt-5
+                  text-[#1a1817]
                 "
               >
                 <div className="grid grid-cols-[0.75fr_1.25fr] gap-3">
+                  {/* CLEAR ALL */}
                   <Link
                     href="/shop"
                     onClick={() => setOpen(false)}
@@ -359,6 +329,7 @@ text-[#eeeeec]
                     Clear all
                   </Link>
 
+                  {/* SHOW PRODUCTS */}
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
@@ -369,19 +340,19 @@ text-[#eeeeec]
                       cursor-pointer
                       overflow-hidden
                       border
-        border-[#1a1817]
-        bg-[#1a1817]
+                      border-[#1a1817]
+                      bg-[#1a1817]
                       px-6
-text-[#eeeeec]
-        "
+                      text-[#eeeeec]
+                    "
                   >
                     <span
                       className="
                         absolute
                         inset-0
                         translate-y-full
-bg-[#eeeeec]
-        transition-transform
+                        bg-[#eeeeec]
+                        transition-transform
                         duration-500
                         ease-[cubic-bezier(0.76,0,0.24,1)]
                         group-hover:translate-y-0

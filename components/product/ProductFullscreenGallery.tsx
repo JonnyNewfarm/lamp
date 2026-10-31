@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState, type TouchEvent } from "react";
+import { useEffect, useRef, type TouchEvent } from "react";
 
 import type { GalleryImage } from "./product.types";
 
@@ -17,7 +17,12 @@ type ProductFullscreenGalleryProps = {
   onNext: () => void;
 };
 
-const ease = [0.22, 1, 0.36, 1] as const;
+const ease = [0.16, 1, 0.3, 1] as const;
+
+const imageTransition = {
+  duration: 0.72,
+  ease,
+};
 
 export default function ProductFullscreenGallery({
   open,
@@ -29,151 +34,152 @@ export default function ProductFullscreenGallery({
   onPrevious,
   onNext,
 }: ProductFullscreenGalleryProps) {
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const touchStart = useRef<{
+    x: number;
+    y: number;
+  } | null>(null);
 
-  const [displayedImage, setDisplayedImage] = useState<
-    GalleryImage | undefined
-  >(selectedImage);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  const [firstImageLoaded, setFirstImageLoaded] = useState(false);
-
+  // BODY SCROLL LOCK + KEYBOARD
   useEffect(() => {
-    if (!open) {
-      return;
-    }
+    if (!open) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+
+    document.body.style.overflow = "hidden";
+
+    closeButtonRef.current?.focus({
+      preventScroll: true,
+    });
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
+        event.preventDefault();
         onClose();
       }
 
       if (event.key === "ArrowRight") {
+        event.preventDefault();
         onNext();
       }
 
       if (event.key === "ArrowLeft") {
+        event.preventDefault();
         onPrevious();
       }
     }
-
-    const previousOverflow = document.body.style.overflow;
-
-    document.body.style.overflow = "hidden";
 
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
-
       window.removeEventListener("keydown", handleKeyDown);
+
+      previouslyFocused?.focus({
+        preventScroll: true,
+      });
     };
   }, [open, onClose, onNext, onPrevious]);
 
-  useEffect(() => {
-    if (!open || !selectedImage) {
-      return;
-    }
-
-    setDisplayedImage(selectedImage);
-    setFirstImageLoaded(false);
-  }, [open]);
-
-  useEffect(() => {
-    if (!open || !selectedImage) {
-      return;
-    }
-
-    if (displayedImage?.id === selectedImage.id) {
-      return;
-    }
-
-    const preloadImage = new window.Image();
-
-    preloadImage.src = selectedImage.url;
-
-    preloadImage.onload = () => {
-      setDisplayedImage(selectedImage);
-    };
-  }, [open, selectedImage, displayedImage?.id]);
-
+  // MOBILE SWIPE
   function handleTouchStart(event: TouchEvent<HTMLDivElement>) {
-    setTouchStartX(event.touches[0].clientX);
+    touchStart.current = {
+      x: event.touches[0].clientX,
+      y: event.touches[0].clientY,
+    };
   }
 
   function handleTouchEnd(event: TouchEvent<HTMLDivElement>) {
-    if (touchStartX === null) {
+    const start = touchStart.current;
+
+    if (!start) return;
+
+    const endX = event.changedTouches[0].clientX;
+    const endY = event.changedTouches[0].clientY;
+
+    const deltaX = start.x - endX;
+    const deltaY = start.y - endY;
+
+    touchStart.current = null;
+
+    if (Math.abs(deltaX) < 50 || Math.abs(deltaX) < Math.abs(deltaY) * 1.2) {
       return;
     }
 
-    const touchEndX = event.changedTouches[0].clientX;
-
-    const distance = touchStartX - touchEndX;
-    const minimumSwipeDistance = 50;
-
-    if (distance > minimumSwipeDistance) {
+    if (deltaX > 0) {
       onNext();
-    }
-
-    if (distance < -minimumSwipeDistance) {
+    } else {
       onPrevious();
     }
-
-    setTouchStartX(null);
   }
 
   return (
-    <AnimatePresence>
-      {open && selectedImage && displayedImage && (
+    <AnimatePresence initial={false}>
+      {open && selectedImage && (
         <motion.div
-          className="
-            fixed
-            inset-0
-            z-[80]
-            flex
-            items-center
-            justify-center
-            bg-[#1a1817]/70
-            p-0
-            text-[#eeeeec]
-            backdrop-blur-[10px]
-            md:p-10
-            lg:p-14
-          "
+          key="product-fullscreen"
           role="dialog"
           aria-modal="true"
           aria-label="Product image fullscreen view"
-          onMouseDown={onClose}
-          initial={{
-            opacity: 0,
-          }}
+          initial={false}
           animate={{
             opacity: 1,
           }}
           exit={{
             opacity: 0,
+            transition: {
+              duration: 0.12,
+              delay: 0.62,
+            },
           }}
-          transition={{
-            duration: 0.35,
-            ease,
-          }}
+          onMouseDown={onClose}
+          className="
+            fixed
+            inset-0
+            z-[80]
+            flex
+            flex-col
+            overflow-hidden
+            text-[#eeeeec]
+          "
         >
+          {/* BACKDROP */}
           <motion.div
-            className="
-              relative
-              flex
-              h-full
-              w-full
-              flex-col
-              overflow-hidden
-              bg-[#1a1817]
-              md:h-[84vh]
-              md:w-[70vw]
-              md:max-w-[1100px]
-            "
-            onMouseDown={(event) => event.stopPropagation()}
+            aria-hidden="true"
             initial={{
               opacity: 0,
-              y: 28,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.4,
+              ease,
+            }}
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+              bg-[#1a1817]/95
+              backdrop-blur-[8px]
+            "
+          />
+
+          {/* CLOSE BUTTON */}
+          <motion.button
+            ref={closeButtonRef}
+            type="button"
+            onClick={onClose}
+            onMouseDown={(event) => event.stopPropagation()}
+            aria-label="Close image viewer"
+            initial={{
+              opacity: 0,
+              y: -10,
             }}
             animate={{
               opacity: 1,
@@ -181,226 +187,195 @@ export default function ProductFullscreenGallery({
             }}
             exit={{
               opacity: 0,
-              y: 18,
+              y: -8,
             }}
             transition={{
-              duration: 0.6,
+              duration: 0.4,
+              delay: 0.2,
               ease,
             }}
+            className="
+              absolute
+              right-5
+              top-6
+              z-30
+              cursor-pointer
+              font-bueno
+              text-sm
+              font-semibold
+              uppercase
+              tracking-[0.04em]
+              text-[#eeeeec]
+              transition-opacity
+              hover:opacity-50
+              focus-visible:outline
+              focus-visible:outline-offset-4
+              md:right-10
+              md:top-9
+              md:text-base
+            "
           >
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close image viewer"
-              className="
-                group
-                absolute
-                right-5
-                top-5
-                z-30
-                flex
-                cursor-pointer
-                items-center
-                gap-4
-                font-normal
-                uppercase
-                tracking-[0.18em]
-                text-white
-                md:right-7
-                md:top-7
-              "
-            >
-              <span className="relative block h-4 w-8">
-                <span
-                  className="
-                    absolute
-                    left-0
-                    top-1/2
-                    h-px
-                    w-8
-                    -translate-y-1/2
-                    bg-current
-                    transition-all
-                    duration-500
-                    ease-[cubic-bezier(0.22,1,0.36,1)]
-                    group-hover:left-2
-                    group-hover:w-4
-                    group-hover:rotate-45
-                  "
-                />
+            Close
+          </motion.button>
 
-                <span
-                  className="
-                    absolute
-                    left-2
-                    top-1/2
-                    h-px
-                    w-4
-                    -translate-y-1/2
-                    -rotate-45
-                    scale-x-0
-                    bg-current
-                    opacity-0
-                    transition-all
-                    duration-500
-                    ease-[cubic-bezier(0.22,1,0.36,1)]
-                    group-hover:scale-x-100
-                    group-hover:opacity-100
-                  "
-                />
-              </span>
-
-              <span
-                className="
-                  text-2xl
-                  transition-transform
-                  duration-500
-                  ease-[cubic-bezier(0.22,1,0.36,1)]
-                  group-hover:translate-x-1
-                  font-bueno
-                "
-              >
-                Close
-              </span>
-            </button>
-
-            <div
-              className="
-                relative
-                flex
-                min-h-0
-                flex-1
-                touch-pan-y
-                items-center
-                justify-center
-                px-6
-                pt-16
-                md:px-12
-                md:pt-12
-              "
+          {/* MAIN IMAGE AREA */}
+          <div
+            className="
+              relative
+              flex
+              min-h-0
+              w-full
+              flex-1
+              items-center
+              justify-center
+              px-5
+              pb-4
+              pt-20
+              md:px-10
+              md:pb-6
+              md:pt-16
+            "
+          >
+            {/* SHARED ELEMENT */}
+            <motion.div
+              layoutId="product-gallery-shared-image"
+              transition={{
+                layout: imageTransition,
+              }}
+              onMouseDown={(event) => event.stopPropagation()}
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
+              className="
+                relative
+                aspect-[4/5]
+                w-[min(88vw,60dvh,700px)]
+                shrink-0
+                touch-pan-y
+                overflow-hidden
+                bg-[#f4f3f0]
+                will-change-transform
+              "
             >
-              <div
-                className="
-                  relative
-                  h-[58vh]
-                  w-full
-                  max-w-[620px]
-                  md:h-[60vh]
-                  md:max-h-[560px]
-                "
-              >
-                {!firstImageLoaded && (
-                  <div
+              {/* IMAGE CROSSFADE */}
+              <AnimatePresence initial={false} mode="sync">
+                <motion.div
+                  key={selectedImage.id}
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  exit={{
+                    opacity: 0,
+                  }}
+                  transition={{
+                    duration: 0.38,
+                    ease,
+                  }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={selectedImage.url}
+                    alt={selectedImage.alt || productTitle}
+                    fill
+                    priority
+                    quality={90}
+                    sizes="(min-width: 1024px) 700px, 88vw"
                     className="
-                      absolute
-                      inset-0
-                      animate-pulse
-                      bg-[#272422]
+                      object-cover
+                      select-none
                     "
+                    draggable={false}
                   />
-                )}
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+          </div>
 
-                <AnimatePresence mode="sync">
-                  <motion.div
-                    key={displayedImage.id}
-                    className="absolute inset-0"
-                    initial={{
-                      opacity: firstImageLoaded ? 0 : 1,
-                    }}
-                    animate={{
-                      opacity: 1,
-                    }}
-                    exit={{
-                      opacity: 0,
-                    }}
-                    transition={{
-                      duration: 0.3,
-                      ease,
-                    }}
-                  >
-                    <Image
-                      src={displayedImage.url}
-                      alt={displayedImage.alt || productTitle}
-                      fill
-                      quality={90}
-                      sizes="
-                        (min-width: 1024px) 620px,
-                        (min-width: 768px) 60vw,
-                        90vw
-                      "
-                      className="
-                        object-contain
-                      "
-                      priority
-                      onLoad={() => {
-                        setFirstImageLoaded(true);
-                      }}
-                    />
-                  </motion.div>
-                </AnimatePresence>
+          {/* THUMBNAILS */}
+          {images.length > 1 && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+                y: 10,
+                transition: {
+                  duration: 0.2,
+                },
+              }}
+              transition={{
+                duration: 0.5,
+                delay: 0.22,
+                ease,
+              }}
+              onMouseDown={(event) => event.stopPropagation()}
+              className="
+                no-scrollbar
+                relative
+                z-20
+                w-full
+                shrink-0
+                overflow-x-auto
+                px-5
+                pb-[max(20px,env(safe-area-inset-bottom))]
+                pt-4
+                md:px-10
+                md:pb-8
+              "
+            >
+              <div className="mx-auto flex w-max gap-2.5">
+                {images.map((image, index) => {
+                  const active = selectedImage.id === image.id;
+
+                  return (
+                    <button
+                      key={`fullscreen-${image.imageType}-${image.id}`}
+                      type="button"
+                      onClick={() => onSelectImage(image.id)}
+                      aria-label={`View image ${index + 1}`}
+                      aria-pressed={active}
+                      className={`
+                        relative
+                        h-16
+                        w-14
+                        shrink-0
+                        cursor-pointer
+                        overflow-hidden
+                        bg-[#f4f3f0]
+                        transition-[opacity,transform]
+                        duration-500
+                        ease-[cubic-bezier(0.16,1,0.3,1)]
+                        md:h-20
+                        md:w-16
+                        ${
+                          active
+                            ? "scale-100 opacity-100"
+                            : "scale-[0.94] opacity-35 hover:scale-100 hover:opacity-75"
+                        }
+                      `}
+                    >
+                      <Image
+                        src={image.url}
+                        alt={image.alt || productTitle}
+                        fill
+                        quality={60}
+                        sizes="80px"
+                        className="object-cover"
+                      />
+                    </button>
+                  );
+                })}
               </div>
-            </div>
-
-            {images.length > 1 && (
-              <div
-                className="
-                  no-scrollbar
-                  shrink-0
-                  overflow-x-auto
-                  px-5
-                  pb-5
-                  pt-4
-                  md:px-8
-                  md:pb-8
-                  md:pt-5
-                "
-              >
-                <div className="mx-auto flex w-max gap-3">
-                  {images.map((image, index) => {
-                    const active = selectedImage.id === image.id;
-
-                    return (
-                      <button
-                        key={`fullscreen-${image.imageType}-${image.id}`}
-                        type="button"
-                        onClick={() => onSelectImage(image.id)}
-                        aria-label={`View image ${index + 1}`}
-                        className={`
-                          relative
-                          h-16
-                          w-14
-                          shrink-0
-                          cursor-pointer
-                          overflow-hidden
-                          bg-[#f4f3f0]
-                          transition-all
-                          duration-300
-                          md:h-20
-                          md:w-16
-                          ${
-                            active
-                              ? "scale-100 opacity-100"
-                              : "scale-[0.94] opacity-35 hover:scale-100 hover:opacity-75"
-                          }
-                        `}
-                      >
-                        <Image
-                          src={image.url}
-                          alt={image.alt || productTitle}
-                          fill
-                          quality={60}
-                          sizes="80px"
-                          className="object-cover"
-                        />
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </motion.div>
+            </motion.div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>

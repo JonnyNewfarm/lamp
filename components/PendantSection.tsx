@@ -2,7 +2,6 @@
 
 import {
   motion,
-  MotionValue,
   useMotionValue,
   useScroll,
   useSpring,
@@ -21,74 +20,11 @@ import {
 const PRODUCT_URL =
   "/products/vintage-ceramic-pendant-light-hand-painted-copper-hanging-lamp";
 
-const ease = [0.16, 1, 0.3, 1] as const;
-
 type ProductLinkElement = HTMLAnchorElement & {
   dataset: {
     pendantLink?: string;
   };
 };
-
-type FloatingImageProps = {
-  imageY: MotionValue<string>;
-};
-
-function FloatingImage({ imageY }: FloatingImageProps) {
-  return (
-    <motion.div
-      style={{
-        y: imageY,
-      }}
-      className="
-        pointer-events-none
-        absolute
-        bottom-5
-        right-5
-        z-20
-        w-[28vw]
-        min-w-[112px]
-        max-w-[150px]
-        will-change-transform
-
-        md:bottom-10
-        md:right-10
-        md:w-[14vw]
-        md:max-w-[190px]
-
-        lg:bottom-14
-        lg:right-14
-        lg:max-w-[210px]
-      "
-    >
-      <div
-        className="
-          relative
-          aspect-[4.3/4.8]
-          w-full
-          overflow-hidden
-        "
-      >
-        <Image
-          src="/ceramic-03.jpg"
-          alt="Red hand-painted ceramic pendant light"
-          fill
-          priority
-          sizes="
-            (max-width: 767px) 28vw,
-            (max-width: 1279px) 14vw,
-            210px
-          "
-          className="
-            pointer-events-none
-            select-none
-            object-cover
-            object-center
-          "
-        />
-      </div>
-    </motion.div>
-  );
-}
 
 export default function PendantImageSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -126,8 +62,6 @@ export default function PendantImageSection() {
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["-7%", "7%"]);
 
   const textY = useTransform(scrollYProgress, [0, 1], ["7%", "-7%"]);
-
-  const floatingImageY = useTransform(scrollYProgress, [0, 1], ["18%", "-18%"]);
 
   const updateHoverAtPointer = useCallback(() => {
     if (!hasPointerPosition.current) {
@@ -210,13 +144,9 @@ export default function PendantImageSection() {
       passive: true,
     });
 
-    window.addEventListener("wheel", handleWheel, {
-      passive: true,
-    });
+    window.addEventListener("wheel", handleWheel, { passive: true });
 
-    window.addEventListener("resize", handleViewportChange, {
-      passive: true,
-    });
+    window.addEventListener("resize", handleViewportChange, { passive: true });
 
     document.addEventListener("scroll", handleViewportChange, {
       passive: true,
@@ -260,6 +190,7 @@ export default function PendantImageSection() {
 
   return (
     <>
+      {/* CUSTOM TEXT CURSOR */}
       <motion.div
         aria-hidden="true"
         style={{
@@ -269,63 +200,49 @@ export default function PendantImageSection() {
         initial={false}
         animate={{
           opacity: isHoveringSection ? 1 : 0,
+          scale: isHoveringSection ? 1 : 0.8,
         }}
         transition={{
           opacity: {
-            duration: 0.15,
+            duration: 0.2,
             ease: "easeOut",
+          },
+          scale: {
+            duration: 0.45,
+            ease: [0.16, 1, 0.3, 1],
           },
         }}
         className="
-    pointer-events-none
-    fixed
-    left-0
-    top-0
-    z-[9999]
-    hidden
-    -translate-x-1/2
-    -translate-y-1/2
-    items-center
-    justify-center
-    md:flex
-  "
+          pointer-events-none
+          fixed
+          left-0
+          top-0
+          z-[9999]
+          hidden
+          mix-blend-difference
+          md:block
+        "
       >
-        <motion.div
-          initial={false}
-          animate={{
-            scale: isHoveringSection ? 1 : 0,
-          }}
-          transition={{
-            scale: {
-              duration: 0.45,
-              ease: [0.16, 1, 0.3, 1],
-            },
-          }}
+        <span
           className="
-      origin-center
-      bg-[#954728]
-      px-10
-      py-6
-    "
+            block
+            -translate-x-1/2
+            -translate-y-1/2
+            whitespace-nowrap
+            font-bueno
+            text-[clamp(1.05rem,1.6vw,1.75rem)]
+            font-bold
+            uppercase
+            leading-none
+            tracking-[-0.025em]
+            text-white
+          "
         >
-          <span
-            className="
-        whitespace-nowrap
-        text-center
-        font-bueno
-        text-[clamp(2rem,4vw,5.5rem)]
-        font-bold
-        uppercase
-        leading-[0.8]
-        tracking-[-0.025em]
-        text-white
-      "
-          >
-            View lamp
-          </span>
-        </motion.div>
+          VIEW LAMP
+        </span>
       </motion.div>
 
+      {/* MAIN SECTION */}
       <section
         ref={sectionRef}
         className="
@@ -335,7 +252,6 @@ export default function PendantImageSection() {
           w-full
           overflow-hidden
           bg-[#1a1817]
-
           md:h-[92svh]
           md:min-h-[720px]
         "
@@ -355,6 +271,7 @@ export default function PendantImageSection() {
             md:cursor-none
           "
         >
+          {/* BACKGROUND IMAGE */}
           <motion.div
             style={{
               y: backgroundY,
@@ -381,39 +298,9 @@ export default function PendantImageSection() {
             />
           </motion.div>
 
-          <div
-            className="
-              pointer-events-none
-              absolute
-              inset-0
-              bg-black/15
-            "
-          />
+          {/* OVERLAYS */}
 
-          <div
-            className="
-              pointer-events-none
-              absolute
-              inset-0
-              bg-gradient-to-r
-              from-black/55
-              via-black/20
-              to-black/5
-            "
-          />
-
-          <div
-            className="
-              pointer-events-none
-              absolute
-              inset-0
-              bg-gradient-to-t
-              from-black/40
-              via-transparent
-              to-black/10
-            "
-          />
-
+          {/* TEXT CONTENT */}
           <motion.div
             style={{
               y: textY,
@@ -428,7 +315,6 @@ export default function PendantImageSection() {
               -translate-y-1/2
               text-white
               will-change-transform
-
               md:left-10
               lg:left-14
             "
@@ -436,11 +322,12 @@ export default function PendantImageSection() {
             <h2
               className="
                 font-bueno
-                text-5xl
-sm:text-[clamp(4.25rem,9vw,10rem)]                font-bold
+                text-4xl
+                font-bold
                 uppercase
-                leading-[0.76]
+                leading-[0.9]
                 text-white
+                sm:text-[clamp(1.25rem,5vw,6rem)]
               "
             >
               Ceramic
@@ -453,11 +340,10 @@ sm:text-[clamp(4.25rem,9vw,10rem)]                font-bold
                 mt-5
                 font-bueno
                 text-2xl
-                sm:text-[clamp(2.55rem,3.8vw,4.25rem)]
                 font-semibold
                 leading-none
-                text-white/80
-
+                text-white
+                sm:text-[clamp(1rem,2.8vw,3.25rem)]
                 md:mt-8
               "
             >
@@ -465,7 +351,27 @@ sm:text-[clamp(4.25rem,9vw,10rem)]                font-bold
             </p>
           </motion.div>
 
-          <FloatingImage imageY={floatingImageY} />
+          {/* MOBILE VIEW LAMP */}
+          <span
+            className="
+    pointer-events-none
+    absolute
+    bottom-5
+    right-5
+    z-20
+    mix-blend-difference
+    font-bueno
+    text-[1rem]
+    font-bold
+    uppercase
+    leading-none
+    tracking-[-0.025em]
+    text-white
+    md:hidden
+  "
+          >
+            View lamp
+          </span>
         </Link>
       </section>
     </>

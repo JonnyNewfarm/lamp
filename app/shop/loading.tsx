@@ -51,7 +51,7 @@ export default function Loading() {
               inset-y-0
               left-0
               w-8
-              bg-[#954728]
+              bg-[#201e1e]
             "
           />
         </div>

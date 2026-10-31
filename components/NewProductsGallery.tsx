@@ -41,8 +41,6 @@ type ProductLinkElement = HTMLAnchorElement & {
   };
 };
 
-const ease = [0.16, 1, 0.3, 1] as const;
-
 const productLayouts = [
   "md:col-start-1 md:col-span-2 md:mt-0",
   "md:col-start-5 md:col-span-2 md:mt-36",
@@ -67,30 +65,11 @@ function cleanTitle(title: string) {
   return title.split(/[–-]/)[0].trim();
 }
 
-function getVariantColorKey(variant: ProductVariantItem) {
-  const colorHex = variant.colorHex?.trim().toLowerCase();
-
-  if (colorHex) {
-    return colorHex;
-  }
-
-  const colorName = variant.color?.trim().toLowerCase();
-
-  if (colorName) {
-    return colorName;
-  }
-
-  return null;
-}
-
 export default function NewProductsGallery({
   products,
 }: NewProductsGalleryProps) {
   const visibleProducts = products.slice(0, 6);
 
-  const sectionRef = useRef<HTMLElement | null>(null);
-
-  const [isSectionInView, setIsSectionInView] = useState(false);
   const [hoverText, setHoverText] = useState("");
   const [isHoveringImage, setIsHoveringImage] = useState(false);
 
@@ -116,39 +95,6 @@ export default function NewProductsGallery({
     damping: 25,
     mass: 0.35,
   });
-
-  useEffect(() => {
-    const checkSectionPosition = () => {
-      const section = sectionRef.current;
-
-      if (!section) {
-        return;
-      }
-
-      const rect = section.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-
-      const showAfter = viewportHeight * 0.35;
-      const hideBefore = viewportHeight * 0.65;
-
-      const shouldShow = rect.top <= showAfter && rect.bottom >= hideBefore;
-
-      setIsSectionInView(shouldShow);
-    };
-
-    checkSectionPosition();
-
-    window.addEventListener("scroll", checkSectionPosition, {
-      passive: true,
-    });
-
-    window.addEventListener("resize", checkSectionPosition);
-
-    return () => {
-      window.removeEventListener("scroll", checkSectionPosition);
-      window.removeEventListener("resize", checkSectionPosition);
-    };
-  }, []);
 
   const updateHoverAtPointer = useCallback(() => {
     if (!hasPointerPosition.current) {
@@ -270,7 +216,6 @@ export default function NewProductsGallery({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("resize", handleViewportChange);
-
       document.removeEventListener("scroll", handleViewportChange, true);
       document.removeEventListener("mouseleave", handleMouseLeaveWindow);
 
@@ -319,11 +264,8 @@ export default function NewProductsGallery({
   }
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative pt-20 bg-[#eeeeec]
-        text-[#1a1817]"
-    >
+    <section className="relative bg-[#eeeeec] pt-20 text-[#1a1817]">
+      {/* CUSTOM TEXT CURSOR */}
       <motion.div
         aria-hidden="true"
         style={{
@@ -333,82 +275,70 @@ export default function NewProductsGallery({
         initial={false}
         animate={{
           opacity: isHoveringImage ? 1 : 0,
+          scale: isHoveringImage ? 1 : 0.8,
         }}
         transition={{
           opacity: {
-            duration: 0.15,
+            duration: 0.2,
             ease: "easeOut",
+          },
+          scale: {
+            duration: 0.45,
+            ease: [0.16, 1, 0.3, 1],
           },
         }}
         className="
-    pointer-events-none
-    fixed
-    left-0
-    top-0
-    z-[9999]
-    hidden
-    -translate-x-1/2
-    -translate-y-1/2
-    items-center
-    justify-center
-    md:flex
-  "
+          pointer-events-none
+          fixed
+          left-0
+          top-0
+          z-[9999]
+          hidden
+          mix-blend-difference
+          md:block
+        "
       >
-        <motion.div
-          initial={false}
-          animate={{
-            scale: isHoveringImage ? 1 : 0,
-          }}
-          transition={{
-            scale: {
-              duration: 0.45,
-              ease: [0.16, 1, 0.3, 1],
-            },
-          }}
+        <span
           className="
-      origin-center
-      bg-[#954728]
-      px-10
-      py-6
-    "
+            block
+            -translate-x-1/2
+            -translate-y-1/2
+            whitespace-nowrap
+            font-bueno
+            text-[clamp(1.05rem,1.6vw,1.75rem)]
+            font-bold
+            uppercase
+            leading-none
+            tracking-[-0.025em]
+            text-white
+          "
         >
-          <span
-            className="
-        whitespace-nowrap
-        text-center
-        font-bueno
-        text-[clamp(1.5rem,3.5vw,5rem)]
-        font-bold
-        uppercase
-        leading-[0.8]
-        tracking-[-0.025em]
-        text-white
-      "
-          >
-            {hoverText}
-          </span>
-        </motion.div>
+          {hoverText}
+        </span>
       </motion.div>
 
+      {/* SECTION HEADING */}
       <div className="px-4 pt-10 md:px-9 md:pt-14">
         <div className="flex items-start justify-between gap-8">
           <div className="relative inline-block">
             <h2
               className="
-font-bueno          text-5xl
+                font-bueno
+                text-2xl
                 font-bold
+                uppercase
                 leading-[0.85]
                 sm:text-5xl
-                lg:text-7xl
-                uppercase
+                lg:text-5xl
               "
             >
-              Added lately
+              Added lately(06)
             </h2>
           </div>
         </div>
       </div>
 
+      {/* PRODUCT GRID */}
       <div className="px-4 pb-36 pt-16 md:px-9 md:pb-56 md:pt-24">
         <div
           className="
@@ -428,25 +358,6 @@ font-bueno          text-5xl
             const transformOrigin =
               productOrigins[index % productOrigins.length];
 
-            const variants = product.variants ?? [];
-
-            const uniqueColors = Array.from(
-              variants
-                .reduce<Map<string, ProductVariantItem>>((map, variant) => {
-                  const colorKey = getVariantColorKey(variant);
-
-                  if (colorKey && !map.has(colorKey)) {
-                    map.set(colorKey, variant);
-                  }
-
-                  return map;
-                }, new Map())
-                .values(),
-            );
-
-            const visibleColors = uniqueColors.slice(0, 4);
-            const hiddenColorCount = uniqueColors.length - visibleColors.length;
-
             return (
               <article
                 key={product.id}
@@ -463,10 +374,7 @@ font-bueno          text-5xl
                     } as CSSProperties
                   }
                 >
-                  <span className="block pb-1 text-xl font-bueno font-semibold uppercase tracking-[0.08em]">
-                    {displayNumber}
-                  </span>
-
+                  {/* PRODUCT IMAGE */}
                   <Link
                     href={`/products/${product.slug}`}
                     aria-label={`View ${title}`}
@@ -503,17 +411,33 @@ font-bueno          text-5xl
                       "
                     />
 
-                    <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-3 text-white mix-blend-difference">
-                      <span className="text-[10px] uppercase md:hidden">
-                        {product.number}
+                    {/* NUMBER LEFT / NEW RIGHT */}
+                    <div
+                      className="
+                        pointer-events-none
+                        absolute
+                        inset-x-0
+                        top-0
+                        z-10
+                        flex
+                        items-start
+                        justify-between
+                        p-3
+                        text-white
+                        mix-blend-difference
+                      "
+                    >
+                      <span className="text-[10px] font-black uppercase md:text-xs">
+                        {displayNumber}
                       </span>
 
-                      <span className="ml-auto text-[10px] font-black uppercase md:text-xs">
+                      <span className="text-[10px] font-black uppercase md:text-xs">
                         New
                       </span>
                     </div>
                   </Link>
 
+                  {/* MOBILE TITLE */}
                   <div className="pt-3 md:hidden">
                     <h2
                       className="
@@ -529,6 +453,7 @@ font-bueno          text-5xl
                     </h2>
                   </div>
 
+                  {/* DESKTOP TITLE + PRICE */}
                   <div className="hidden justify-between pt-3 md:flex">
                     <span className="flex flex-col text-sm font-bold tracking-[-0.055em] md:text-lg">
                       {title}
@@ -538,43 +463,6 @@ font-bueno          text-5xl
                       {formatPrice(product.price)}
                     </span>
                   </div>
-
-                  {variants.length > 0 && (
-                    <div className="mt-3 flex items-center justify-between gap-3">
-                      <span className="text-[9px] font-bold uppercase tracking-[0.08em] opacity-50 md:text-[10px]">
-                        {variants.length}{" "}
-                        {variants.length === 1 ? "variant" : "variants"}
-                      </span>
-
-                      {visibleColors.length > 0 && (
-                        <div className="flex items-center gap-1.5">
-                          {visibleColors.map((variant) => {
-                            const colorKey = getVariantColorKey(variant);
-
-                            return (
-                              <span
-                                key={colorKey}
-                                title={variant.color || variant.name}
-                                className="h-2.5 w-2.5 border border-[#161310]/20 md:h-3 md:w-3"
-                                style={{
-                                  backgroundColor:
-                                    variant.colorHex ||
-                                    variant.color ||
-                                    "#d8d1c7",
-                                }}
-                              />
-                            );
-                          })}
-
-                          {hiddenColorCount > 0 && (
-                            <span className="ml-0.5 text-[9px] font-bold opacity-40 md:text-[10px]">
-                              +{hiddenColorCount}
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
                 </div>
               </article>
             );

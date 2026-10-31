@@ -89,14 +89,14 @@ export default function ContactPage() {
             className="
               mt-16
               font-bueno
-              text-[12vw]
+              text-[10vw]
               font-bold
               uppercase
               leading-[0.82]
-              sm:text-[13vw]
+              sm:text-[11vw]
               md:mt-24
-              md:text-[11vw]
-              lg:text-[10vw]
+              md:text-[9vw]
+              lg:text-[8vw]
             "
           >
             Get In Touch
@@ -155,7 +155,7 @@ export default function ContactPage() {
                   items-center
                   gap-4
                   font-bueno
-                  text-[clamp(2.4rem,4.2vw,5rem)]
+                  text-[clamp(1.4rem,3.2vw,4rem)]
                   font-bold
                   uppercase
                   leading-[0.86]

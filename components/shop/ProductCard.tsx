@@ -1,4 +1,3 @@
-// components/shop/ProductCard.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/formatPrice";
@@ -41,54 +40,159 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
     lifestyleImage && image && lifestyleImage.id !== image.id;
 
   return (
-    <Link href={`/products/${product.slug}`} className="group block">
+    <Link href={`/products/${product.slug}`} className="block">
       <article className="relative">
-        <div className="relative aspect-[4/5] overflow-hidden bg-[#f4f3f0]">
-          <div className="absolute left-4 top-4 z-20 text-xs uppercase tracking-[0.2em] text-[#161310]/35">
+        {/* PRODUCT IMAGE */}
+        <div
+          className="
+            group/image
+            isolate
+            relative
+            aspect-[4/5]
+            overflow-hidden
+            bg-[#f4f3f0]
+          "
+        >
+          {/* CATEGORY */}
+          <div
+            className="
+              pointer-events-none
+              absolute
+              left-4
+              top-4
+              z-20
+              mix-blend-difference
+              text-xs
+              uppercase
+              tracking-[0.2em]
+              text-white
+              transition-opacity
+              duration-300
+              ease-out
+              lg:group-hover/image:opacity-0
+            "
+          >
             {product.category.name}
           </div>
 
+          {/* FEATURED */}
           {product.featured && (
-            <div className="absolute right-4 top-4 z-20 text-xs uppercase tracking-[0.2em] text-[#161310]/35">
+            <div
+              className="
+                pointer-events-none
+                absolute
+                right-4
+                top-4
+                z-20
+                text-xs
+                uppercase
+                tracking-[0.2em]
+                text-[#161310]/35
+              "
+            >
               Featured
             </div>
           )}
 
+          {/* MAIN IMAGE */}
           {image ? (
             <Image
               src={image.url}
               alt={image.alt || product.title}
               fill
               sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
-              className="z-0 object-contain p-10 transition-transform duration-700 ease-out lg:group-hover:scale-[1.03]"
+              className="
+                z-0
+                object-contain
+                p-10
+                transition-transform
+                duration-700
+                ease-out
+                lg:group-hover/image:scale-[1.03]
+              "
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-sm text-[#161310]/35">
+            <div
+              className="
+                flex
+                h-full
+                items-center
+                justify-center
+                text-sm
+                text-[#161310]/35
+              "
+            >
               No image
             </div>
           )}
 
+          {/* LIFESTYLE HOVER IMAGE */}
           {hasDifferentLifestyleImage && (
             <Image
               src={lifestyleImage.url}
               alt={lifestyleImage.alt || product.title}
               fill
               sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
-              className="z-10 hidden object-cover opacity-0 transition-opacity duration-500 ease-out lg:block lg:group-hover:opacity-100"
+              className="
+                z-10
+                hidden
+                object-cover
+                opacity-0
+                transition-opacity
+                duration-500
+                ease-out
+                lg:block
+                lg:group-hover/image:opacity-100
+              "
             />
           )}
 
-          <div className="absolute bottom-4 left-4 z-20 translate-y-4 opacity-0 transition-all duration-500 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
-            <div className="inline-flex items-center font-bueno font-bold text-white bg-[#954728] px-4 py-3 text-lg uppercase">
-              <span>{totalStock > 0 ? "View product" : "Out of stock"}</span>
-            </div>
+          {/* HOVER TEXT */}
+          <div
+            className="
+              pointer-events-none
+              absolute
+              bottom-4
+              left-4
+              z-20
+              translate-y-4
+              opacity-0
+              mix-blend-difference
+              transition-all
+              duration-500
+              ease-[cubic-bezier(0.16,1,0.3,1)]
+              lg:group-hover/image:translate-y-0
+              lg:group-hover/image:opacity-100
+            "
+          >
+            <span
+              className="
+                font-bueno
+                text-[clamp(1rem,1.5vw,1.5rem)]
+                font-bold
+                uppercase
+                leading-none
+                tracking-[-0.025em]
+                text-white
+              "
+            >
+              {totalStock > 0 ? "View product" : "Out of stock"}
+            </span>
           </div>
         </div>
 
+        {/* PRODUCT INFORMATION */}
         <div className="pt-5">
           <div className="flex items-start justify-between gap-5">
             <div>
-              <h2 className="text-lg font-light tracking-[-0.04em] md:text-xl">
+              <h2
+                className="
+                  text-lg
+                  font-light
+                  tracking-[-0.04em]
+                  md:text-xl
+                "
+              >
                 {product.title}
               </h2>
 
@@ -98,24 +202,37 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
               </p>
             </div>
 
+            {/* PRICE */}
             <div className="text-right text-sm">
               <p>{formatPrice(price, product.currency)}</p>
 
               {product.compareAtPrice && (
-                <p className="mt-1 text-[#161310]/35 line-through">
+                <p
+                  className="
+                    mt-1
+                    text-[#161310]/35
+                    line-through
+                  "
+                >
                   {formatPrice(product.compareAtPrice, product.currency)}
                 </p>
               )}
             </div>
           </div>
 
+          {/* COLORS */}
           {colors.length > 0 && (
             <div className="mt-4 flex items-center gap-2">
               {colors.map((variant) => (
                 <span
                   key={variant.id}
                   title={variant.color || variant.name}
-                  className="h-3 w-3 border border-[#161310]/20"
+                  className="
+                    h-3
+                    w-3
+                    border
+                    border-[#161310]/20
+                  "
                   style={{
                     backgroundColor: variant.colorHex || "#d8d1c7",
                   }}
@@ -123,7 +240,13 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
               ))}
 
               {product.variants.length > colors.length && (
-                <span className="ml-1 text-xs text-[#161310]/35">
+                <span
+                  className="
+                    ml-1
+                    text-xs
+                    text-[#161310]/35
+                  "
+                >
                   +{product.variants.length - colors.length}
                 </span>
               )}

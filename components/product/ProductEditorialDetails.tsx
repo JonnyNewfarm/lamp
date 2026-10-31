@@ -26,10 +26,10 @@ export default function ProductEditorialDetails() {
           <h2
             className="
               max-w-4xl
-font-bueno            text-5xl
+font-bueno            text-4xl
               font-semibold
-              leading-[0.8]
-              md:text-7xl
+              leading-[0.95]
+              md:text-6xl
             "
           >
             A quiet object for everyday atmosphere.
@@ -44,14 +44,11 @@ font-bueno            text-5xl
     text-[#1a1817]
   "
           >
-            <span className=" flex flex-col gap-y-2 md:text-xl">
+            <span className="  gap-y-2 md:text-xl">
               <p>
                 Selected by Calero Studio for soft interiors, calm lighting and
-                everyday use.
-              </p>
-              <p>
-                Each available variant may differ in finish, color, plug type
-                and supplier details.
+                everyday use. Each available variant may differ in finish,
+                color, plug type and supplier details.
               </p>
             </span>
           </div>

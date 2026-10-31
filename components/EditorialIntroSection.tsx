@@ -86,7 +86,7 @@ export default function EditorialTextAssembleSection() {
           <p
             className="
               max-w-[1150px]
-font-bueno text-[clamp(3.25rem,7vw,8.5rem)]              font-regular
+font-bueno text-[clamp(2.25rem,6vw,7.5rem)]              font-regular
               leading-[0.9]
               tracking-[-0.001em]
               text-[#131412]
@@ -163,7 +163,6 @@ font-bueno text-[clamp(3.25rem,7vw,8.5rem)]              font-regular
             </div>
           </motion.div>
 
-          {/* Lite bilde – drifter vertikalt med scroll */}
           <motion.div
             initial={{
               opacity: 0,
@@ -215,7 +214,7 @@ font-bueno text-[clamp(3.25rem,7vw,8.5rem)]              font-regular
               "
             >
               <Image
-                src="/intro-lamp-3.jpg"
+                src="/lamp-green.jpg"
                 alt="Close-up of a decorative lamp"
                 fill
                 sizes="
@@ -242,39 +241,54 @@ font-bueno text-[clamp(3.25rem,7vw,8.5rem)]              font-regular
             md:items-end
           "
         >
-          <motion.p
-            initial={{
-              y: 25,
-              opacity: 0,
-            }}
-            animate={
-              isInView
-                ? {
-                    y: 0,
-                    opacity: 1,
-                  }
-                : {
-                    y: 25,
-                    opacity: 0,
-                  }
-            }
-            transition={{
-              duration: 0.9,
-              delay: 1.1,
-              ease,
-            }}
+          {/* EDITORIAL DESCRIPTION */}
+          <div
             className="
-              max-w-[390px]
-font-bueno          text-4xl
-              leading-[1.1]
-              tracking-[-0.001em]
-              text-[#0e0d0c]
-              md:col-span-5
-            "
+    relative
+    z-30
+    md:col-span-5
+    md:col-start-3
+    md:-top-16
+    lg:col-span-4
+    lg:col-start-3
+    lg:-top-28
+  "
           >
-            A quiet collection built around warm materials, soft silhouettes and
-            considered light.
-          </motion.p>
+            <motion.p
+              initial={{
+                y: 25,
+                opacity: 0,
+              }}
+              animate={
+                isInView
+                  ? {
+                      y: 0,
+                      opacity: 1,
+                    }
+                  : {
+                      y: 25,
+                      opacity: 0,
+                    }
+              }
+              transition={{
+                duration: 0.9,
+                delay: 1.1,
+                ease,
+              }}
+              className="
+      max-w-[420px]
+      font-bueno
+      text-3xl
+      font-normal
+      leading-[1.1]
+      tracking-[-0.001em]
+      text-[#0e0d0c]
+    "
+            >
+              A quiet collection built around warm materials, soft silhouettes
+              and considered light.
+            </motion.p>
+          </div>
 
           <motion.div
             initial={{
@@ -312,11 +326,11 @@ font-bueno          text-4xl
                 relative
                 inline-flex
                 overflow-hidden
-font-bueno             text-5xl
+font-bueno             text-4xl
                 font-bold
                 leading-none
-                md:text-6xl
-                lg:text-7xl
+                md:text-5xl
+                lg:text-6xl
                 uppercase
               "
             >
@@ -327,7 +341,7 @@ font-bueno             text-5xl
                 className="
                   pointer-events-none
                   absolute
-                  bottom-1
+                  bottom-0
                   left-0
                   h-px
                   w-full

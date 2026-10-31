@@ -45,17 +45,7 @@ const Footer = () => {
     <footer className="noise-bg relative overflow-hidden bg-[#eeeeec] px-5 pb-6 pt-20 text-[#1a1817] md:px-8 md:pb-8 md:pt-28">
       <div className="grid gap-14 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-7">
-          <Link href="/" aria-label="Go to home page" className="block w-fit">
-            <span className="block uppercase font-bueno text-8xl font-semibold leading-[0.80] ">
-              Calero
-            </span>
-
-            <span className="block uppercase font-bueno text-8xl font-semibold leading-[0.75] ">
-              Studio
-            </span>
-          </Link>
-
-          <p className="mt-8 max-w-[560px]  text-2xl  leading-[0.9] tracking-[-0.01em] text-[#1a1817] md:max-w-[500px] md:text-3xl">
+          <p className="mt-8 max-w-[560px] font-bold  text-2xl  leading-[0.9] tracking-[-0.01em] text-[#1a1817] md:max-w-[500px] md:text-3xl">
             Minimal lighting curated for calm interiors, warm corners and
             everyday atmosphere.
           </p>
