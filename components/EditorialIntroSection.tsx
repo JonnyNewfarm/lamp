@@ -86,7 +86,9 @@ export default function EditorialTextAssembleSection() {
           <p
             className="
               max-w-[1150px]
-font-bueno text-[clamp(2.25rem,6vw,7.5rem)]              font-regular
+              font-bueno
+              text-[clamp(2.25rem,6vw,7.5rem)]
+              font-normal
               leading-[0.9]
               tracking-[-0.001em]
               text-[#131412]
@@ -110,7 +112,6 @@ font-bueno text-[clamp(2.25rem,6vw,7.5rem)]              font-regular
             lg:min-h-[920px]
           "
         >
-          {/* Stort hovedbilde */}
           <motion.div
             initial={{
               y: 50,
@@ -185,20 +186,18 @@ font-bueno text-[clamp(2.25rem,6vw,7.5rem)]              font-regular
               ease,
             }}
             className="
-              absolute
-              bottom-[5%]
-              right-0
-              z-20
-              h-[40%]
-              w-[50%]
-              md:bottom-[4%]
-              md:right-[2%]
-              md:h-[46%]
-              md:w-[34%]
-              lg:right-[4%]
-              lg:h-[48%]
-              lg:w-[30%]
-            "
+  absolute
+  bottom-[5%]
+  right-0
+  z-20
+  aspect-[3/4]
+  w-[clamp(140px,35vw,210px)]
+  md:bottom-[4%]
+  md:right-[2%]
+  md:w-[clamp(175px,23vw,290px)]
+  lg:right-[4%]
+  lg:w-[clamp(200px,20vw,310px)]
+"
           >
             <motion.div
               style={{
@@ -241,18 +240,17 @@ font-bueno text-[clamp(2.25rem,6vw,7.5rem)]              font-regular
             md:items-end
           "
         >
-          {/* EDITORIAL DESCRIPTION */}
           <div
             className="
-    relative
-    z-30
-    md:col-span-5
-    md:col-start-3
-    md:-top-16
-    lg:col-span-4
-    lg:col-start-3
-    lg:-top-28
-  "
+              relative
+              z-30
+              md:col-span-5
+              md:col-start-3
+              md:-top-16
+              lg:col-span-4
+              lg:col-start-3
+              lg:-top-28
+            "
           >
             <motion.p
               initial={{
@@ -276,14 +274,14 @@ font-bueno text-[clamp(2.25rem,6vw,7.5rem)]              font-regular
                 ease,
               }}
               className="
-      max-w-[420px]
-      font-bueno
-      text-3xl
-      font-normal
-      leading-[1.1]
-      tracking-[-0.001em]
-      text-[#0e0d0c]
-    "
+                max-w-[420px]
+                font-bueno
+                text-3xl
+                font-normal
+                leading-[1.1]
+                tracking-[-0.001em]
+                text-[#0e0d0c]
+              "
             >
               A quiet collection built around warm materials, soft silhouettes
               and considered light.
@@ -326,12 +324,13 @@ font-bueno text-[clamp(2.25rem,6vw,7.5rem)]              font-regular
                 relative
                 inline-flex
                 overflow-hidden
-font-bueno             text-4xl
+                font-bueno
+                text-4xl
                 font-bold
+                uppercase
                 leading-none
                 md:text-5xl
                 lg:text-6xl
-                uppercase
               "
             >
               <span>View all</span>

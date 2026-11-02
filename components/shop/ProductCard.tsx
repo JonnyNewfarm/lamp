@@ -126,7 +126,6 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
             </div>
           )}
 
-          {/* LIFESTYLE HOVER IMAGE */}
           {hasDifferentLifestyleImage && (
             <Image
               src={lifestyleImage.url}
@@ -147,7 +146,6 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
             />
           )}
 
-          {/* HOVER TEXT */}
           <div
             className="
               pointer-events-none

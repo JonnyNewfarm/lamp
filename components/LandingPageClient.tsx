@@ -111,7 +111,9 @@ export default function CaleroHero() {
             items-center
             pt-32
             sm:pt-32
-            md:pt-32
+          md:items-end
+md:pb-0
+md:pt-[200px]
           "
         >
           <div className="w-full">
@@ -123,6 +125,7 @@ export default function CaleroHero() {
                 w-full
                 items-end
                 justify-between
+                md:mt-0
               "
             >
               <div
@@ -164,12 +167,7 @@ export default function CaleroHero() {
                   sm:flex
                 "
               >
-                <div
-                  className="
-                    overflow-hidden
-                    pb-[0.08em]
-                  "
-                >
+                <div className="overflow-hidden pb-[0.08em]">
                   <motion.p
                     variants={labelRevealVariants}
                     className="
@@ -188,7 +186,6 @@ export default function CaleroHero() {
           </div>
         </div>
 
-        {/* CATEGORY IMAGES */}
         <div className="mt-3 w-full">
           <motion.div
             initial={{
@@ -301,7 +298,6 @@ function HeroImage({
           md:aspect-[4/5]
         "
       >
-        {/* IMAGE */}
         <motion.div
           initial={{
             scale: 1.18,
@@ -333,7 +329,6 @@ function HeroImage({
           />
         </motion.div>
 
-        {/* HOVER OVERLAY */}
         <div
           className="
             pointer-events-none
@@ -347,7 +342,6 @@ function HeroImage({
           "
         />
 
-        {/* IMAGE NUMBER */}
         <motion.span
           initial={{
             opacity: 0,
@@ -377,7 +371,6 @@ function HeroImage({
           {String(index + 1).padStart(2, "0")}
         </motion.span>
 
-        {/* MOBILE CATEGORY LABEL */}
         <motion.span
           initial={{
             opacity: 0,

@@ -151,7 +151,6 @@ export default function ShopPagination({
           </div>
         </div>
 
-        {/* PAGINATION CONTROLS */}
         <div
           className="
             flex
@@ -160,7 +159,6 @@ export default function ShopPagination({
             md:w-[450px]
           "
         >
-          {/* DESKTOP PAGE LINKS */}
           <div
             className="
               hidden
@@ -245,7 +243,6 @@ export default function ShopPagination({
             />
           </div>
 
-          {/* PREV / PAGE / NEXT */}
           <div
             className="
               flex
@@ -261,7 +258,6 @@ export default function ShopPagination({
               disabled={currentPage <= 1}
             />
 
-            {/* MOBILE PAGE COUNTER */}
             <span
               className={`
                 ${paginationTextClass}
