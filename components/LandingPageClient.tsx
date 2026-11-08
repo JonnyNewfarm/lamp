@@ -1,239 +1,146 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useInView,
+} from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
 const heroImages = [
   {
-    src: "/images/grain-lamp1.jpg",
+    src: "/images/lamp-grain-1.jpg",
     href: "/shop?category=table-lamps",
     alt: "Explore table lamps",
+    title: "Table Lamps",
     hoverText: "Table",
   },
   {
     src: "/images/pend-1.jpg",
     href: "/shop?category=pendant-lighting",
     alt: "Explore pendant lighting",
+    title: "Pendant Lighting",
     hoverText: "Pendant",
   },
   {
     src: "/images/wall-2.jpg",
     href: "/shop?category=wall-lights",
     alt: "Explore wall lights",
+    title: "Wall Lights",
     hoverText: "Wall",
   },
   {
-    src: "/images/grain-lamp10.jpg",
+    src: "/images/floor-2.jpg",
     href: "/shop?category=floor-lamps",
     alt: "Explore floor lamps",
+    title: "Floor Lamps",
     hoverText: "Floor",
   },
 ];
 
+type HeroImageData = (typeof heroImages)[number];
+
 const ease = [0.16, 1, 0.3, 1] as const;
-const imageEase = [0.76, 0, 0.24, 1] as const;
 
-const titleRevealVariants = {
-  hidden: {
-    y: "115%",
-    rotate: 2,
-    skewY: 3,
-  },
-  visible: {
-    y: "0%",
-    rotate: 0,
-    skewY: 0,
-    transition: {
-      duration: 1.25,
-      delay: 0.08,
-      ease: imageEase,
-    },
-  },
-};
+// SCROLL DRIFT
+const IMAGE_DRIFT = 12;
+const CARD_DRIFT = 3;
 
-const labelContainerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      delayChildren: 0.42,
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const labelRevealVariants = {
-  hidden: {
-    y: "125%",
-    rotate: 2,
-  },
-  visible: {
-    y: "0%",
-    rotate: 0,
-    transition: {
-      duration: 0.85,
-      ease,
-    },
-  },
-};
+// ENTRANCE ANIMATION
+const REVEAL_Y = 70;
+const REVEAL_SCALE = 0.97;
+const REVEAL_DURATION = 1.65;
+const REVEAL_STAGGER = 0.16;
 
 export default function CaleroHero() {
   return (
-    <section
-      className="
-        noise-bg
-        relative
-        min-h-screen
-        overflow-x-hidden
-        bg-[#eeeeec]
-        text-[#1a1817]
-      "
-    >
+    <section className="noise-bg relative min-h-screen overflow-x-clip bg-[#eeeeec] text-[#1a1817]">
       <div
         className="
-          flex
-          min-h-screen
-          flex-col
+          w-full
           px-4
-          pb-4
-          pt-10
+          pb-20
+          pt-32
           sm:px-5
-          sm:pb-5
           md:px-8
-          md:pb-8
-          md:pt-14
+          md:pb-32
+          md:pt-32
         "
       >
         <div
           className="
-            flex
-            flex-1
-            items-center
-            pt-32
-            sm:pt-32
-          md:items-end
-md:pb-0
-md:pt-[200px]
+            grid
+            grid-cols-1
+            gap-y-12
+            md:grid-cols-[39%_51%]
+            md:items-start
+            md:justify-between
           "
         >
-          <div className="w-full">
+          {/* LEFT COLUMN */}
+          <div className="contents md:flex md:flex-col">
+            {/* IMAGE 01 */}
+            <div className="order-1 w-full">
+              <HeroImage
+                image={heroImages[0]}
+                aspect="aspect-square"
+                index={0}
+                priority
+              />
+            </div>
+
+            {/* IMAGE 03 */}
             <div
               className="
-                relative
-                mt-16
-                flex
-                w-full
-                items-end
-                justify-between
-                md:mt-0
+                order-3
+                w-[88%]
+                self-end
+                md:ml-[35%]
+                md:mt-[clamp(50px,6vw,105px)]
+                md:w-[75%]
               "
             >
-              <div
-                className="
-                  overflow-hidden
-                  px-[0.08em]
-                  pb-[0.14em]
-                  pt-[0.12em]
-                "
-              >
-                <motion.h1
-                  variants={titleRevealVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="
-                    origin-bottom-left
-                    whitespace-nowrap
-                    font-bueno
-                    font-bold
-                    text-[12vw]
-                    leading-[0.9]
-                    tracking-[-2]
-                    md:text-[10.5vw]
-                  "
-                >
-                  Calero Studio
-                </motion.h1>
-              </div>
-
-              <motion.div
-                variants={labelContainerVariants}
-                initial="hidden"
-                animate="visible"
-                className="
-                  mb-[0.8vw]
-                  hidden
-                  shrink-0
-                  items-center
-                  sm:flex
-                "
-              >
-                <div className="overflow-hidden pb-[0.08em]">
-                  <motion.p
-                    variants={labelRevealVariants}
-                    className="
-                      origin-bottom-left
-                      whitespace-nowrap
-                      text-[11px]
-                      font-semibold
-                      uppercase
-                    "
-                  >
-                    Categories
-                  </motion.p>
-                </div>
-              </motion.div>
+              <HeroImage
+                image={heroImages[2]}
+                aspect="aspect-[9/10]"
+                index={2}
+              />
             </div>
           </div>
-        </div>
 
-        <div className="mt-3 w-full">
-          <motion.div
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            transition={{
-              duration: 0.8,
-              ease: "easeOut",
-            }}
-          >
-            <motion.div
-              initial={{
-                opacity: 0,
-                y: 35,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 1,
-                delay: 0.62,
-                ease,
-              }}
+          {/* RIGHT COLUMN */}
+          <div className="contents md:flex md:flex-col">
+            {/* IMAGE 02 */}
+            <div className="order-2 w-full">
+              <HeroImage
+                image={heroImages[1]}
+                aspect="aspect-[4/5]"
+                index={1}
+                priority
+              />
+            </div>
+
+            {/* IMAGE 04 */}
+            <div
               className="
-                grid
-                grid-cols-2
-                gap-2.5
-                md:grid-cols-4
-                md:gap-4
+                order-4
+                w-[88%]
+                md:ml-[12%]
+                md:mt-[clamp(45px,5vw,90px)]
+                md:w-[78%]
               "
             >
-              {heroImages.map((image, index) => (
-                <HeroImage
-                  key={image.href}
-                  src={image.src}
-                  href={image.href}
-                  alt={image.alt}
-                  hoverText={image.hoverText}
-                  index={index}
-                  priority={index < 2}
-                />
-              ))}
-            </motion.div>
-          </motion.div>
+              <HeroImage
+                image={heroImages[3]}
+                aspect="aspect-[5/4]"
+                index={3}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -241,168 +148,166 @@ md:pt-[200px]
 }
 
 function HeroImage({
-  src,
-  href,
-  alt,
-  hoverText,
+  image,
+  aspect,
   index,
   priority = false,
 }: {
-  src: string;
-  href: string;
-  alt: string;
-  hoverText: string;
+  image: HeroImageData;
+  aspect: string;
   index: number;
   priority?: boolean;
 }) {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const isInView = useInView(frameRef, {
+    once: true,
+    amount: 0.15,
+  });
+
+  const { scrollYProgress } = useScroll({
+    target: frameRef,
+    offset: ["start end", "end start"],
+  });
+
+  // IMAGE DRIFT
+  const imageY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [IMAGE_DRIFT, -IMAGE_DRIFT],
+  );
+
+  // CARD DRIFT
+  const cardY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [-CARD_DRIFT, CARD_DRIFT],
+  );
+
+  const smoothImageY = useSpring(imageY, {
+    stiffness: 80,
+    damping: 28,
+    mass: 0.7,
+  });
+
+  const smoothCardY = useSpring(cardY, {
+    stiffness: 80,
+    damping: 28,
+    mass: 0.7,
+  });
+
+  const showImage = imageLoaded && isInView;
+
+  const revealDelay = index < 2 ? index * REVEAL_STAGGER : 0;
+
   return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        y: 80,
-        scale: 0.94,
-        rotate: index % 2 === 0 ? -2 : 2,
-        filter: "blur(12px)",
-        clipPath: "inset(100% 0 0 0)",
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        rotate: 0,
-        filter: "blur(0px)",
-        clipPath: "inset(0% 0 0 0)",
-      }}
-      transition={{
-        duration: 1.25,
-        delay: 0.2 + index * 0.12,
-        ease: imageEase,
-      }}
-      className="origin-bottom"
-    >
-      <Link
-        href={href}
-        aria-label={alt}
-        data-calero-cursor={hoverText}
-        className="
-          group
-          relative
-          block
-          aspect-[3/4]
-          w-full
-          cursor-pointer
-          overflow-hidden
-          border
-          border-[#1a1817]/10
-          bg-[#dfddd8]
-          md:aspect-[4/5]
-        "
+    <motion.article style={{ y: smoothCardY }} className="w-full min-w-0">
+      {/* FADE + MOVEMENT + SCALE */}
+      <motion.div
+        initial={{
+          opacity: 0,
+          y: REVEAL_Y,
+          scale: REVEAL_SCALE,
+        }}
+        animate={{
+          opacity: showImage ? 1 : 0,
+          y: showImage ? 0 : REVEAL_Y,
+          scale: showImage ? 1 : REVEAL_SCALE,
+        }}
+        transition={{
+          opacity: {
+            duration: 1.3,
+            delay: revealDelay,
+            ease: [0.22, 1, 0.36, 1],
+          },
+          y: {
+            duration: REVEAL_DURATION,
+            delay: revealDelay,
+            ease,
+          },
+          scale: {
+            duration: 1.8,
+            delay: revealDelay,
+            ease,
+          },
+        }}
+        className="w-full"
       >
-        <motion.div
-          initial={{
-            scale: 1.18,
-          }}
-          animate={{
-            scale: 1,
-          }}
-          transition={{
-            duration: 1.6,
-            delay: 0.82 + index * 0.12,
-            ease: imageEase,
-          }}
-          className="absolute inset-0"
+        <Link
+          href={image.href}
+          aria-label={image.alt}
+          data-calero-cursor={image.hoverText}
+          className="group block w-full cursor-pointer"
         >
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            priority={priority}
-            sizes="(max-width: 767px) 50vw, 25vw"
+          <div
+            ref={frameRef}
+            className={`
+              relative
+              w-full
+              overflow-hidden
+              bg-[#dfddd8]
+              ${aspect}
+            `}
+          >
+            {/* DRIFTING IMAGE */}
+            <motion.div
+              style={{ y: smoothImageY }}
+              className="
+                absolute
+                -inset-[12%]
+                will-change-transform
+              "
+            >
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                priority={priority}
+                onLoad={() => setImageLoaded(true)}
+                sizes="(max-width: 767px) 100vw, 55vw"
+                className="
+                  object-cover
+                  transition-transform
+                  duration-[1000ms]
+                  ease-[cubic-bezier(0.16,1,0.3,1)]
+                  group-hover:scale-[1.045]
+                "
+                draggable={false}
+              />
+            </motion.div>
+
+            {/* HOVER DARKEN */}
+            <div
+              className="
+                pointer-events-none
+                absolute
+                inset-0
+                bg-black/0
+                transition-colors
+                duration-700
+                group-hover:bg-black/10
+              "
+            />
+          </div>
+
+          {/* CATEGORY NAME */}
+          <div
             className="
-              object-cover
-              transition-transform
-              duration-700
-              ease-out
-              group-hover:scale-[1.04]
+              mt-3
+              flex
+              items-center
+              justify-end
+              text-[11px]
+              font-medium
+              md:mt-4
+              md:text-[12px]
             "
-            draggable={false}
-          />
-        </motion.div>
-
-        <div
-          className="
-            pointer-events-none
-            absolute
-            inset-0
-            z-10
-            bg-black/0
-            transition-colors
-            duration-500
-            group-hover:bg-black/10
-          "
-        />
-
-        <motion.span
-          initial={{
-            opacity: 0,
-            y: -10,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.6,
-            delay: 1.35 + index * 0.12,
-            ease,
-          }}
-          className="
-            absolute
-            left-3
-            top-3
-            z-30
-            text-[0.62rem]
-            font-black
-            leading-none
-            tracking-[0.16em]
-            text-white
-          "
-        >
-          {String(index + 1).padStart(2, "0")}
-        </motion.span>
-
-        <motion.span
-          initial={{
-            opacity: 0,
-            y: 12,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.6,
-            delay: 1.4 + index * 0.12,
-            ease,
-          }}
-          className="
-            pointer-events-none
-            absolute
-            bottom-3
-            left-3
-            z-30
-            text-[0.5rem]
-            font-black
-            uppercase
-            leading-none
-            tracking-[0.12em]
-            text-white
-            md:hidden
-          "
-        >
-          {hoverText}
-        </motion.span>
-      </Link>
-    </motion.div>
+          >
+            <span>{image.title}</span>
+          </div>
+        </Link>
+      </motion.div>
+    </motion.article>
   );
 }

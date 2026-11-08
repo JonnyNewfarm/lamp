@@ -320,40 +320,27 @@ export default function EditorialTextAssembleSection() {
             <Link
               href="/shop"
               className="
-                group
-                relative
-                inline-flex
-                overflow-hidden
-                font-bueno
-                text-4xl
-                font-bold
-                uppercase
-                leading-none
-                md:text-5xl
-                lg:text-6xl
-              "
+    group
+    inline-flex
+    items-center
+    gap-4
+    text-[20px]
+    font-medium
+  "
             >
-              <span>View all</span>
-
+              Explore collection
               <span
-                aria-hidden="true"
                 className="
-                  pointer-events-none
-                  absolute
-                  bottom-0
-                  left-0
-                  h-px
-                  w-full
-                  origin-right
-                  scale-x-0
-                  bg-current
-                  transition-transform
-                  duration-500
-                  ease-[cubic-bezier(0.76,0,0.24,1)]
-                  group-hover:origin-left
-                  group-hover:scale-x-100
-                "
-              />
+      inline-block
+      transition-transform
+      duration-500
+      ease-[cubic-bezier(0.16,1,0.3,1)]
+      group-hover:translate-x-1
+      group-hover:-translate-y-1
+    "
+              >
+                ↗
+              </span>
             </Link>
           </motion.div>
         </div>

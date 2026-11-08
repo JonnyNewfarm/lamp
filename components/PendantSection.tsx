@@ -91,13 +91,12 @@ export default function PendantImageSection() {
         >
           <h2
             className="
-              font-bueno
               text-4xl
               font-bold
               uppercase
               leading-[0.9]
               text-white
-              sm:text-[clamp(1.25rem,5vw,6rem)]
+              sm:text-[clamp(1rem,4vw,5rem)]
             "
           >
             Ceramic
@@ -110,10 +109,10 @@ export default function PendantImageSection() {
               mt-5
               font-bueno
               text-2xl
-              font-semibold
+              
               leading-none
               text-white
-              sm:text-[clamp(1rem,2.8vw,3.25rem)]
+              sm:text-[clamp(0.5rem,2vw,3rem)]
               md:mt-8
             "
           >

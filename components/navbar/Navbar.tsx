@@ -125,14 +125,28 @@ const Navbar = () => {
             className="
               relative
               z-10
+              text-xl
               flex
               shrink-0
               items-center
+              font-bold
               justify-center
             "
           >
-            <CaleroLogo className="h-8 w-8 md:h-12 md:w-12" />
+            Calero Studio{" "}
           </Link>
+          <p
+            className="
+    hidden
+    whitespace-nowrap
+    text-[12px]
+    font-medium
+    leading-none
+    lg:block
+  "
+          >
+            Calm by Design.
+          </p>
 
           {/* DESKTOP NAVIGATION */}
           <motion.div

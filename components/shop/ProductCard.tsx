@@ -61,7 +61,6 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
               left-4
               top-4
               z-20
-              mix-blend-difference
               text-xs
               uppercase
               tracking-[0.2em]
@@ -155,7 +154,6 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
               z-20
               translate-y-4
               opacity-0
-              mix-blend-difference
               transition-all
               duration-500
               ease-[cubic-bezier(0.16,1,0.3,1)]
