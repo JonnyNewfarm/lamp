@@ -129,7 +129,7 @@ const Navbar = () => {
               flex
               shrink-0
               items-center
-              font-bold
+              font-semibold
               justify-center
             "
           >
@@ -139,7 +139,7 @@ const Navbar = () => {
             className="
     hidden
     whitespace-nowrap
-    text-[12px]
+    text-[16px]
     font-medium
     leading-none
     lg:block
