@@ -111,23 +111,11 @@ export default function ShopPagination({
       >
         {/* DESKTOP PAGE COUNTER */}
         <div className="hidden md:block">
-          <p
-            className="
-              text-xs
-              uppercase
-              tracking-[0.34em]
-              text-[#1a1817]/40
-            "
-          >
-            Page
-          </p>
-
           <div className="mt-3 flex items-end gap-3">
             <span
               className="
-                font-bueno
                 text-[3.5rem]
-                font-semibold
+                
                 leading-[0.8]
                 text-[#1a1817]
                 md:text-[4rem]
@@ -139,9 +127,8 @@ export default function ShopPagination({
             <span
               className="
                 pb-2
-                font-bueno
                 text-3xl
-                font-semibold
+                
                 leading-[0.68]
                 text-[#1a1817]
               "

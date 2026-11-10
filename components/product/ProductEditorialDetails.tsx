@@ -27,7 +27,7 @@ export default function ProductEditorialDetails() {
             className="
               max-w-4xl
 font-bueno            text-4xl
-              font-semibold
+              font-normal
               leading-[0.95]
               md:text-6xl
             "

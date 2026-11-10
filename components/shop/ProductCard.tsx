@@ -64,7 +64,7 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
               text-xs
               uppercase
               tracking-[0.2em]
-              text-white
+              text-black
               transition-opacity
               duration-300
               ease-out
