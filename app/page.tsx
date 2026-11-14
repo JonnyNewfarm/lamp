@@ -4,7 +4,6 @@ import LandingPageClient from "@/components/LandingPageClient";
 import LightingByMood from "@/components/LightingByMood";
 import PendantImageSection from "@/components/PendantSection";
 import ScrollSection from "@/components/SmoothScroll";
-import KineticHoverCursor from "@/components/ui/KineticHoverCursor";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -56,10 +55,8 @@ const page = () => {
   return (
     <>
       <ScrollSection>
-        <KineticHoverCursor />
         <LandingPageClient />
         <EditorialIntroSection />
-        <PendantImageSection />
         <FeaturedCollection />
         <LightingByMood />
       </ScrollSection>

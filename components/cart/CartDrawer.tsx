@@ -165,7 +165,7 @@ export default function CartDrawer() {
               overflow-hidden
               border-l
               border-white/8
-              bg-[#171513]
+              bg-[#0e0d0c]
               text-[#ece8e1]
               shadow-[-24px_0_80px_rgba(0,0,0,0.28)]
             "
@@ -249,7 +249,7 @@ export default function CartDrawer() {
                       max-w-[420px]
                       font-bueno
                       text-[clamp(2rem,10vw,4.4rem)]
-                      font-semibold
+                      font-medium
                       leading-[0.88]
                       tracking-[-0.01em]
                       text-[#ece8e1]

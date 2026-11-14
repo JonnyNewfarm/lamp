@@ -8,43 +8,225 @@ import {
 } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 import CartButton from "../cart/CartButton";
 import NavigationLink from "../NavigationLink";
-import CaleroLogo from "./CaleroLogo";
+import { useHeroIntro } from "../HeroIntroContext";
 
 const NAVIGATION_EASE = [0.76, 0, 0.24, 1] as const;
-const MENU_EASE = [0.16, 1, 0.3, 1] as const;
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const NAV_FADE_DURATION = 1.1;
+const ITEM_DURATION = 0.95;
+const ITEM_STAGGER = 0.09;
+const ITEM_RISE = 14;
 
 const mobileLinks = [
-  {
-    href: "/",
-    label: "Home",
-  },
-  {
-    href: "/shop",
-    label: "Shop",
-  },
-  {
-    href: "/contact",
-    label: "Contact",
-  },
+  { href: "/", label: "Home" },
+  { href: "/shop", label: "Shop" },
+  { href: "/contact", label: "Contact" },
 ];
 
-const Navbar = () => {
+type HeroState = {
+  pathname: string;
+  active: boolean;
+};
+
+function FadeItem({
+  index,
+  visible,
+  children,
+  className = "",
+}: {
+  index: number;
+  visible: boolean;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: ITEM_RISE,
+      }}
+      animate={{
+        opacity: visible ? 1 : 0,
+        y: visible ? 0 : ITEM_RISE,
+      }}
+      transition={{
+        duration: ITEM_DURATION,
+        delay: visible ? index * ITEM_STAGGER : 0,
+        ease: EASE,
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+export default function Navbar() {
   const pathname = usePathname();
+  const { stage } = useHeroIntro();
   const { scrollY } = useScroll();
 
   const [isNavigationVisible, setIsNavigationVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const [heroState, setHeroState] = useState<HeroState>({
+    pathname,
+    active: pathname === "/",
+  });
+
   const previousScrollY = useRef(0);
 
-  useMotionValueEvent(scrollY, "change", (currentScrollY) => {
-    if (isMenuOpen) {
+  const introReady =
+    pathname !== "/" || stage === "navigation" || stage === "complete";
+
+  const showNavbar = isNavigationVisible || isMenuOpen;
+
+  // HERO DETECTION
+  useLayoutEffect(() => {
+    if (pathname !== "/") {
+      setHeroState({
+        pathname,
+        active: false,
+      });
       return;
     }
+
+    let observedHero: HTMLElement | null = null;
+    let intersectionObserver: IntersectionObserver | null = null;
+    let resizeObserver: ResizeObserver | null = null;
+    let mutationObserver: MutationObserver | null = null;
+
+    const getTriggerY = () => (window.innerWidth >= 768 ? 38 : 32);
+
+    const updateHeroState = () => {
+      const triggerY = getTriggerY();
+      const hero = document.getElementById("calero-hero");
+
+      let active: boolean;
+
+      if (hero) {
+        active = hero.getBoundingClientRect().bottom > triggerY;
+      } else {
+        const fallbackHeight = Math.max(window.innerHeight, 560);
+
+        active = window.scrollY + triggerY < fallbackHeight;
+      }
+
+      setHeroState((previous) => {
+        if (previous.pathname === pathname && previous.active === active) {
+          return previous;
+        }
+
+        return { pathname, active };
+      });
+    };
+
+    const setupIntersectionObserver = () => {
+      intersectionObserver?.disconnect();
+
+      if (!observedHero) return;
+
+      const triggerY = Math.min(getTriggerY(), window.innerHeight - 2);
+
+      const bottomMargin = Math.max(0, window.innerHeight - triggerY - 1);
+
+      intersectionObserver = new IntersectionObserver(updateHeroState, {
+        root: null,
+        rootMargin: `-${triggerY}px 0px -${bottomMargin}px 0px`,
+        threshold: 0,
+      });
+
+      intersectionObserver.observe(observedHero);
+    };
+
+    const observeHero = () => {
+      const hero = document.getElementById("calero-hero");
+
+      if (!hero || observedHero === hero) return;
+
+      resizeObserver?.disconnect();
+      intersectionObserver?.disconnect();
+
+      observedHero = hero;
+
+      resizeObserver = new ResizeObserver(updateHeroState);
+
+      resizeObserver.observe(hero);
+
+      setupIntersectionObserver();
+      updateHeroState();
+
+      mutationObserver?.disconnect();
+    };
+
+    const handleScroll = () => {
+      observeHero();
+      updateHeroState();
+    };
+
+    const handleResize = () => {
+      observeHero();
+      setupIntersectionObserver();
+      updateHeroState();
+    };
+
+    updateHeroState();
+    observeHero();
+
+    if (!observedHero) {
+      mutationObserver = new MutationObserver(() => {
+        observeHero();
+        updateHeroState();
+      });
+
+      mutationObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+    }
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("pageshow", handleScroll);
+
+    const frame = requestAnimationFrame(() => {
+      observeHero();
+      updateHeroState();
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("pageshow", handleScroll);
+
+      intersectionObserver?.disconnect();
+      resizeObserver?.disconnect();
+      mutationObserver?.disconnect();
+    };
+  }, [pathname]);
+
+  const isOverHero =
+    heroState.pathname === pathname ? heroState.active : pathname === "/";
+
+  // NAVBAR VISIBILITY
+  useMotionValueEvent(scrollY, "change", (currentScrollY) => {
+    if (isMenuOpen) return;
 
     const previous = previousScrollY.current;
     const difference = currentScrollY - previous;
@@ -55,22 +237,22 @@ const Navbar = () => {
       return;
     }
 
-    if (Math.abs(difference) < 4) {
-      return;
-    }
+    if (Math.abs(difference) < 4) return;
 
     setIsNavigationVisible(difference < 0);
     previousScrollY.current = currentScrollY;
   });
 
+  // ROUTE CHANGES
   useEffect(() => {
     setIsMenuOpen(false);
+    setIsNavigationVisible(true);
+    previousScrollY.current = window.scrollY;
   }, [pathname]);
 
+  // MOBILE SCROLL LOCK
   useEffect(() => {
-    if (!isMenuOpen) {
-      return;
-    }
+    if (!isMenuOpen) return;
 
     const previousOverflow = document.body.style.overflow;
 
@@ -81,29 +263,39 @@ const Navbar = () => {
     };
   }, [isMenuOpen]);
 
+  // COLORS
+  const useLightText = isOverHero || isMenuOpen;
+
+  const navbarTextColor = useLightText
+    ? "text-[#eeeeec] dark:text-[#eeeeec]"
+    : "text-[#1a1817] dark:text-[#eeeeec]";
+
   return (
     <>
       <motion.header
         initial={{
           opacity: 0,
-          y: -16,
+          y: -12,
         }}
         animate={{
-          opacity: 1,
-          y: isNavigationVisible || isMenuOpen ? 0 : "-120%",
+          opacity: introReady ? 1 : 0,
+          y: showNavbar ? 0 : "-120%",
         }}
         transition={{
           opacity: {
-            duration: 0.8,
-            delay: 0.1,
-            ease: MENU_EASE,
+            duration: NAV_FADE_DURATION,
+            delay: introReady ? 0.05 : 0,
+            ease: EASE,
           },
           y: {
-            duration: 0.5,
+            duration: 0.55,
             ease: NAVIGATION_EASE,
           },
         }}
-        className="
+        style={{
+          pointerEvents: introReady ? "auto" : "none",
+        }}
+        className={`
           fixed
           left-0
           top-0
@@ -111,113 +303,160 @@ const Navbar = () => {
           w-full
           px-4
           py-4
-          text-[#1a1817]
-          dark:text-[#eeeeec]
+          transition-colors
+          duration-300
           md:px-8
           md:py-6
-        "
+          ${navbarTextColor}
+        `}
       >
-        <nav className="flex items-start justify-between">
-          {/* LOGO */}
-          <Link
-            href="/"
-            aria-label="Calero home"
+        <nav
+          className="
+            flex
+            w-full
+            items-start
+            justify-between
+            md:gap-x-4
+          "
+        >
+          {/* 01 — BRAND */}
+          <FadeItem
+            index={0}
+            visible={introReady}
             className="
               relative
               z-10
-              text-xl
-              flex
-              shrink-0
-              items-center
-              font-semibold
-              justify-center
+              min-w-0
+              md:shrink-0
             "
           >
-            Calero Studio{" "}
-          </Link>
-          <p
-            className="
-    hidden
-    whitespace-nowrap
-    text-[16px]
-    font-medium
-    leading-none
-    lg:block
-  "
-          >
-            Calm by Design.
-          </p>
+            <Link
+              href="/"
+              aria-label="Calero home"
+              className="
+                inline-flex
+                items-center
+                whitespace-nowrap
+                text-xl
+                font-medium
+                leading-[1.2]
+                md:text-[20px]
+              "
+            >
+              Calero Studio
+            </Link>
+          </FadeItem>
 
-          {/* DESKTOP NAVIGATION */}
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: -14,
-            }}
-            animate={{
-              opacity: isNavigationVisible ? 1 : 0,
-              y: isNavigationVisible ? 0 : -20,
-            }}
-            transition={{
-              opacity: {
-                duration: 0.65,
-                delay: 0.2,
-                ease: MENU_EASE,
-              },
-              y: {
-                duration: 0.55,
-                delay: 0.15,
-                ease: MENU_EASE,
-              },
-            }}
+          {/* 02 — TAGLINE */}
+          <FadeItem
+            index={1}
+            visible={introReady}
             className="
               hidden
-              items-center
-              gap-x-6
-              text-right
-              font-bueno
-              text-xl
-              font-semibold
-              uppercase
-              leading-[0.95]
-              tracking-[-0.03em]
-              md:flex
+              shrink-0
+              whitespace-nowrap
+              text-[20px]
+              font-medium
+              leading-[1.2]
+              md:block
             "
           >
-            <NavigationLink href="/">Home</NavigationLink>
+            Calm by Design.
+          </FadeItem>
 
-            <NavigationLink href="/shop">Shop</NavigationLink>
+          {/* 03 — SECOND TAGLINE */}
+          <FadeItem
+            index={2}
+            visible={introReady}
+            className="
+              hidden
+              shrink-0
+              whitespace-nowrap
+              text-[20px]
+              font-medium
+              leading-[1.2]
+              md:block
+            "
+          >
+            <div className="flex flex-col items-start gap-y-0.5">
+              <span>Light for living</span>
+              <span>Made for quieter spaces</span>
+            </div>
+          </FadeItem>
 
-            <NavigationLink href="/contact">Contact</NavigationLink>
+          {/* 04 — VERTICAL NAVIGATION */}
+          <div
+            className="
+              hidden
+              shrink-0
+              flex-col
+              items-start
+              gap-y-0.5
+              whitespace-nowrap
+              text-[20px]
+              font-medium
+              leading-[1.2]
+              tracking-[-0.02em]
+              md:flex
+              [&_a]:!text-[20px]
+              [&_span]:!text-[20px]
+            "
+          >
+            <FadeItem index={3} visible={introReady}>
+              <NavigationLink href="/">Home</NavigationLink>
+            </FadeItem>
 
+            <FadeItem index={4} visible={introReady}>
+              <NavigationLink href="/shop">Shop</NavigationLink>
+            </FadeItem>
+
+            <FadeItem index={5} visible={introReady}>
+              <NavigationLink href="/contact">Contact</NavigationLink>
+            </FadeItem>
+          </div>
+
+          {/* 05 — CART */}
+          <FadeItem
+            index={6}
+            visible={introReady}
+            className="
+              hidden
+              shrink-0
+              whitespace-nowrap
+              text-[20px]
+              font-medium
+              leading-[1.2]
+              tracking-[-0.02em]
+              md:block
+              [&_a]:!text-[20px]
+              [&_button]:!text-[20px]
+              [&_span]:!text-[20px]
+            "
+          >
             <CartButton />
-          </motion.div>
+          </FadeItem>
 
           {/* MOBILE CONTROLS */}
-          <div
-            className={`
+          <FadeItem
+            index={1}
+            visible={introReady}
+            className="
               relative
               z-10
               flex
               items-center
               gap-5
               text-base
-              font-semibold
+              font-medium
               uppercase
               leading-none
               tracking-[-0.01em]
-              transition-colors
-              duration-300
               md:hidden
-              ${isMenuOpen ? "text-[#eeeeec]" : "text-[#1a1817]"}
-            `}
+            "
           >
-            {/* ANIMATED MENU / CLOSE */}
             <button
               type="button"
-              onClick={() => {
-                setIsMenuOpen((current) => !current);
-              }}
+              onClick={() => setIsMenuOpen((current) => !current)}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
               className="
@@ -251,15 +490,13 @@ const Navbar = () => {
                   }}
                   transition={{
                     duration: 0.24,
-                    ease: MENU_EASE,
+                    ease: EASE,
                   }}
                   className="
                     block
                     origin-center
-                    font-bueno
                     text-base
-                    font-semibold
-                    uppercase
+                    font-medium
                     leading-none
                     [backface-visibility:hidden]
                   "
@@ -270,7 +507,7 @@ const Navbar = () => {
             </button>
 
             <CartButton />
-          </div>
+          </FadeItem>
         </nav>
       </motion.header>
 
@@ -301,7 +538,6 @@ const Navbar = () => {
             "
           >
             <div className="relative h-full w-full px-4">
-              {/* NAVIGATION LINKS */}
               <nav
                 aria-label="Mobile navigation"
                 className="
@@ -312,7 +548,7 @@ const Navbar = () => {
                   -translate-y-1/2
                 "
               >
-                <h2 className="mb-4 ">Navigation:</h2>
+                <h2 className="mb-4">Navigation:</h2>
 
                 {mobileLinks.map((link, index) => {
                   const isActive =
@@ -341,7 +577,7 @@ const Navbar = () => {
                       transition={{
                         duration: 0.7,
                         delay: 0.18 + index * 0.07,
-                        ease: MENU_EASE,
+                        ease: EASE,
                       }}
                       className="py-5"
                     >
@@ -350,31 +586,30 @@ const Navbar = () => {
                         aria-current={isActive ? "page" : undefined}
                         onClick={() => setIsMenuOpen(false)}
                         className={`
-          flex
-          items-center
-          justify-between
-          font-bueno
-          text-[11vw]
-          font-medium
-          uppercase
-          leading-[0.9]
-          tracking-[0.01em]
-          text-[#eeeeec]
-          transition-opacity
-          duration-500
-          ease-[cubic-bezier(0.16,1,0.3,1)]
-          hover:opacity-100
-          ${isActive ? "opacity-100" : "opacity-35"}
-        `}
+                          flex
+                          items-center
+                          justify-between
+                          text-[11vw]
+                          font-medium
+                          uppercase
+                          leading-[0.9]
+                          tracking-[0.01em]
+                          text-[#eeeeec]
+                          transition-opacity
+                          duration-500
+                          ease-[cubic-bezier(0.16,1,0.3,1)]
+                          hover:opacity-100
+                          ${isActive ? "opacity-100" : "opacity-35"}
+                        `}
                       >
                         <span>{link.label}</span>
 
                         <span
                           className="
-            text-sm
-            font-semibold
-            tracking-normal
-          "
+                            text-sm
+                            font-semibold
+                            tracking-normal
+                          "
                         >
                           {String(index + 1).padStart(2, "0")}
                         </span>
@@ -389,6 +624,4 @@ const Navbar = () => {
       </AnimatePresence>
     </>
   );
-};
-
-export default Navbar;
+}

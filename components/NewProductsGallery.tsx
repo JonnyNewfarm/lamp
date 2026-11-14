@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { type CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import { formatPrice } from "@/lib/formatPrice";
 
 type ProductVariantItem = {
@@ -55,6 +55,8 @@ export default function NewProductsGallery({
 }: NewProductsGalleryProps) {
   const visibleProducts = products.slice(0, 6);
 
+  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
+
   return (
     <section className="relative bg-[#eeeeec] pt-20 text-[#1a1817]">
       <div className="px-4 pt-10 md:px-9 md:pt-14">
@@ -62,7 +64,6 @@ export default function NewProductsGallery({
           <div className="relative inline-block">
             <h2
               className="
-                font-bueno
                 text-2xl
                 font-bold
                 uppercase
@@ -92,15 +93,36 @@ export default function NewProductsGallery({
           {visibleProducts.map((product, index) => {
             const title = cleanTitle(product.title);
             const displayNumber = String(index + 1).padStart(2, "0");
+
             const scale = productScales[index % productScales.length];
+
             const transformOrigin =
               productOrigins[index % productOrigins.length];
+
+            const isInactive =
+              hoveredProduct !== null && hoveredProduct !== product.id;
 
             return (
               <article
                 key={product.id}
+                onMouseEnter={() => setHoveredProduct(product.id)}
+                onMouseLeave={() => setHoveredProduct(null)}
+                onFocus={() => setHoveredProduct(product.id)}
+                onBlur={(event) => {
+                  if (
+                    !event.currentTarget.contains(
+                      event.relatedTarget as Node | null,
+                    )
+                  ) {
+                    setHoveredProduct(null);
+                  }
+                }}
                 className={[
                   "col-span-1",
+                  "transition-[filter]",
+                  "duration-700",
+                  "ease-[cubic-bezier(0.16,1,0.3,1)]",
+                  isInactive ? "blur-[2px]" : "blur-0",
                   productLayouts[index % productLayouts.length],
                 ].join(" ")}
               >
@@ -115,7 +137,6 @@ export default function NewProductsGallery({
                   <Link
                     href={`/products/${product.slug}`}
                     aria-label={`View ${title}`}
-                    data-calero-cursor="VIEW LAMP"
                     className="
                       group
                       relative
@@ -127,6 +148,8 @@ export default function NewProductsGallery({
                       bg-[#d7d6d4]
                     "
                   >
+                    {/* PRODUCT IMAGE WITH SUBTLE ZOOM */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={product.image}
                       alt={title}
@@ -143,6 +166,7 @@ export default function NewProductsGallery({
                       "
                     />
 
+                    {/* IMAGE LABELS */}
                     <div
                       className="
                         pointer-events-none
@@ -182,6 +206,7 @@ export default function NewProductsGallery({
                     </div>
                   </Link>
 
+                  {/* MOBILE TITLE */}
                   <div className="pt-3 md:hidden">
                     <h2
                       className="
@@ -197,6 +222,7 @@ export default function NewProductsGallery({
                     </h2>
                   </div>
 
+                  {/* DESKTOP TITLE + PRICE */}
                   <div className="hidden justify-between pt-3 md:flex">
                     <span
                       className="

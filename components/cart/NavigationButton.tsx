@@ -25,7 +25,6 @@ export default function NavigationButton({
         justify-end
         overflow-hidden
         pb-[2px]
-        uppercase
         md:opacity-60
         transition-opacity
         duration-300

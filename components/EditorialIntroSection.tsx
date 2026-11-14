@@ -1,30 +1,115 @@
 "use client";
 
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Link from "next/link";
-import { useRef } from "react";
+import { useState } from "react";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
+const categories = [
+  {
+    title: "Table",
+    image: "/images/lamp-grain-1.jpg",
+    href: "/shop?category=table-lamps",
+    alt: "Table lamp",
+  },
+  {
+    title: "Pendant",
+    image: "/images/pend-1.jpg",
+    href: "/shop?category=pendant-lighting",
+    alt: "Pendant lighting",
+  },
+  {
+    title: "Wall",
+    image: "/images/wall-2.jpg",
+    href: "/shop?category=wall-lights",
+    alt: "Wall light",
+  },
+  {
+    title: "Floor",
+    image: "/images/floor-2.jpg",
+    href: "/shop?category=floor-lamps",
+    alt: "Floor lamp",
+  },
+];
+
+type WordRevealProps = {
+  text: string;
+  className?: string;
+  as?: "p" | "span";
+  delay?: number;
+};
+
+function WordReveal({
+  text,
+  className = "",
+  as = "p",
+  delay = 0,
+}: WordRevealProps) {
+  const reducedMotion = useReducedMotion();
+
+  const words = text.trim().split(/\s+/);
+
+  const REVEAL_SPREAD = 0.18;
+  const REVEAL_DURATION = 0.9;
+
+  const wordVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: "0.9em",
+    },
+    visible: (index: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: reducedMotion ? 0 : REVEAL_DURATION,
+        delay: reducedMotion
+          ? 0
+          : delay + (index / Math.max(words.length - 1, 1)) * REVEAL_SPREAD,
+        ease,
+      },
+    }),
+  };
+
+  const Component = as === "span" ? motion.span : motion.p;
+
+  return (
+    <Component
+      initial={reducedMotion ? false : "hidden"}
+      whileInView="visible"
+      viewport={{
+        once: true,
+        amount: 0.1,
+        margin: "0px 0px -40px 0px",
+      }}
+      aria-label={text}
+      className={className}
+    >
+      {words.map((word, index) => (
+        <span key={index}>
+          <motion.span
+            custom={index}
+            variants={wordVariants}
+            aria-hidden="true"
+            className="inline-block whitespace-nowrap"
+            style={{
+              textIndent: 0,
+            }}
+          >
+            {word}
+          </motion.span>
+          {index < words.length - 1 ? " " : null}
+        </span>
+      ))}
+    </Component>
+  );
+}
+
 export default function EditorialTextAssembleSection() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-
-  const isInView = useInView(sectionRef, {
-    once: true,
-    margin: "-15% 0px -15% 0px",
-  });
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const floatingImageY = useTransform(scrollYProgress, [0, 1], [180, -220]);
+  const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
 
   return (
     <section
-      ref={sectionRef}
       className="
         noise-bg
         relative
@@ -39,310 +124,186 @@ export default function EditorialTextAssembleSection() {
         lg:py-36
       "
     >
-      <div
-        className="
-          relative
-          mx-auto
-          grid
-          min-h-[95svh]
-          max-w-[1800px]
-          grid-cols-1
-          gap-16
-          md:min-h-[100svh]
-          md:grid-cols-12
-          md:gap-x-6
-          lg:gap-x-8
-        "
-      >
-        <motion.div
-          initial={{
-            y: 42,
-            opacity: 0,
-          }}
-          animate={
-            isInView
-              ? {
-                  y: 0,
-                  opacity: 1,
-                }
-              : {
-                  y: 42,
-                  opacity: 0,
-                }
-          }
-          transition={{
-            duration: 1.1,
-            delay: 0.08,
-            ease,
-          }}
-          className="
-            relative
-            z-30
-            md:col-span-8
-            md:col-start-1
-            lg:col-span-7
-          "
-        >
-          <p
+      <div className="relative mx-auto w-full">
+        {/* LARGE EDITORIAL TEXT */}
+        <div className="relative w-full">
+          <WordReveal
+            text="Lighting and objects selected for rooms that feel slower, softer, and more intentional."
             className="
-              max-w-[1150px]
-              font-bueno
-              text-[clamp(2.25rem,6vw,7.5rem)]
+              w-full
+              text-[clamp(2.05rem,5vw,6.5rem)]
               font-normal
-              leading-[0.9]
-              tracking-[-0.001em]
+              leading-[0.95]
+              tracking-[-0.015em]
               text-[#131412]
+              md:[text-indent:10%]
             "
-          >
-            Lighting and objects selected for rooms that feel slower, softer,
-            and more intentional.
-          </p>
-        </motion.div>
-
-        <div
-          className="
-            relative
-            z-10
-            min-h-[600px]
-            md:col-span-10
-            md:col-start-2
-            md:min-h-[820px]
-            lg:col-span-9
-            lg:col-start-3
-            lg:min-h-[920px]
-          "
-        >
-          <motion.div
-            initial={{
-              y: 50,
-              opacity: 0,
-            }}
-            animate={
-              isInView
-                ? {
-                    y: 0,
-                    opacity: 1,
-                  }
-                : {
-                    y: 50,
-                    opacity: 0,
-                  }
-            }
-            transition={{
-              duration: 1.2,
-              delay: 0.35,
-              ease,
-            }}
-            className="
-              absolute
-              left-0
-              top-[8%]
-              h-[72%]
-              w-[86%]
-              overflow-hidden
-              md:left-[4%]
-              md:top-[7%]
-              md:h-[78%]
-              md:w-[75%]
-              lg:left-[6%]
-              lg:w-[70%]
-            "
-          >
-            <div className="relative h-full w-full">
-              <Image
-                src="/intro-lamp.jpg"
-                alt="Interior with decorative lighting"
-                fill
-                priority
-                sizes="
-                  (max-width: 768px) 86vw,
-                  (max-width: 1200px) 70vw,
-                  58vw
-                "
-                className="object-cover"
-              />
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              scale: 0.94,
-            }}
-            animate={
-              isInView
-                ? {
-                    opacity: 1,
-                    scale: 1,
-                  }
-                : {
-                    opacity: 0,
-                    scale: 0.94,
-                  }
-            }
-            transition={{
-              duration: 1.1,
-              delay: 0.72,
-              ease,
-            }}
-            className="
-  absolute
-  bottom-[5%]
-  right-0
-  z-20
-  aspect-[3/4]
-  w-[clamp(140px,35vw,210px)]
-  md:bottom-[4%]
-  md:right-[2%]
-  md:w-[clamp(175px,23vw,290px)]
-  lg:right-[4%]
-  lg:w-[clamp(200px,20vw,310px)]
-"
-          >
-            <motion.div
-              style={{
-                y: floatingImageY,
-              }}
-              className="
-                relative
-                h-full
-                w-full
-                overflow-hidden
-                shadow-[0_35px_80px_rgba(22,19,16,0.16)]
-                will-change-transform
-              "
-            >
-              <Image
-                src="/lamp-green.jpg"
-                alt="Close-up of a decorative lamp"
-                fill
-                sizes="
-                  (max-width: 768px) 42vw,
-                  (max-width: 1200px) 34vw,
-                  25vw
-                "
-                className="object-cover"
-              />
-            </motion.div>
-          </motion.div>
+          />
         </div>
 
+        {/* CATEGORIES */}
         <div
           className="
-            relative
-            z-30
-            flex
-            flex-col
-            gap-10
-            md:col-span-12
-            md:grid
-            md:grid-cols-12
-            md:items-end
+            mt-20
+            grid
+            grid-cols-2
+            items-start
+            gap-x-3
+            gap-y-10
+            md:mt-28
+            md:grid-cols-4
+            md:gap-x-5
+            lg:mt-36
+            lg:gap-x-7
+          "
+          onMouseLeave={() => setHoveredCategory(null)}
+        >
+          {categories.map((category, index) => {
+            const isInactive =
+              hoveredCategory !== null && hoveredCategory !== index;
+
+            return (
+              <div key={category.title} className="min-w-0 self-start">
+                <Link
+                  href={category.href}
+                  className="group block"
+                  onMouseEnter={() => setHoveredCategory(index)}
+                  onFocus={() => setHoveredCategory(index)}
+                  onBlur={() => setHoveredCategory(null)}
+                >
+                  {/* IMAGE */}
+                  <div
+                    className={`
+                      relative
+                      w-full
+                      overflow-hidden
+                      transition-[filter,opacity]
+                      duration-[650ms]
+                      ease-[cubic-bezier(0.16,1,0.3,1)]
+                      ${
+                        isInactive
+                          ? "blur-[1.5px] brightness-[0.85] saturate-[0.9]"
+                          : "blur-0 brightness-100 saturate-100"
+                      }
+                    `}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={category.image}
+                      alt={category.alt}
+                      loading="lazy"
+                      draggable={false}
+                      className="
+                        block
+                        h-auto
+                        w-full
+                        select-none
+                        transition-transform
+                        duration-[900ms]
+                        ease-[cubic-bezier(0.16,1,0.3,1)]
+                        group-hover:scale-[1.045]
+                      "
+                    />
+                  </div>
+
+                  {/* CATEGORY NAME */}
+                  <div className="mt-4 md:mt-5">
+                    <WordReveal
+                      as="span"
+                      text={category.title}
+                      className="
+                        block
+                        text-[15px]
+                        font-normal
+                        leading-none
+                        tracking-[-0.025em]
+                        md:text-[18px]
+                      "
+                    />
+                  </div>
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* BOTTOM TEXT */}
+        <div
+          className="
+            mt-24
+            grid
+            grid-cols-1
+            gap-8
+            md:mt-32
+            md:grid-cols-[minmax(0,0.9fr)_minmax(0,0.9fr)_minmax(0,1.5fr)]
+            md:items-start
+            md:gap-x-8
+            lg:mt-40
+            lg:gap-x-12
           "
         >
-          <div
+          {/* LEFT */}
+          <WordReveal
+            text="Light changes how a room feels."
             className="
-              relative
-              z-30
-              md:col-span-5
-              md:col-start-3
-              md:-top-16
-              lg:col-span-4
-              lg:col-start-3
-              lg:-top-28
+              max-w-[240px]
+              text-[15px]
+              leading-[1.35]
+              tracking-[-0.025em]
+              md:text-[clamp(16px,1.2vw,22px)]
             "
-          >
-            <motion.p
-              initial={{
-                y: 25,
-                opacity: 0,
-              }}
-              animate={
-                isInView
-                  ? {
-                      y: 0,
-                      opacity: 1,
-                    }
-                  : {
-                      y: 25,
-                      opacity: 0,
-                    }
-              }
-              transition={{
-                duration: 0.9,
-                delay: 1.1,
-                ease,
-              }}
-              className="
-                max-w-[420px]
-                font-bueno
-                text-3xl
-                font-normal
-                leading-[1.1]
-                tracking-[-0.001em]
-                text-[#0e0d0c]
-              "
-            >
-              A quiet collection built around warm materials, soft silhouettes
-              and considered light.
-            </motion.p>
-          </div>
+          />
 
-          <motion.div
-            initial={{
-              y: 34,
-              opacity: 0,
-            }}
-            animate={
-              isInView
-                ? {
-                    y: 0,
-                    opacity: 1,
-                  }
-                : {
-                    y: 34,
-                    opacity: 0,
-                  }
-            }
-            transition={{
-              duration: 1,
-              delay: 1.18,
-              ease,
-            }}
-            className="
-              flex
-              justify-start
-              md:col-span-4
-              md:col-start-9
-              md:justify-end
-            "
-          >
+          {/* CENTER */}
+          <div className="md:justify-self-center">
             <Link
               href="/shop"
               className="
-    group
-    inline-flex
-    items-center
-    gap-4
-    text-[20px]
-    font-medium
-  "
+                group
+                inline-flex
+                items-center
+                gap-3
+                text-[15px]
+                leading-[1.35]
+                tracking-[-0.025em]
+                md:text-[clamp(16px,1.2vw,22px)]
+              "
             >
-              Explore collection
+              <WordReveal
+                as="span"
+                text="Explore collection"
+                className="inline-block whitespace-nowrap"
+              />
+
               <span
+                aria-hidden="true"
                 className="
-      inline-block
-      transition-transform
-      duration-500
-      ease-[cubic-bezier(0.16,1,0.3,1)]
-      group-hover:translate-x-1
-      group-hover:-translate-y-1
-    "
+                  inline-block
+                  transition-transform
+                  duration-500
+                  ease-[cubic-bezier(0.16,1,0.3,1)]
+                  group-hover:translate-x-1
+                  group-hover:-translate-y-1
+                "
               >
                 ↗
               </span>
             </Link>
-          </motion.div>
+          </div>
+
+          {/* RIGHT */}
+          <WordReveal
+            text="A quiet collection built around warm materials, soft silhouettes and considered light. Each piece is thoughtfully selected to bring warmth and a sense of calm into everyday spaces, creating an inviting atmosphere that feels effortless and timeless."
+            delay={0.08}
+            className="
+              min-w-0
+              max-w-[580px]
+              text-[17px]
+              leading-[1.32]
+              tracking-[-0.025em]
+              md:text-[clamp(18px,1.45vw,26px)]
+            "
+          />
         </div>
       </div>
     </section>

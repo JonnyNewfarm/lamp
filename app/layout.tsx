@@ -7,6 +7,7 @@ import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/components/cart/CartProvider";
 import CartDrawer from "@/components/cart/CartDrawer";
+import { HeroIntroProvider } from "@/components/HeroIntroContext";
 
 const eudoxus = localFont({
   src: [
@@ -154,9 +155,11 @@ export default function RootLayout({
 
         <CartProvider>
           <div className="relative min-h-screen w-full">
-            <Navbar />
+            <HeroIntroProvider>
+              <Navbar />
 
-            <main>{children}</main>
+              <main>{children}</main>
+            </HeroIntroProvider>
 
             <Footer />
           </div>

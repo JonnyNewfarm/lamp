@@ -1,38 +1,38 @@
 "use client";
 
-import { useEffect, useContext, createContext, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
+
 import Lenis from "lenis";
 
 const SmoothScrollerContext = createContext<Lenis | null>(null);
 
 export const useSmoothScroller = () => useContext(SmoothScrollerContext);
 
-export default function ScrollSection({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [lenisRef, setLenis] = useState<Lenis | null>(null);
+export default function ScrollSection({ children }: { children: ReactNode }) {
+  const [lenis, setLenis] = useState<Lenis | null>(null);
 
   useEffect(() => {
-    const scroller = new Lenis();
+    const scroller = new Lenis({
+      autoRaf: true,
+      smoothWheel: true,
+      syncTouch: false,
+    });
+
     setLenis(scroller);
 
-    function raf(time: number) {
-      scroller.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    const rafId = requestAnimationFrame(raf);
-
     return () => {
-      cancelAnimationFrame(rafId);
       scroller.destroy();
     };
   }, []);
 
   return (
-    <SmoothScrollerContext.Provider value={lenisRef}>
+    <SmoothScrollerContext.Provider value={lenis}>
       {children}
     </SmoothScrollerContext.Provider>
   );
