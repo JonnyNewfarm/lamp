@@ -96,7 +96,7 @@ export default function CaleroHero() {
 
       const compact = Math.min(
         expanded,
-        Math.ceil(Math.max(calmWidth, designWidth) * 2 + byWidth + 28),
+        Math.ceil(calmWidth + byWidth + designWidth + 48),
       );
 
       setDimensions((previous) => {
@@ -302,7 +302,7 @@ export default function CaleroHero() {
             pointer-events-none
             absolute
             inset-0
-            bg-black/20
+            bg-black/40
           "
         />
 
@@ -348,29 +348,23 @@ export default function CaleroHero() {
             },
           }}
           className="
-            grid
-            grid-cols-[1fr_auto_1fr]
-            items-center
-            gap-x-2
-            whitespace-nowrap
-            font-medium
-            leading-none
-            tracking-[-0.02em]
-            text-[clamp(24px,2.9vw,46px)]
-            sm:gap-x-3
-          "
+  flex
+  items-center
+  justify-between
+  gap-x-3
+  sm:gap-x-6
+  whitespace-nowrap
+  font-medium
+  leading-none
+  tracking-[-0.02em]
+  text-[clamp(24px,2.9vw,46px)]
+"
         >
-          <span ref={calmRef} className="justify-self-start">
-            Calm
-          </span>
+          <span ref={calmRef}>Calm</span>
 
-          <span ref={byRef} className="justify-self-center ">
-            by
-          </span>
+          <span ref={byRef}>Beyond</span>
 
-          <span ref={designRef} className="justify-self-end">
-            Design
-          </span>
+          <span ref={designRef}>Design</span>
         </motion.h1>
       </div>
 
@@ -386,13 +380,16 @@ export default function CaleroHero() {
           ease,
         }}
         className="
-          pointer-events-none
-          absolute
-          left-1/2
-          top-[calc(50%+65px)]
-          z-40
-          -translate-x-1/2
-        "
+  pointer-events-none
+  absolute
+  bottom-6
+  right-4
+  z-40
+  sm:bottom-8
+  sm:right-5
+  md:bottom-10
+  md:right-8
+"
         role="status"
         aria-label="Loading Calero Studio"
       >
@@ -460,7 +457,7 @@ export default function CaleroHero() {
                   font-medium
                   leading-[1.5]
                   tracking-[-0.02em]
-                  md:text-[16px]
+                  md:text-[18px]
                 "
               >
                 {line}
@@ -500,7 +497,7 @@ md:left-[67%]            md:-translate-x-1/2
               leading-[1.5]
               tracking-[-0.02em]
               text-[#eeeeec]
-              md:text-[16px]
+              md:text-[18px]
             "
           >
             Light creates atmosphere.
@@ -541,7 +538,7 @@ md:left-[67%]            md:-translate-x-1/2
                 inline-flex
                 items-center
                 gap-3
-                text-[16px]
+                text-[18px]
                 font-medium
                 leading-none
                 tracking-[-0.02em]

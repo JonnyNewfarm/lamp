@@ -121,18 +121,6 @@ export default function LightingByMood() {
             text-right
           "
         >
-          {/* TITLE */}
-          <WordReveal
-            text="Lighting by mood"
-            className="
-              mb-4
-              text-5xl
-              font-medium
-              text-[#161310]
-              md:text-6xl
-            "
-          />
-
           {/* DESCRIPTION */}
           <WordReveal
             text="Calero Studio curates minimal lighting for calm interiors — from focused desk setups to warm evening corners and soft everyday spaces."
@@ -142,7 +130,7 @@ export default function LightingByMood() {
               text-xl
               tracking-[-0.7px]
               text-[#161310]
-              md:text-2xl
+              md:text-3xl
             "
           />
         </div>

@@ -361,7 +361,7 @@ export default function Navbar() {
               md:block
             "
           >
-            Calm by Design.
+            Calm by Design
           </FadeItem>
 
           {/* 03 — SECOND TAGLINE */}

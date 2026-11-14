@@ -2,9 +2,11 @@
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ease = [0.16, 1, 0.3, 1] as const;
+
+const HOVER_EXIT_DELAY = 180;
 
 const categories = [
   {
@@ -108,6 +110,36 @@ function WordReveal({
 export default function EditorialTextAssembleSection() {
   const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
 
+  const hoverExitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleCategoryEnter = (index: number) => {
+    if (hoverExitTimer.current !== null) {
+      clearTimeout(hoverExitTimer.current);
+      hoverExitTimer.current = null;
+    }
+
+    setHoveredCategory(index);
+  };
+
+  const handleCategoryLeave = () => {
+    if (hoverExitTimer.current !== null) {
+      clearTimeout(hoverExitTimer.current);
+    }
+
+    hoverExitTimer.current = setTimeout(() => {
+      setHoveredCategory(null);
+      hoverExitTimer.current = null;
+    }, HOVER_EXIT_DELAY);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverExitTimer.current !== null) {
+        clearTimeout(hoverExitTimer.current);
+      }
+    };
+  }, []);
+
   return (
     <section
       className="
@@ -133,10 +165,10 @@ export default function EditorialTextAssembleSection() {
               w-full
               text-[clamp(2.05rem,5vw,6.5rem)]
               font-normal
-              leading-[0.95]
+              leading-[1.1]
               tracking-[-0.015em]
               text-[#131412]
-              md:[text-indent:10%]
+              md:[text-indent:20%]
             "
           />
         </div>
@@ -156,7 +188,7 @@ export default function EditorialTextAssembleSection() {
             lg:mt-36
             lg:gap-x-7
           "
-          onMouseLeave={() => setHoveredCategory(null)}
+          onMouseLeave={handleCategoryLeave}
         >
           {categories.map((category, index) => {
             const isInactive =
@@ -167,25 +199,23 @@ export default function EditorialTextAssembleSection() {
                 <Link
                   href={category.href}
                   className="group block"
-                  onMouseEnter={() => setHoveredCategory(index)}
-                  onFocus={() => setHoveredCategory(index)}
-                  onBlur={() => setHoveredCategory(null)}
+                  onMouseEnter={() => handleCategoryEnter(index)}
+                  onFocus={() => handleCategoryEnter(index)}
+                  onBlur={handleCategoryLeave}
                 >
                   {/* IMAGE */}
                   <div
-                    className={`
-                      relative
-                      w-full
-                      overflow-hidden
-                      transition-[filter,opacity]
-                      duration-[650ms]
-                      ease-[cubic-bezier(0.16,1,0.3,1)]
-                      ${
-                        isInactive
-                          ? "blur-[1.5px] brightness-[0.85] saturate-[0.9]"
-                          : "blur-0 brightness-100 saturate-100"
-                      }
-                    `}
+                    className={[
+                      "relative",
+                      "w-full",
+                      "overflow-hidden",
+                      "transition-[filter]",
+                      "duration-700",
+                      "ease-[cubic-bezier(0.16,1,0.3,1)]",
+                      isInactive
+                        ? "blur-[1px] brightness-[0.65]"
+                        : "blur-0 brightness-100",
+                    ].join(" ")}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
