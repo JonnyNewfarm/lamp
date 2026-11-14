@@ -2,11 +2,8 @@
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 
 const ease = [0.16, 1, 0.3, 1] as const;
-
-const HOVER_EXIT_DELAY = 180;
 
 const categories = [
   {
@@ -108,38 +105,6 @@ function WordReveal({
 }
 
 export default function EditorialTextAssembleSection() {
-  const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
-
-  const hoverExitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleCategoryEnter = (index: number) => {
-    if (hoverExitTimer.current !== null) {
-      clearTimeout(hoverExitTimer.current);
-      hoverExitTimer.current = null;
-    }
-
-    setHoveredCategory(index);
-  };
-
-  const handleCategoryLeave = () => {
-    if (hoverExitTimer.current !== null) {
-      clearTimeout(hoverExitTimer.current);
-    }
-
-    hoverExitTimer.current = setTimeout(() => {
-      setHoveredCategory(null);
-      hoverExitTimer.current = null;
-    }, HOVER_EXIT_DELAY);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (hoverExitTimer.current !== null) {
-        clearTimeout(hoverExitTimer.current);
-      }
-    };
-  }, []);
-
   return (
     <section
       className="
@@ -188,73 +153,49 @@ export default function EditorialTextAssembleSection() {
             lg:mt-36
             lg:gap-x-7
           "
-          onMouseLeave={handleCategoryLeave}
         >
-          {categories.map((category, index) => {
-            const isInactive =
-              hoveredCategory !== null && hoveredCategory !== index;
+          {categories.map((category) => (
+            <div key={category.title} className="min-w-0 self-start">
+              <Link href={category.href} className="group block">
+                {/* IMAGE */}
+                <div className="relative w-full overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={category.image}
+                    alt={category.alt}
+                    loading="lazy"
+                    draggable={false}
+                    className="
+                      block
+                      h-auto
+                      w-full
+                      select-none
+                      transition-transform
+                      duration-[900ms]
+                      ease-[cubic-bezier(0.16,1,0.3,1)]
+                      group-hover:scale-[1.045]
+                    "
+                  />
+                </div>
 
-            return (
-              <div key={category.title} className="min-w-0 self-start">
-                <Link
-                  href={category.href}
-                  className="group block"
-                  onMouseEnter={() => handleCategoryEnter(index)}
-                  onFocus={() => handleCategoryEnter(index)}
-                  onBlur={handleCategoryLeave}
-                >
-                  {/* IMAGE */}
-                  <div
-                    className={[
-                      "relative",
-                      "w-full",
-                      "overflow-hidden",
-                      "transition-[filter]",
-                      "duration-700",
-                      "ease-[cubic-bezier(0.16,1,0.3,1)]",
-                      isInactive
-                        ? "blur-[1px] brightness-[0.65]"
-                        : "blur-0 brightness-100",
-                    ].join(" ")}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={category.image}
-                      alt={category.alt}
-                      loading="lazy"
-                      draggable={false}
-                      className="
-                        block
-                        h-auto
-                        w-full
-                        select-none
-                        transition-transform
-                        duration-[900ms]
-                        ease-[cubic-bezier(0.16,1,0.3,1)]
-                        group-hover:scale-[1.045]
-                      "
-                    />
-                  </div>
-
-                  {/* CATEGORY NAME */}
-                  <div className="mt-4 md:mt-5">
-                    <WordReveal
-                      as="span"
-                      text={category.title}
-                      className="
-                        block
-                        text-[15px]
-                        font-normal
-                        leading-none
-                        tracking-[-0.025em]
-                        md:text-[18px]
-                      "
-                    />
-                  </div>
-                </Link>
-              </div>
-            );
-          })}
+                {/* CATEGORY NAME */}
+                <div className="mt-4 md:mt-5">
+                  <WordReveal
+                    as="span"
+                    text={category.title}
+                    className="
+                      block
+                      text-[15px]
+                      font-normal
+                      leading-none
+                      tracking-[-0.025em]
+                      md:text-[18px]
+                    "
+                  />
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
 
         {/* BOTTOM TEXT */}

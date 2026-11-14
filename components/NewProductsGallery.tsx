@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import { formatPrice } from "@/lib/formatPrice";
 
 type ProductVariantItem = {
@@ -30,46 +29,18 @@ type ProductCardProps = {
   product: ProductItem;
   index: number;
   small?: boolean;
-  hoveredProduct: string | null;
-  onProductEnter: (id: string) => void;
-  onProductLeave: () => void;
 };
 
 function cleanTitle(title: string) {
   return title.split(/[–-]/)[0].trim();
 }
 
-function ProductCard({
-  product,
-  index,
-  small = false,
-  hoveredProduct,
-  onProductEnter,
-  onProductLeave,
-}: ProductCardProps) {
+function ProductCard({ product, index, small = false }: ProductCardProps) {
   const title = cleanTitle(product.title);
   const displayNumber = String(index + 1).padStart(2, "0");
 
-  const isInactive = hoveredProduct !== null && hoveredProduct !== product.id;
-
   return (
-    <article
-      onMouseEnter={() => onProductEnter(product.id)}
-      onMouseLeave={onProductLeave}
-      onFocus={() => onProductEnter(product.id)}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-          onProductLeave();
-        }
-      }}
-      className={[
-        "min-w-0",
-        "transition-[filter]",
-        "duration-700",
-        "ease-[cubic-bezier(0.16,1,0.3,1)]",
-        isInactive ? "blur-[1px] brightness-[0.65]" : "blur-0 brightness-100",
-      ].join(" ")}
-    >
+    <article className="min-w-0">
       <Link
         href={`/products/${product.slug}`}
         aria-label={`View ${title}`}
@@ -173,40 +144,6 @@ export default function NewProductsGallery({
   const largeProducts = visibleProducts.slice(0, 2);
   const smallProducts = visibleProducts.slice(2, 6);
 
-  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
-
-  const hoverExitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleProductEnter = (id: string) => {
-    // Cancel the pending reset when entering another product.
-    if (hoverExitTimer.current !== null) {
-      clearTimeout(hoverExitTimer.current);
-      hoverExitTimer.current = null;
-    }
-
-    setHoveredProduct(id);
-  };
-
-  const handleProductLeave = () => {
-    // Don't instantly reset the hover state between products.
-    if (hoverExitTimer.current !== null) {
-      clearTimeout(hoverExitTimer.current);
-    }
-
-    hoverExitTimer.current = setTimeout(() => {
-      setHoveredProduct(null);
-      hoverExitTimer.current = null;
-    }, 180);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (hoverExitTimer.current !== null) {
-        clearTimeout(hoverExitTimer.current);
-      }
-    };
-  }, []);
-
   return (
     <section className="relative bg-[#eeeeec] pt-20 text-[#1a1817]">
       {/* HEADING */}
@@ -232,14 +169,7 @@ export default function NewProductsGallery({
         >
           {/* TWO LARGE PRODUCTS */}
           {largeProducts.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              index={index}
-              hoveredProduct={hoveredProduct}
-              onProductEnter={handleProductEnter}
-              onProductLeave={handleProductLeave}
-            />
+            <ProductCard key={product.id} product={product} index={index} />
           ))}
 
           {/* FOUR SMALL PRODUCTS — 2x2 */}
@@ -264,9 +194,6 @@ export default function NewProductsGallery({
                   product={product}
                   index={index + 2}
                   small
-                  hoveredProduct={hoveredProduct}
-                  onProductEnter={handleProductEnter}
-                  onProductLeave={handleProductLeave}
                 />
               ))}
             </div>

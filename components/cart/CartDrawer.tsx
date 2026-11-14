@@ -247,7 +247,6 @@ export default function CartDrawer() {
                   <h3
                     className="
                       max-w-[420px]
-                      font-bueno
                       text-[clamp(2rem,10vw,4.4rem)]
                       font-medium
                       leading-[0.88]
