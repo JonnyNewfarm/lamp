@@ -66,7 +66,6 @@ export default function NewProductsGallery({
               className="
                 text-2xl
                 font-bold
-                uppercase
                 leading-[0.85]
                 sm:text-5xl
                 lg:text-5xl

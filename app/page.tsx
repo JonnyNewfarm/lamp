@@ -2,7 +2,6 @@ import EditorialIntroSection from "@/components/EditorialIntroSection";
 import FeaturedCollection from "@/components/FeaturedCollection";
 import LandingPageClient from "@/components/LandingPageClient";
 import LightingByMood from "@/components/LightingByMood";
-import PendantImageSection from "@/components/PendantSection";
 import ScrollSection from "@/components/SmoothScroll";
 import type { Metadata } from "next";
 

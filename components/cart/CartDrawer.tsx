@@ -613,7 +613,7 @@ export default function CartDrawer() {
                     shrink-0
                     border-t
                     border-white/8
-                    bg-[#171513]
+              bg-[#0e0d0c]
                     px-5
                     pb-[max(20px,env(safe-area-inset-bottom))]
                     pt-5

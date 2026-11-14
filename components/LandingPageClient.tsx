@@ -294,7 +294,7 @@ export default function CaleroHero() {
             object-cover
           "
         >
-          <source src="/1114.mp4" type="video/mp4" />
+          <source src="/hero-bg-1.mp4" type="video/mp4" />
         </motion.video>
 
         <div
