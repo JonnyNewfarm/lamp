@@ -357,8 +357,8 @@ export default function CaleroHero() {
   font-medium
   leading-none
   tracking-[-0.02em]
-  text-[clamp(24px,2.9vw,46px)]
-"
+text-[clamp(20px,5vw,26px)]
+md:text-[clamp(36px,3.6vw,58px)]"
         >
           <span ref={calmRef}>Calm</span>
 

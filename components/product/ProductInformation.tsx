@@ -93,7 +93,7 @@ export default function ProductInformation({
         </motion.p>
 
         {/* TITLE */}
-        <div className="overflow-hidden">
+        <div>
           <motion.h1
             initial={{
               opacity: 0,
@@ -115,12 +115,11 @@ export default function ProductInformation({
             className="
               mt-5
               max-w-2xl
-              font-bueno
-              font-semibold
+              font-medium
               text-[10vw]
-              leading-[1]
+              leading-[1.1]
               md:text-[5vw]
-              lg:text-[5vw]
+              lg:text-[4vw]
             "
           >
             {product.title}

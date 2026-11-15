@@ -38,11 +38,6 @@ function WordReveal({ text, className = "", delay = 0 }: WordRevealProps) {
 
   const words = text.trim().split(/\s+/);
 
-  const containerVariants: Variants = {
-    hidden: {},
-    visible: {},
-  };
-
   const wordVariants: Variants = {
     hidden: {
       opacity: reducedMotion ? 1 : 0,
@@ -63,14 +58,13 @@ function WordReveal({ text, className = "", delay = 0 }: WordRevealProps) {
 
   return (
     <motion.p
-      initial="hidden"
+      initial={reducedMotion ? false : "hidden"}
       whileInView="visible"
       viewport={{
         once: true,
         amount: 0.15,
         margin: "0px 0px -40px 0px",
       }}
-      variants={containerVariants}
       aria-label={text}
       className={className}
     >
@@ -81,9 +75,6 @@ function WordReveal({ text, className = "", delay = 0 }: WordRevealProps) {
             variants={wordVariants}
             aria-hidden="true"
             className="inline-block whitespace-nowrap"
-            style={{
-              textIndent: 0,
-            }}
           >
             {word}
           </motion.span>
@@ -103,88 +94,144 @@ export default function LightingByMood() {
         relative
         bg-[#eeeeec]
         px-6
-        py-20
+        
         text-[#1a1817]
         md:px-12
         md:py-32
       "
     >
       <div className="pt-10">
-        {/* HEADING + DESCRIPTION */}
         <div
           className="
-            ml-auto
             flex
-            max-w-4xl
-            flex-col
-            items-end
-            text-right
+            w-full
+            flex-col-reverse
+            gap-12
+            md:flex-row
+            md:items-start
+            md:justify-between
+            md:gap-10
+            lg:gap-20
           "
         >
-          {/* DESCRIPTION */}
-          <WordReveal
-            text="Calero Studio curates minimal lighting for calm interiors — from focused desk setups to warm evening corners and soft everyday spaces."
-            delay={0.08}
-            className="
-              max-w-3xl
-              text-xl
-              tracking-[-0.7px]
-              text-[#161310]
-              md:text-3xl
-            "
-          />
-        </div>
-
-        {/* ROOM LINKS — NO TEXT REVEAL */}
-        <div className="mt-20 pt-8">
+          {/* LEFT — VIDEO + ROOM LINKS */}
           <div
             className="
-              grid
-              grid-cols-1
-              gap-4
-              text-sm
-              xl:grid-cols-4
+              flex
+              w-full
+              min-w-0
+              flex-col
+              md:w-[28%]
+              md:shrink-0
+              lg:w-[20%]
             "
           >
-            {roomLinks.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
+            {/* HORIZONTAL VIDEO — DESKTOP ONLY */}
+            <div
+              className="
+                hidden
+                w-full
+                overflow-hidden
+                md:block
+              "
+            >
+              <video
+                src="/mood-2.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-hidden="true"
                 className="
-                  group
-                  relative
-                  inline-flex
-                  w-fit
-                  overflow-hidden
-                  pb-0.5
-                  text-2xl
-                  font-bold
-                  uppercase
+                  block
+                  aspect-video
+                  w-full
+                  object-cover
                 "
-              >
-                <span>{`For ${item.label}`}</span>
+              />
+            </div>
 
-                <span
-                  aria-hidden="true"
+            {/* ROOM LINKS — VERTICAL */}
+            <nav
+              aria-label="Shop lighting by room"
+              className="
+                flex
+                flex-col
+                items-start
+                gap-4
+                md:mt-10
+                md:gap-5
+                lg:mt-12
+              "
+            >
+              {roomLinks.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
                   className="
-                    pointer-events-none
-                    absolute
-                    bottom-1.5
-                    left-0
-                    h-px
-                    w-full
-                    origin-right
-                    scale-x-0
-                    bg-current
-                    transition-transform
-                    duration-500
-                    ease-[cubic-bezier(0.76,0,0.24,1)]
-                    group-hover:origin-left
-                    group-hover:scale-x-100
+                    group
+                    relative
+                    inline-flex
+                    w-fit
+                    max-w-full
+                    pb-0.5
+                    text-2xl
+                    font-normal
+                    leading-[1.1]
+                    tracking-[-0.035em]
+                    md:text-[clamp(15px,1.6vw,24px)]
                   "
-                />
-              </Link>
-            ))}
+                >
+                  <span>{`For ${item.label}`}</span>
+
+                  <span
+                    aria-hidden="true"
+                    className="
+                      pointer-events-none
+                      absolute
+                      bottom-0
+                      left-0
+                      h-px
+                      w-full
+                      origin-right
+                      scale-x-0
+                      bg-current
+                      transition-transform
+                      duration-500
+                      ease-[cubic-bezier(0.76,0,0.24,1)]
+                      group-hover:origin-left
+                      group-hover:scale-x-100
+                    "
+                  />
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* RIGHT — DESCRIPTION */}
+          <div
+            className="
+              ml-auto
+              flex
+              w-full
+              min-w-0
+              max-w-[1050px]
+              flex-col
+              items-end
+              md:flex-1
+            "
+          >
+            <WordReveal
+              text="Calero Studio curates minimal lighting for calm interiors — from focused desk setups to warm evening corners and soft everyday spaces."
+              delay={0.08}
+              className="
+                text-[clamp(24px,3.9vw,65px)]
+                leading-[1.12]
+                tracking-[-0.035em]
+                text-[#161310]
+              "
+            />
           </div>
         </div>
       </div>

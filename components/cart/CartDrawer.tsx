@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useCart } from "@/components/cart/CartProvider";
 import { formatPrice } from "@/lib/formatPrice";
 
-const CART_EASE = [0.76, 0, 0.24, 1] as const;
+const ease = [0.16, 1, 0.3, 1] as const;
 
 const drawerVariants = {
   closed: {
@@ -31,7 +31,7 @@ const overlayVariants = {
 const contentVariants = {
   closed: {
     opacity: 0,
-    y: 18,
+    y: 16,
   },
   open: {
     opacity: 1,
@@ -57,7 +57,6 @@ export default function CartDrawer() {
     if (!isOpen) return;
 
     const previousOverflow = document.body.style.overflow;
-
     document.body.style.overflow = "hidden";
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -126,16 +125,16 @@ export default function CartDrawer() {
             animate="open"
             exit="closed"
             transition={{
-              duration: 0.45,
-              ease: CART_EASE,
+              duration: 0.5,
+              ease,
             }}
             className="
               fixed
               inset-0
               z-[9998]
               cursor-default
-              bg-[#0f0e0d]/42
-              backdrop-blur-[10px]
+              bg-black/55
+              backdrop-blur-[8px]
             "
           />
 
@@ -149,8 +148,8 @@ export default function CartDrawer() {
             animate="open"
             exit="closed"
             transition={{
-              duration: 0.7,
-              ease: CART_EASE,
+              duration: 0.75,
+              ease,
             }}
             className="
               fixed
@@ -160,45 +159,43 @@ export default function CartDrawer() {
               flex
               h-dvh
               w-full
-              max-w-[600px]
+              max-w-[560px]
               flex-col
               overflow-hidden
-              border-l
-              border-white/8
-              bg-[#0e0d0c]
-              text-[#ece8e1]
-              shadow-[-24px_0_80px_rgba(0,0,0,0.28)]
+              bg-[#0c0b0a]
+              font-sans
+              text-[#eeeeec]
             "
           >
             {/* HEADER */}
             <header
               className="
                 flex
-                h-[90px]
                 shrink-0
-                items-center
+                items-start
                 justify-between
                 px-5
-                sm:h-[104px]
-                sm:px-8
+                pb-8
+                pt-7
+                sm:px-9
+                sm:pb-12
+                sm:pt-9
               "
             >
-              <div className="flex items-baseline gap-3">
-                <h2
-                  className="
-                    font-bueno
-                    text-[clamp(2rem,4vw,2.4rem)]
-                    font-light
-                    leading-none
-                  "
-                >
-                  Cart
-                </h2>
-
-                <span className="text-sm text-[#ece8e1]/35">
+              <h2
+                className="
+                  text-[28px]
+                  font-medium
+                  leading-none
+                  tracking-[-0.01em]
+                  sm:text-[22px]
+                "
+              >
+                Cart
+                <span className="ml-2 text-[#eeeeec]/45">
                   ({totalQuantity})
                 </span>
-              </div>
+              </h2>
 
               <button
                 type="button"
@@ -206,15 +203,15 @@ export default function CartDrawer() {
                 aria-label="Close cart"
                 className="
                   cursor-pointer
-                  font-bueno
-                  text-sm
-                  font-semibold
-                  uppercase
-                  tracking-[0.03em]
-                  text-[#ece8e1]
+                  text-[14px]
+                  font-medium
+                  leading-none
+                  text-[#eeeeec]
                   transition-opacity
                   duration-300
-                  hover:opacity-45
+                  hover:opacity-50
+                  focus-visible:outline
+                  focus-visible:outline-offset-4
                 "
               >
                 Close
@@ -222,14 +219,15 @@ export default function CartDrawer() {
             </header>
 
             {items.length === 0 ? (
+              /* EMPTY CART */
               <motion.div
                 variants={contentVariants}
                 initial="closed"
                 animate="open"
                 transition={{
-                  delay: 0.18,
-                  duration: 0.7,
-                  ease: CART_EASE,
+                  delay: 0.15,
+                  duration: 0.8,
+                  ease,
                 }}
                 className="
                   flex
@@ -238,20 +236,20 @@ export default function CartDrawer() {
                   flex-col
                   justify-between
                   px-5
-                  py-8
-                  sm:px-8
-                  sm:py-10
+                  pb-[max(28px,env(safe-area-inset-bottom))]
+                  pt-16
+                  sm:px-9
+                  sm:pb-9
+                  sm:pt-24
                 "
               >
-                <div className="pt-[11vh] sm:pt-[15vh]">
+                <div>
                   <h3
                     className="
-                      max-w-[420px]
-                      text-[clamp(2rem,10vw,4.4rem)]
+                      text-[clamp(32px,4vw,48px)]
                       font-medium
-                      leading-[0.88]
+                      leading-[1.05]
                       tracking-[-0.01em]
-                      text-[#ece8e1]
                     "
                   >
                     Your cart is empty.
@@ -261,13 +259,14 @@ export default function CartDrawer() {
                     className="
                       mt-5
                       max-w-[340px]
-                      text-sm
-                      leading-[1.75]
-                      text-[#ece8e1]/58
+                      text-[15px]
+                      font-normal
+                      leading-[1.6]
+                      text-[#eeeeec]/55
                     "
                   >
-                    Explore the collection and add something made for slower,
-                    warmer rooms.
+                    Explore the collection and discover lighting made for
+                    quieter, more considered spaces.
                   </p>
                 </div>
 
@@ -275,38 +274,30 @@ export default function CartDrawer() {
                   href="/shop"
                   onClick={closeCart}
                   className="
-    group
-    flex
-    w-fit
-    items-center
-    gap-2
-    border-t-0
-    py-5
-    text-sm
-    font-medium
-    uppercase
-    tracking-[0.08em]
-    text-[#ece8e1]
-    transition-opacity
-    duration-300
-    hover:opacity-60
-  "
+                    group
+                    inline-flex
+                    w-fit
+                    items-center
+                    gap-3
+                    text-[17px]
+                    font-medium
+                    tracking-[-0.025em]
+                    transition-opacity
+                    duration-300
+                    hover:opacity-60
+                  "
                 >
-                  <span>Explore lighting</span>
-
+                  Explore collection
                   <span
-                    className="
-      inline-block
-      -mt-3
-      text-lg
-      leading-none
-      transition-transform
-      duration-500
-      ease-[cubic-bezier(0.16,1,0.3,1)]
-      group-hover:translate-x-1
-      group-hover:-translate-y-1
-    "
                     aria-hidden="true"
+                    className="
+                      inline-block
+                      transition-transform
+                      duration-500
+                      ease-[cubic-bezier(0.16,1,0.3,1)]
+                      group-hover:translate-x-1
+                      group-hover:-translate-y-1
+                    "
                   >
                     ↗
                   </span>
@@ -314,15 +305,15 @@ export default function CartDrawer() {
               </motion.div>
             ) : (
               <>
-                {/* ITEMS */}
+                {/* CART ITEMS */}
                 <motion.div
                   variants={contentVariants}
                   initial="closed"
                   animate="open"
                   transition={{
-                    delay: 0.14,
-                    duration: 0.7,
-                    ease: CART_EASE,
+                    delay: 0.12,
+                    duration: 0.75,
+                    ease,
                   }}
                   className="
                     min-h-0
@@ -330,14 +321,14 @@ export default function CartDrawer() {
                     overflow-y-auto
                     overscroll-contain
                     px-5
-                    py-6
-                    sm:px-8
-                    sm:py-8
+                    pb-10
+                    sm:px-9
                   "
                 >
-                  <div className="divide-y divide-white/8">
+                  <div className="flex flex-col gap-9">
                     {items.map((item) => {
                       const variantLabel = getCartItemVariantLabel(item);
+
                       const reachedStockLimit = item.quantity >= item.stock;
 
                       return (
@@ -345,24 +336,25 @@ export default function CartDrawer() {
                           key={item.variantId}
                           className="
                             grid
-                            grid-cols-[92px_minmax(0,1fr)]
+                            grid-cols-[105px_minmax(0,1fr)]
+                            items-start
                             gap-4
-                            py-6
-                            first:pt-0
-                            sm:grid-cols-[126px_minmax(0,1fr)]
+                            sm:grid-cols-[138px_minmax(0,1fr)]
                             sm:gap-6
-                            sm:py-8
                           "
                         >
+                          {/* PRODUCT IMAGE */}
                           <Link
                             href={`/products/${item.slug}`}
                             onClick={closeCart}
                             className="
                               group
                               relative
+                              block
                               aspect-[4/5]
+                              w-full
                               overflow-hidden
-                              bg-[#23201d]
+                              bg-[#292724]
                             "
                           >
                             {item.image ? (
@@ -370,13 +362,13 @@ export default function CartDrawer() {
                                 src={item.image}
                                 alt={item.title}
                                 fill
-                                sizes="(max-width: 640px) 92px, 126px"
+                                sizes="(max-width: 640px) 105px, 138px"
                                 className="
                                   object-cover
                                   transition-transform
-                                  duration-700
-                                  ease-[cubic-bezier(0.76,0,0.24,1)]
-                                  group-hover:scale-[1.035]
+                                  duration-[900ms]
+                                  ease-[cubic-bezier(0.16,1,0.3,1)]
+                                  group-hover:scale-[1.045]
                                 "
                               />
                             ) : (
@@ -387,7 +379,7 @@ export default function CartDrawer() {
                                   items-center
                                   justify-center
                                   text-xs
-                                  text-[#ece8e1]/30
+                                  text-[#eeeeec]/35
                                 "
                               >
                                 No image
@@ -395,72 +387,64 @@ export default function CartDrawer() {
                             )}
                           </Link>
 
-                          <div className="flex min-w-0 flex-col">
+                          {/* PRODUCT INFORMATION */}
+                          <div
+                            className="
+                              flex
+                              min-h-[131px]
+                              min-w-0
+                              flex-col
+                              sm:min-h-[172px]
+                            "
+                          >
                             <div>
-                              <div
+                              <Link
+                                href={`/products/${item.slug}`}
+                                onClick={closeCart}
                                 className="
-                                  flex
-                                  items-start
-                                  justify-between
-                                  gap-3
+                                  block
+                                  max-w-[310px]
+                                  text-[17px]
+                                  font-medium
+                                  leading-[1.15]
+                                  tracking-[-0.035em]
+                                  transition-opacity
+                                  duration-300
+                                  hover:opacity-55
+                                  sm:text-[20px]
                                 "
                               >
-                                <Link
-                                  href={`/products/${item.slug}`}
-                                  onClick={closeCart}
-                                  className="
-                                    min-w-0
-                                    text-[clamp(1.25rem,4vw,1.75rem)]
-                                    font-light
-                                    leading-[1.05]
-                                    tracking-[-0.045em]
-                                    text-[#ece8e1]
-                                    transition-opacity
-                                    hover:opacity-55
-                                  "
-                                >
-                                  {item.title}
-                                </Link>
-
-                                <p
-                                  className="
-                                    shrink-0
-                                    pt-1
-                                    text-xs
-                                    text-[#ece8e1]
-                                    sm:text-sm
-                                  "
-                                >
-                                  {formatPrice(item.price, item.currency)}
-                                </p>
-                              </div>
+                                {item.title}
+                              </Link>
 
                               {variantLabel && (
                                 <p
                                   className="
-                                    mt-3
-                                    text-xs
+                                    mt-2
+                                    text-[12px]
                                     capitalize
-                                    text-[#ece8e1]/58
+                                    text-[#eeeeec]/50
+                                    sm:text-[13px]
                                   "
                                 >
                                   {variantLabel}
                                 </p>
                               )}
 
-                              {item.stock > 0 && (
-                                <p
-                                  className="
-                                    mt-1
-                                    text-xs
-                                    text-[#ece8e1]/38
-                                  "
-                                >
-                                  {item.stock} available
-                                </p>
-                              )}
+                              <p
+                                className="
+                                  mt-3
+                                  text-[14px]
+                                  font-medium
+                                  tracking-[-0.02em]
+                                  sm:text-[15px]
+                                "
+                              >
+                                {formatPrice(item.price, item.currency)}
+                              </p>
                             </div>
 
+                            {/* QUANTITY / REMOVE */}
                             <div
                               className="
                                 mt-auto
@@ -476,8 +460,6 @@ export default function CartDrawer() {
                                   flex
                                   h-10
                                   items-center
-                                  border
-                                  border-white/14
                                 "
                               >
                                 <button
@@ -491,16 +473,16 @@ export default function CartDrawer() {
                                   }
                                   className="
                                     flex
-                                    h-full
-                                    w-9
+                                    h-10
+                                    w-10
                                     cursor-pointer
                                     items-center
                                     justify-center
-                                    text-base
-                                    text-[#ece8e1]
+                                    text-[18px]
+                                    font-normal
                                     transition-colors
-                                    hover:bg-[#ece8e1]
-                                    hover:text-[#171513]
+                                    duration-300
+                                    hover:bg-[#1c1b18]
                                   "
                                 >
                                   −
@@ -509,15 +491,12 @@ export default function CartDrawer() {
                                 <span
                                   className="
                                     flex
-                                    h-full
-                                    min-w-9
+                                    h-10
+                                    min-w-8
                                     items-center
                                     justify-center
-                                    border-x
-                                    border-white/14
-                                    px-2
-                                    text-xs
-                                    text-[#ece8e1]
+                                    text-[13px]
+                                    font-medium
                                   "
                                 >
                                   {item.quantity}
@@ -535,20 +514,19 @@ export default function CartDrawer() {
                                   }
                                   className="
                                     flex
-                                    h-full
-                                    w-9
+                                    h-10
+                                    w-10
                                     cursor-pointer
                                     items-center
                                     justify-center
-                                    text-base
-                                    text-[#ece8e1]
+                                    text-[18px]
+                                    font-normal
                                     transition-colors
-                                    hover:bg-[#ece8e1]
-                                    hover:text-[#171513]
+                                    duration-300
+                                    hover:bg-[#1c1b18]
                                     disabled:cursor-not-allowed
                                     disabled:opacity-25
                                     disabled:hover:bg-transparent
-                                    disabled:hover:text-[#ece8e1]
                                   "
                                 >
                                   +
@@ -560,14 +538,13 @@ export default function CartDrawer() {
                                 onClick={() => removeItem(item.variantId)}
                                 className="
                                   cursor-pointer
-                                  border-b
-                                  border-transparent
-                                  pb-0.5
-                                  text-xs
-                                  text-[#ece8e1]/42
-                                  transition
-                                  hover:border-[#ece8e1]
-                                  hover:text-[#ece8e1]
+                                  pb-3
+                                  text-[12px]
+                                  font-normal
+                                  text-[#eeeeec]/45
+                                  transition-colors
+                                  duration-300
+                                  hover:text-[#eeeeec]
                                 "
                               >
                                 Remove
@@ -579,8 +556,8 @@ export default function CartDrawer() {
                                 className="
                                   mt-3
                                   text-[11px]
-                                  leading-relaxed
-                                  text-[#ece8e1]/30
+                                  leading-[1.4]
+                                  text-[#eeeeec]/40
                                 "
                               >
                                 Maximum available quantity reached.
@@ -595,79 +572,71 @@ export default function CartDrawer() {
 
                 {/* FOOTER */}
                 <motion.footer
-                  initial={{
-                    opacity: 0,
-                    y: 24,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
+                  variants={contentVariants}
+                  initial="closed"
+                  animate="open"
                   transition={{
-                    delay: 0.22,
-                    duration: 0.7,
-                    ease: CART_EASE,
+                    delay: 0.18,
+                    duration: 0.75,
+                    ease,
                   }}
                   className="
                     shrink-0
-                    border-t
-                    border-white/8
-              bg-[#0e0d0c]
-                    px-5
-                    pb-[max(20px,env(safe-area-inset-bottom))]
-                    pt-5
-                    sm:px-8
-                    sm:pb-8
-                    sm:pt-6
+bg-[#0c0b0a]                    px-5
+                    pb-[max(24px,env(safe-area-inset-bottom))]
+                    pt-6
+                    sm:px-9
+                    sm:pb-9
+                    sm:pt-8
                   "
                 >
+                  {/* SUBTOTAL */}
                   <div
                     className="
-                      mb-4
                       flex
-                      items-end
+                      items-baseline
                       justify-between
-                      gap-5
+                      gap-4
                     "
                   >
-                    <div>
-                      <p
-                        className="
-                          mb-1
-                          text-xs
-                          uppercase
-                          tracking-[0.12em]
-                          text-[#ece8e1]/52
-                        "
-                      >
-                        Subtotal
-                      </p>
-
-                      <p className="text-xs text-[#ece8e1]/40">
-                        Shipping calculated at checkout
-                      </p>
-                    </div>
-
-                    <p
+                    <span
                       className="
-                        shrink-0
-                        text-2xl
-                        font-light
+                        text-[18px]
+                        font-medium
+                        tracking-[-0.03em]
+                      "
+                    >
+                      Subtotal
+                    </span>
+
+                    <span
+                      className="
+                        text-[24px]
+                        font-medium
                         tracking-[-0.04em]
-                        text-[#ece8e1]
                       "
                     >
                       {formatPrice(subtotal, items[0]?.currency || "usd")}
-                    </p>
+                    </span>
                   </div>
+
+                  <p
+                    className="
+                      mt-1
+                      text-[12px]
+                      text-[#eeeeec]/45
+                    "
+                  >
+                    Shipping calculated at checkout
+                  </p>
 
                   {error && (
                     <p
                       role="alert"
                       className="
-                        mb-4
-                        text-sm
-                        leading-relaxed
+                        mt-5
+                        text-[13px]
+                        leading-[1.5]
                         text-red-300
                       "
                     >
@@ -675,53 +644,56 @@ export default function CartDrawer() {
                     </p>
                   )}
 
+                  {/* CHECKOUT */}
                   <button
                     type="button"
                     onClick={handleCheckout}
                     disabled={loading}
                     className="
                       group
-                      relative
-                      min-h-16
+                      mt-7
+                      flex
+                      min-h-[60px]
                       w-full
                       cursor-pointer
-                      overflow-hidden
-                      border
-                      border-[#ece8e1]
-                      bg-[#ece8e1]
-                      px-6
-                      text-[#171513]
+                      items-center
+                      justify-between
+                      gap-4
+                      bg-[#eeeeec]
+                      px-5
+                      text-[#1a1817]
+                      transition-colors
+                      duration-300
+                      hover:bg-[#d8d7d4]
                       disabled:cursor-not-allowed
-                      disabled:opacity-35
+                      disabled:opacity-40
+                      sm:px-6
                     "
                   >
                     <span
                       className="
-                        absolute
-                        inset-0
-                        translate-y-full
-                        bg-[#2a2623]
-                        transition-transform
-                        duration-500
-                        ease-[cubic-bezier(0.76,0,0.24,1)]
-                        group-hover:translate-y-0
-                      "
-                    />
-
-                    <span
-                      className="
-                        relative
-                        z-10
-                        text-lg
-                        transition-colors
-                        duration-500
-                        font-semibold
-                        group-hover:text-[#ece8e1]
+                        text-[17px]
+                        font-medium
+                        tracking-[-0.025em]
                       "
                     >
                       {loading
                         ? "Starting checkout..."
                         : "Continue to checkout"}
+                    </span>
+
+                    <span
+                      aria-hidden="true"
+                      className="
+                        text-[21px]
+                        transition-transform
+                        duration-500
+                        ease-[cubic-bezier(0.16,1,0.3,1)]
+                        group-hover:translate-x-1
+                        group-hover:-translate-y-1
+                      "
+                    >
+                      ↗
                     </span>
                   </button>
                 </motion.footer>

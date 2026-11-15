@@ -127,13 +127,12 @@ export default function EditorialTextAssembleSection() {
           <WordReveal
             text="Lighting and objects selected for rooms that feel slower, softer, and more intentional."
             className="
-              w-full
-              text-[clamp(2.05rem,5vw,6.5rem)]
+              max-w-3xl
+              text-[clamp(1.05rem,3vw,4.5rem)]
               font-normal
               leading-[1.1]
               tracking-[-0.015em]
               text-[#131412]
-              md:[text-indent:20%]
             "
           />
         </div>
@@ -219,6 +218,8 @@ export default function EditorialTextAssembleSection() {
             className="
               max-w-[240px]
               text-[15px]
+              hidden
+              md:block
               leading-[1.35]
               tracking-[-0.025em]
               md:text-[clamp(16px,1.2vw,22px)]

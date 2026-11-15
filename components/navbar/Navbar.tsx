@@ -361,7 +361,10 @@ export default function Navbar() {
               md:block
             "
           >
-            Calm by Design
+            <div className="flex flex-col items-start gap-y-0.5">
+              <span>Calm by Design</span>
+              <span>Made for quieter spaces</span>
+            </div>{" "}
           </FadeItem>
 
           {/* 03 — SECOND TAGLINE */}
@@ -380,7 +383,6 @@ export default function Navbar() {
           >
             <div className="flex flex-col items-start gap-y-0.5">
               <span>Light for living</span>
-              <span>Made for quieter spaces</span>
             </div>
           </FadeItem>
 
