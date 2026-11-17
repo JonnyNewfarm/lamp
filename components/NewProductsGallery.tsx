@@ -147,14 +147,14 @@ export default function NewProductsGallery({
   return (
     <section className="relative bg-[#eeeeec] pt-20 text-[#1a1817]">
       {/* HEADING */}
-      <div className="px-4 pt-10 md:px-9 md:pt-14">
+      <div className="px-4 pt-10 md:px-5 md:pt-14">
         <h2 className="text-xl font-medium leading-[0.85] sm:text-2xl lg:text-3xl">
           Added lately(06)
         </h2>
       </div>
 
       {/* PRODUCTS */}
-      <div className="px-4 pb-36 pt-8 md:px-9 md:pb-56 md:pt-8">
+      <div className="px-4 pb-36 pt-8 md:px-5 md:pb-56 md:pt-8">
         <div
           className="
             grid

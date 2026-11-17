@@ -96,7 +96,7 @@ export default function LightingByMood() {
         px-6
         
         text-[#1a1817]
-        md:px-12
+        md:px-5
         md:py-32
       "
     >
@@ -151,62 +151,6 @@ export default function LightingByMood() {
                 "
               />
             </div>
-
-            {/* ROOM LINKS — VERTICAL */}
-            <nav
-              aria-label="Shop lighting by room"
-              className="
-                flex
-                flex-col
-                items-start
-                gap-4
-                md:mt-10
-                md:gap-5
-                lg:mt-12
-              "
-            >
-              {roomLinks.map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className="
-                    group
-                    relative
-                    inline-flex
-                    w-fit
-                    max-w-full
-                    pb-0.5
-                    text-2xl
-                    font-normal
-                    leading-[1.1]
-                    tracking-[-0.035em]
-                    md:text-[clamp(15px,1.6vw,24px)]
-                  "
-                >
-                  <span>{`For ${item.label}`}</span>
-
-                  <span
-                    aria-hidden="true"
-                    className="
-                      pointer-events-none
-                      absolute
-                      bottom-0
-                      left-0
-                      h-px
-                      w-full
-                      origin-right
-                      scale-x-0
-                      bg-current
-                      transition-transform
-                      duration-500
-                      ease-[cubic-bezier(0.76,0,0.24,1)]
-                      group-hover:origin-left
-                      group-hover:scale-x-100
-                    "
-                  />
-                </Link>
-              ))}
-            </nav>
           </div>
 
           {/* RIGHT — DESCRIPTION */}

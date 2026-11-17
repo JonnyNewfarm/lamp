@@ -113,12 +113,12 @@ export default function EditorialTextAssembleSection() {
         overflow-hidden
         bg-[#eeeeec]
         px-5
-        py-20
+        py-10
         text-[#1a1817]
-        md:px-12
-        md:py-28
-        lg:px-16
-        lg:py-36
+        md:px-5
+        md:py-10
+        lg:px-5
+        lg:py-10
       "
     >
       <div className="relative mx-auto w-full">
@@ -129,7 +129,8 @@ export default function EditorialTextAssembleSection() {
             className="
               max-w-3xl
               text-[clamp(1.05rem,3vw,4.5rem)]
-              font-normal
+              font-medium
+              uppercase
               leading-[1.1]
               tracking-[-0.015em]
               text-[#131412]
@@ -200,46 +201,47 @@ export default function EditorialTextAssembleSection() {
         {/* BOTTOM TEXT */}
         <div
           className="
-            mt-24
-            grid
-            grid-cols-1
-            gap-8
-            md:mt-32
-            md:grid-cols-[minmax(0,0.9fr)_minmax(0,0.9fr)_minmax(0,1.5fr)]
-            md:items-start
-            md:gap-x-8
-            lg:mt-40
-            lg:gap-x-12
-          "
+    mt-24
+    grid
+    grid-cols-1
+    gap-8
+    md:mt-32
+    md:grid-cols-[1fr_auto_470px]
+    md:items-start
+    md:gap-x-12
+    lg:mt-40
+    lg:gap-x-16
+  "
         >
           {/* LEFT */}
           <WordReveal
             text="Light changes how a room feels."
             className="
-              max-w-[240px]
-              text-[15px]
-              hidden
-              md:block
-              leading-[1.35]
-              tracking-[-0.025em]
-              md:text-[clamp(16px,1.2vw,22px)]
-            "
+      hidden
+      max-w-[240px]
+      text-[15px]
+      leading-[1.35]
+      tracking-[-0.025em]
+      md:block
+      md:text-[clamp(16px,1.2vw,22px)]
+    "
           />
 
           {/* CENTER */}
-          <div className="md:justify-self-center">
+          <div className="md:justify-self-end">
             <Link
               href="/shop"
               className="
-                group
-                inline-flex
-                items-center
-                gap-3
-                text-[15px]
-                leading-[1.35]
-                tracking-[-0.025em]
-                md:text-[clamp(16px,1.2vw,22px)]
-              "
+        group
+        inline-flex
+        items-center
+        gap-3
+        text-[15px]
+        font-medium
+        leading-[1.35]
+        tracking-[-0.025em]
+        md:text-[clamp(16px,1.2vw,22px)]
+      "
             >
               <WordReveal
                 as="span"
@@ -250,13 +252,13 @@ export default function EditorialTextAssembleSection() {
               <span
                 aria-hidden="true"
                 className="
-                  inline-block
-                  transition-transform
-                  duration-500
-                  ease-[cubic-bezier(0.16,1,0.3,1)]
-                  group-hover:translate-x-1
-                  group-hover:-translate-y-1
-                "
+          inline-block
+          transition-transform
+          duration-500
+          ease-[cubic-bezier(0.16,1,0.3,1)]
+          group-hover:translate-x-1
+          group-hover:-translate-y-1
+        "
               >
                 ↗
               </span>
@@ -268,13 +270,14 @@ export default function EditorialTextAssembleSection() {
             text="A quiet collection built around warm materials, soft silhouettes and considered light. Each piece is thoughtfully selected to bring warmth and a sense of calm into everyday spaces, creating an inviting atmosphere that feels effortless and timeless."
             delay={0.08}
             className="
-              min-w-0
-              max-w-[580px]
-              text-[17px]
-              leading-[1.32]
-              tracking-[-0.025em]
-              md:text-[clamp(18px,1.45vw,26px)]
-            "
+      min-w-0
+      max-w-[470px]
+      text-[17px]
+      leading-[1.32]
+      tracking-[-0.025em]
+      md:justify-self-end
+      md:text-[clamp(18px,1.45vw,26px)]
+    "
           />
         </div>
       </div>
